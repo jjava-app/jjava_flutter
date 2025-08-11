@@ -36,6 +36,13 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_blockly_plus: ^2.0.2
   webview_flutter: ^4.13.0
+  dio: ^5.8.0+1
+  flutter_riverpod: ^2.6.1
+  flutter_svg: ^2.2.0
+  logger: ^2.5.0
+  validators: ^3.0.0
+  intl: ^0.20.2
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -60,8 +67,10 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animation/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
