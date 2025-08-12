@@ -105,4 +105,14 @@ class MText {
     text,
     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: color),
   );
+
+  static Text buttonSS(String text, {Color? color}) => Text(
+    text,
+    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color),
+  );
+
+  static Text s14Bold(String text, {Color? color}) => Text(
+    text,
+    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: color),
+  );
 }

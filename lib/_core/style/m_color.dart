@@ -10,6 +10,7 @@ class MColor {
   static const kStatic = _StaticColors();
   static const kFill = _FillColors();
   static const kMaterial = _MaterialColors();
+  static const kButton = _ButtonColors();
 }
 
 // Primary Colors
@@ -96,4 +97,11 @@ class _MaterialColors {
   const _MaterialColors();
 
   final Color dimmer = const Color(0xFF868687); // 화면 어둡게 덮는 색
+}
+
+// Button Colors
+class _ButtonColors {
+  const _ButtonColors();
+
+  final Color active = const Color(0xFF005AE0);
 }
