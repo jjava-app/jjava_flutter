@@ -17,18 +17,8 @@ class _Top {
 }
 
 class _Bottom {
-  final Widget solvedQuestion = SvgPicture.asset(
-    'assets/icons/nav_bottom_solved_question.svg',
-    width: 24,
-    height: 24,
-  );
   final Widget home = SvgPicture.asset(
     'assets/icons/nav_bottom_home.svg',
-    width: 24,
-    height: 24,
-  );
-  final Widget myPage = SvgPicture.asset(
-    'assets/icons/nav_bottom_my_page.svg',
     width: 24,
     height: 24,
   );
@@ -39,6 +29,16 @@ class _Bottom {
   );
   final Widget workspace = SvgPicture.asset(
     'assets/icons/nav_bottom_workspace.svg',
+    width: 24,
+    height: 24,
+  );
+  final Widget solvedQuestion = SvgPicture.asset(
+    'assets/icons/nav_bottom_solved_question.svg',
+    width: 24,
+    height: 24,
+  );
+  final Widget myPage = SvgPicture.asset(
+    'assets/icons/nav_bottom_my_page.svg',
     width: 24,
     height: 24,
   );

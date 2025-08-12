@@ -39,6 +39,7 @@ class _BackgroundColors {
   const _BackgroundColors();
 
   // 기본 배경
+  final Color global = const Color(0xFFFAFAFA);
   final Color normal = const Color(0xFFFFFFFF);
   final Color alternative = const Color(0xFFF7F7F8);
 

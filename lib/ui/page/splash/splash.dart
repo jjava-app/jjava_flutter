@@ -12,10 +12,25 @@ class SplashPage extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, "/login");
-        },
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            heroTag: 'btn1',
+            child: Text('로그인\n페이지'),
+            onPressed: () {
+              Navigator.pushNamed(context, "/login");
+            },
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: 'btn2',
+            child: Text('메인\n페이지'),
+            onPressed: () {
+              Navigator.pushNamed(context, "/main-holder");
+            },
+          ),
+        ],
       ),
     );
   }
