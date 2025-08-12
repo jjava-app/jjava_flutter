@@ -10,6 +10,7 @@ class MColor {
   static const kStatic = _StaticColors();
   static const kFill = _FillColors();
   static const kMaterial = _MaterialColors();
+  static const kShadow = _ShadowColors();
 }
 
 // Primary Colors
@@ -96,4 +97,40 @@ class _MaterialColors {
   const _MaterialColors();
 
   final Color dimmer = const Color(0xFF868687); // 화면 어둡게 덮는 색
+}
+
+class _ShadowColors {
+  const _ShadowColors();
+
+  // normal
+  final List<BoxShadow> normal = const [
+    BoxShadow(
+      color: Color(0x16000000),
+      blurRadius: 9,
+      offset: Offset(0, 1),
+      spreadRadius: 0,
+    ),
+  ];
+
+  // emphasize
+  final List<BoxShadow> emphasize = const [
+    BoxShadow(
+      color: Color(0x14000000),
+      blurRadius: 4,
+      offset: Offset(0, 0),
+      spreadRadius: 0,
+    ),
+    BoxShadow(
+      color: Color(0x14000000),
+      blurRadius: 8,
+      offset: Offset(0, 4),
+      spreadRadius: 0,
+    ),
+    BoxShadow(
+      color: Color(0x1E000000),
+      blurRadius: 12,
+      offset: Offset(0, 6),
+      spreadRadius: 0,
+    ),
+  ];
 }

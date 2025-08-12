@@ -63,6 +63,8 @@ class _Home {
 
 class _Login {
   final Widget naver = SvgPicture.asset('assets/icons/page_login_naver_logo.svg');
+  final Widget kakao = SvgPicture.asset('assets/icons/page_login_kakao_logo.svg');
+  final Widget google = SvgPicture.asset('assets/icons/page_login_google_logo.svg');
 }
 
 class _MyPage {
