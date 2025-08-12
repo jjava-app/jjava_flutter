@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjava_flutter/ui/page/auth/login_page/widget/login_body.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -6,14 +7,12 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          child: Text("로그인 페이지"),
-        ),
+      body: LoginBody(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "/main-holder");
+        },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.pushNamed(context, "/main-holder");
-      }),
     );
   }
 }
