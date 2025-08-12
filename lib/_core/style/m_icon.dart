@@ -65,11 +65,11 @@ class _Page {
 }
 
 class _Home {
-  final Widget arrowForward = SvgPicture.asset('assets/icons/page_home_arrow_forward.svg');
+  final Widget arrowForward = SvgPicture.asset('assets/icons/page_home_arrow_forward.svg', width: 5, height: 9);
   final Widget arrowUpper = SvgPicture.asset('assets/icons/page_home_arrow_upper.svg');
-  final Widget code = SvgPicture.asset('assets/icons/page_home_code.svg');
-  final Widget square = SvgPicture.asset('assets/icons/page_home_square.svg');
+  final Widget codeSquare = SvgPicture.asset('assets/icons/page_home_code_square.svg');
   final Widget logo = SvgPicture.asset('assets/images/global/main_logo.svg');
+  final Widget block = SvgPicture.asset('assets/icons/page_home_block.svg');
 }
 
 class _Login {

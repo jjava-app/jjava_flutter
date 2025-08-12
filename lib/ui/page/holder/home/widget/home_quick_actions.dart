@@ -10,39 +10,29 @@ class HomeQuickActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        _QuickCardFilled(
-          title: '학습하기',
-          subtitle: '짜바와 함께 오늘도 화이팅!',
-          icon: MIcon.page.home.square, // 큐브 아이콘
-          onTapRouteName: '/study', // 필요 시 라우팅 바꿔줘
+      children: [
+        Expanded(
+          child: AspectRatio(
+            aspectRatio: 1 / 1,
+            child: _QuickCardFilled(),
+          ),
         ),
-        _QuickCardOutlined(
-          title: '워크플레이스',
-          subtitle: '내가 만든 블록을 확인해 보세요',
-          icon: MIcon.page.home.code, // 코드/화살표 아이콘
-          onTapRouteName: '/workspace', // 필요 시 라우팅 바꿔줘
+        SizedBox(width: 14),
+        Expanded(
+          child: AspectRatio(
+            aspectRatio: 1 / 1,
+            child: _QuickCardOutlined(),
+          ),
         ),
       ],
     );
   }
 }
 
-/// 157x157, radius 8, padding 12 — Primary fill
 class _QuickCardFilled extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final Widget icon;
-  final String? onTapRouteName;
-
-  const _QuickCardFilled({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    this.onTapRouteName,
-    super.key,
-  });
+  final String title = '학습하기';
+  final String subtitle = '짜바와 함께 오늘도 화이팅!';
+  final String? onTapRouteName = '/question';
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +50,17 @@ class _QuickCardFilled extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MText.buttonS(title, color: Colors.white),
+            MText.h4(title, color: Colors.white),
             const SizedBox(height: 6),
-            MText.bodyXXS(subtitle, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w500),
+            MText.bodyMicro(subtitle, color: Colors.white),
             const Spacer(),
             Align(
               alignment: Alignment.bottomRight,
-              child: icon,
+              child: SizedBox(
+                width: 44.53,
+                height: 60,
+                child: MIcon.page.home.block,
+              ),
             ),
           ],
         ),
@@ -75,20 +69,10 @@ class _QuickCardFilled extends StatelessWidget {
   }
 }
 
-/// 157x157, radius 8, padding 12 — Outline 1px
 class _QuickCardOutlined extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final Widget icon;
-  final String? onTapRouteName;
-
-  const _QuickCardOutlined({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    this.onTapRouteName,
-    super.key,
-  });
+  final String title = '워크플레이스';
+  final String subtitle = '내가 만든 블록을 확인해 보세요';
+  final String? onTapRouteName = '/workspace';
 
   @override
   Widget build(BuildContext context) {
@@ -102,18 +86,18 @@ class _QuickCardOutlined extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: MColor.kLine.normal, width: 1), // #70737C 22% 느낌
+          border: Border.all(color: MColor.kPrimary.normal, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MText.buttonS(title, color: MColor.kPrimary.normal),
+            MText.h4(title, color: MColor.kPrimary.normal),
             const SizedBox(height: 6),
-            MText.bodyXXS(subtitle, color: MColor.kLabel.dim),
+            MText.bodyMicro(subtitle, color: MColor.kPrimary.normal),
             const Spacer(),
             Align(
               alignment: Alignment.bottomRight,
-              child: icon,
+              child: MIcon.page.home.codeSquare,
             ),
           ],
         ),
