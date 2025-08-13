@@ -11,6 +11,46 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _QuestionPageState extends State<QuestionPage> {
+  bool _isLoading = false;
+
+  Future<void> _onRunPressed() async {
+    setState(() {
+      _isLoading = true; // 로딩 UI 켜기
+    });
+
+    await Future.delayed(Duration(milliseconds: 1500));
+    final isCorrect = await _checkAnswerFromServer(); // 서버 통신 (true/false 반환)
+
+    setState(() {
+      _isLoading = false; // 로딩 UI 끄기
+    });
+
+    if (!mounted) return;
+
+    // 결과에 맞는 다이얼로그 표시
+    if (isCorrect) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => _CorrectResultDialog(),
+      );
+    } else {
+      // showDialog(
+      //   context: context,
+      //   barrierDismissible: false,
+      //   builder: (_) => _IncorrectResultDialog(),
+      // );
+    }
+  }
+
+  bool _mockIsCorrect = true; // UI 테스트용
+
+  Future<bool> _checkAnswerFromServer() async {
+    // TODO: 실제 API 호출로 변경
+    await Future.delayed(const Duration(milliseconds: 500));
+    return _mockIsCorrect;
+  }
+
   bool _showIntro = true;
   bool _showPressPreview = false;
 
@@ -180,7 +220,7 @@ class _QuestionPageState extends State<QuestionPage> {
                         ),
                         child: InkWell(
                           // TODO: 클릭 시 통신
-                          onTap: () {},
+                          onTap: _onRunPressed,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                             child: Row(
@@ -255,40 +295,41 @@ class _QuestionPageState extends State<QuestionPage> {
                 ),
               ),
               // 컴파일 애니메이션 UI
-              Positioned.fill(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  child: Align(
-                    alignment: Alignment(0, -0.3),
-                    child: Container(
-                      width: 166,
-                      height: 58,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0x80FFFFFF),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 8,
-                        children: [
-                          Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Color(0xFFEAEAEA)),
-                          ),
-                          Text(
-                            'AI 분석중 ...',
-                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: MColor.kButton.active),
-                          ),
-                        ],
+              if (_isLoading)
+                Positioned.fill(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    child: Align(
+                      alignment: Alignment(0, -0.3),
+                      child: Container(
+                        width: 166,
+                        height: 58,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Color(0x80FFFFFF),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 8,
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Color(0xFFEAEAEA)),
+                            ),
+                            Text(
+                              'AI 분석중 ...',
+                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: MColor.kButton.active),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
               //
             ],
           ),
@@ -312,6 +353,117 @@ class _QuestionPageState extends State<QuestionPage> {
             ),
           ),
       ],
+    );
+  }
+}
+
+// 정답 다이얼로그 창
+class _CorrectResultDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: MColor.kBackground.normal,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            child: Column(
+              spacing: 10,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '성공 😇',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: MColor.kLabel.normal,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '다음 문제도 풀어볼까요?',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: MColor.kLabel.neutral,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  spacing: 10,
+                  children: [
+                    Row(
+                      spacing: 6,
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Color(0xFFEAEAEA)),
+                        ),
+                        Text(
+                          'AI 첨삭',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: MColor.kButton.active),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      'Lorem ipsum dolor sit amet consectetur. Porta sed placerat dignissim facilisis congue viverra suspendisse neque maecenas. Ut venenatis proin mi id id sit lectus ut nam.',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: MColor.kLabel.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: MColor.kLine.normal),
+          SizedBox(
+            height: 48,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(
+                      '나가기',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: MColor.kLabel.normal,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                VerticalDivider(width: 1, color: MColor.kLine.normal),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: Text(
+                      '계속하기',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: MColor.kStatus.destructive,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
