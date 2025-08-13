@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
+import 'package:jjava_flutter/data/repository/question_repository.dart';
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -12,6 +13,15 @@ class QuestionPage extends StatefulWidget {
 class _QuestionPageState extends State<QuestionPage> {
   bool _showIntro = true;
   bool _showPressPreview = false;
+
+  final repo = QuestionRepository();
+  String? selectedType;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedType = repo.types.isNotEmpty ? repo.types.first : null;
+  }
 
   void _startPressPreview([PointerDownEvent? _]) {
     if (!_showPressPreview) setState(() => _showPressPreview = true);
@@ -122,19 +132,28 @@ class _QuestionPageState extends State<QuestionPage> {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        child: Text('블록종류'),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8,
+                  children: [
+                    QuestionBlockTypeList(
+                      // TODO: 통신 받을 때 하드코딩 => List<model>로 변경하면 됨.
+                      labels: repo.types,
+                      selectedLabel: selectedType,
+                      onSelected: (type) {
+                        setState(() {
+                          selectedType = type;
+                        });
+                      },
+                    ),
+                    if (selectedType != null)
+                      QuestionBlockList(
+                        labels: repo.blocksByType[selectedType] ?? [],
                       ),
-                      Container(
-                        child: Text('블록리스트'),
-                      ),
-                      // 터미널
-                      Container(
+                    // 터미널
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16, right: 16, left: 16),
+                      child: Container(
                         width: double.infinity,
                         height: 148,
                         decoration: BoxDecoration(
@@ -143,8 +162,8 @@ class _QuestionPageState extends State<QuestionPage> {
                         ),
                         child: Text('터미널창'),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -169,6 +188,157 @@ class _QuestionPageState extends State<QuestionPage> {
             ),
           ),
       ],
+    );
+  }
+}
+
+// 블록 리스트 스크롤
+class QuestionBlockList extends StatelessWidget {
+  final List<String> labels;
+
+  const QuestionBlockList({
+    super.key,
+    required this.labels,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 48,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        reverse: false,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemBuilder: (_, i) {
+          final label = labels[i];
+          return Center(
+            child: QuestionBlock(
+              blockName: label,
+            ),
+          );
+        },
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        itemCount: labels.length,
+      ),
+    );
+  }
+}
+
+// 블록 박스
+class QuestionBlock extends StatelessWidget {
+  final String blockName;
+
+  const QuestionBlock({
+    super.key,
+    required this.blockName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: MColor.kLine.normal,
+          width: 1,
+        ),
+        color: Color(0x99FFFFFF),
+      ),
+      child: Padding(
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 50),
+        child: Center(
+          child: Text(
+            blockName,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: MColor.kLabel.alternative,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 블록 타입 리스트 스크롤
+class QuestionBlockTypeList extends StatelessWidget {
+  final List<String> labels;
+  final String? selectedLabel;
+  final ValueChanged<String> onSelected;
+
+  const QuestionBlockTypeList({
+    super.key,
+    required this.labels,
+    required this.selectedLabel,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 32,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        reverse: false,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemBuilder: (_, i) {
+          final label = labels[i];
+          final isSelected = label == selectedLabel;
+          return GestureDetector(
+            onTap: () => onSelected(label),
+            child: Center(
+              child: QuestionBlockType(
+                typeName: label,
+                isSelected: isSelected,
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        itemCount: labels.length,
+      ),
+    );
+  }
+}
+
+// 블록 타입 박스
+class QuestionBlockType extends StatelessWidget {
+  final String typeName;
+  final bool isSelected;
+
+  const QuestionBlockType({
+    super.key,
+    required this.typeName,
+    required this.isSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+          color: isSelected ? MColor.kPrimary.normal : MColor.kLine.normal,
+          width: 1,
+        ),
+        color: Color(0x99FFFFFF),
+      ),
+      child: Padding(
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+        child: Center(
+          child: Text(
+            typeName,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: isSelected ? MColor.kPrimary.normal : MColor.kLabel.assistive,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
