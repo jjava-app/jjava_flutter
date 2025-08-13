@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/ui/page/question/list/question_list_page.dart';
 
 class QuestionSelectPage extends StatelessWidget {
   const QuestionSelectPage({super.key});
@@ -17,13 +18,13 @@ class QuestionSelectPage extends StatelessWidget {
             children: [
               _SelectQuestion(
                 title: '학습하기',
-                onTapRouteName: '/question-list',
+                onTapRouteName: QuestionListPage(),
                 textColor: MColor.kPrimary.normal,
               ),
               SizedBox(height: 14),
               _SelectQuestion(
                 title: '진행중인 학습 이어하기',
-                onTapRouteName: '/question-list', // TODO 문제 만들어지면 최근 진행한 문제 화면 할당하기
+                onTapRouteName: QuestionListPage(), // TODO 문제 만들어지면 최근 진행한 문제 화면 할당하기
                 textColor: MColor.kLabel.neutral,
               ),
             ],
@@ -48,7 +49,7 @@ AppBar _appBar(BuildContext context) {
 
 class _SelectQuestion extends StatelessWidget {
   final String title;
-  final String onTapRouteName;
+  final Widget onTapRouteName;
   final Color textColor;
 
   const _SelectQuestion({
@@ -63,7 +64,7 @@ class _SelectQuestion extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () {
-        Navigator.pushNamed(context, onTapRouteName);
+        Navigator.push(context, MaterialPageRoute(builder: (_) => onTapRouteName));
       },
       child: Container(
         height: 148,

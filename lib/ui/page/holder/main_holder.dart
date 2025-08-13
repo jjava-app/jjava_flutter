@@ -44,11 +44,11 @@ class _MainHolderState extends State<MainHolder> {
         index: selectedIndex, // 변수가 되어야 한다. -> 상태로 등록
         children: [
           // rebuild에 의해 앞 번호의 화면들이 new 되는 문제 아직 존재.
-          loadPages.contains(0) ? const HomePage() : Container(),
-          loadPages.contains(1) ? const QuestionSelectPage() : Container(),
-          loadPages.contains(2) ? const WorkspacePage() : Container(),
-          loadPages.contains(3) ? const SolvedQuestionPage() : Container(),
-          loadPages.contains(4) ? const MyPagePage() : Container(),
+          loadPages.contains(0) ? HomePage() : Container(),
+          loadPages.contains(1) ? QuestionSelectPage() : Container(),
+          loadPages.contains(2) ? WorkspacePage() : Container(),
+          loadPages.contains(3) ? SolvedQuestionPage() : Container(),
+          loadPages.contains(4) ? MyPagePage() : Container(),
         ],
       ),
       bottomNavigationBar: _bottomNavigationBar(),

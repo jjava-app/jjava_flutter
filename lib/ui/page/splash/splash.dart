@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjava_flutter/ui/page/holder/home/home_page.dart';
 
 class SplashPage extends StatelessWidget {
   @override
@@ -27,7 +28,12 @@ class SplashPage extends StatelessWidget {
             heroTag: 'btn2',
             child: Text('메인\n페이지'),
             onPressed: () {
-              Navigator.pushNamed(context, "/main-holder");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => HomePage(),
+                ),
+              );
             },
           ),
         ],
