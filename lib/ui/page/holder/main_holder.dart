@@ -41,9 +41,8 @@ class _MainHolderState extends State<MainHolder> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
-        index: selectedIndex, // 변수가 되어야 한다. -> 상태로 등록
+        index: selectedIndex, 
         children: [
-          // rebuild에 의해 앞 번호의 화면들이 new 되는 문제 아직 존재.
           loadPages.contains(0) ? const HomePage() : Container(),
           loadPages.contains(1) ? const QuestionPage() : Container(),
           loadPages.contains(2) ? const WorkspacePage() : Container(),
