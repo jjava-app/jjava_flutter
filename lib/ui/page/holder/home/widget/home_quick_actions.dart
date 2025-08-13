@@ -40,7 +40,7 @@ class _QuickCardFilled extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const MainHolder(initialIndex: 1)),
+          MaterialPageRoute(builder: (_) => MainHolder(initialIndex: 1)),
         );
       },
       child: Container(
@@ -81,7 +81,7 @@ class _QuickCardOutlined extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const MainHolder(initialIndex: 2)),
+          MaterialPageRoute(builder: (_) => MainHolder(initialIndex: 2)),
         );
       },
       child: Container(
