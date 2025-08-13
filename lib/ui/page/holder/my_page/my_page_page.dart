@@ -7,7 +7,7 @@ class MyPagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        child: Text("동행 페이지"),
+        child: Text("마이페이지"),
       ),
     );
   }

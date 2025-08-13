@@ -62,7 +62,7 @@ class _InteractionColors {
 class _LineColors {
   const _LineColors();
 
-  final Color normal = const Color(0xFFE0E0E2); // 기본 라인
+  final Color normal = const Color(0x3870737C); // 기본 라인
   final Color neutral = const Color(0xFFE8E8EA); // 중립 라인
   final Color alternative = const Color(0xFFF4F4F5); // 대체 라인
 }

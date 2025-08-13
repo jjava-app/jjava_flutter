@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   AppBar _appbar() {
     return AppBar(
       leading: Padding(
-        padding: EdgeInsets.only(left: 16),
+        padding: EdgeInsets.all(16),
         child: MIcon.nav.top.logo,
       ),
       leadingWidth: 56,
