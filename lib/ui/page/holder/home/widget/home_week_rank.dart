@@ -9,7 +9,6 @@ class HomeWeekRank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 예시 데이터
     final homeRepository = HomeRepository();
     final rankingList = homeRepository.getMockRankingList();
 
@@ -18,11 +17,9 @@ class HomeWeekRank extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 제목
           MText.h2("이번 주 랭킹", color: MColor.kLabel.neutral),
           const SizedBox(height: 8),
 
-          // 카드 (회색 테두리 고정)
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -36,9 +33,8 @@ class HomeWeekRank extends StatelessWidget {
                 right: 22,
                 bottom: 12,
               ),
-              // 안쪽만 Carousel
               child: SizedBox(
-                height: 30, // 캐러셀 높이
+                height: 30,
                 child: CarouselSlider(
                   options: CarouselOptions(
                     height: 30,
