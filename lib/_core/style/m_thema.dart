@@ -6,7 +6,7 @@ ThemeData mTheme() {
     useMaterial3: true,
     fontFamily: 'Pretendard',
     primaryColor: MColor.kPrimary.normal,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: MColor.kBackground.global,
 
     appBarTheme: AppBarTheme(
       backgroundColor: MColor.kBackground.global,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
+import 'package:jjava_flutter/data/enum/sign_up_type.dart';
 import 'package:jjava_flutter/ui/page/auth/login_page/widget/login_form_field.dart';
 
 class LoginEmail extends StatelessWidget {
@@ -35,7 +36,9 @@ class LoginEmail extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, '/join', arguments: JoinType.email);
+          },
           child: Text(
             '짜바 회원이 아니신가요?',
             style: TextStyle(
