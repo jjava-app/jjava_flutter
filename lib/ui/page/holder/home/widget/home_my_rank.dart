@@ -27,7 +27,6 @@ class HomeMyRank extends StatelessWidget {
               MText.s14Bold("DevSsar", color: MColor.kPrimary.normal),
             ],
           ),
-          // 순위 & 점수
           Row(
             children: [
               _RankChip(label: "155 위"),
