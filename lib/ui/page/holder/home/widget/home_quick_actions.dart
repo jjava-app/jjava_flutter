@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/ui/page/holder/main_holder.dart';
 
 class HomeQuickActions extends StatelessWidget {
   const HomeQuickActions({super.key});
@@ -30,15 +31,18 @@ class HomeQuickActions extends StatelessWidget {
 }
 
 class _QuickCardFilled extends StatelessWidget {
-  final String title = '학습하기';
-  final String subtitle = '짜바와 함께 오늘도 화이팅!';
   final String? onTapRouteName = '/question';
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
-      onTap: onTapRouteName == null ? null : () => Navigator.of(context).pushNamed(onTapRouteName!),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const MainHolder(initialIndex: 1)),
+        );
+      },
       child: Container(
         width: 157,
         height: 157,
@@ -50,9 +54,9 @@ class _QuickCardFilled extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MText.h4(title, color: Colors.white),
+            MText.h4('학습하기', color: Colors.white),
             const SizedBox(height: 6),
-            MText.bodyMicro(subtitle, color: Colors.white),
+            MText.bodyMicro('짜바와 함께 오늘도 화이팅!', color: Colors.white),
             const Spacer(),
             Align(
               alignment: Alignment.bottomRight,
@@ -70,15 +74,16 @@ class _QuickCardFilled extends StatelessWidget {
 }
 
 class _QuickCardOutlined extends StatelessWidget {
-  final String title = '워크플레이스';
-  final String subtitle = '내가 만든 블록을 확인해 보세요';
-  final String? onTapRouteName = '/workspace';
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
-      onTap: onTapRouteName == null ? null : () => Navigator.of(context).pushNamed(onTapRouteName!),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const MainHolder(initialIndex: 2)),
+        );
+      },
       child: Container(
         width: 157,
         height: 157,
@@ -91,9 +96,9 @@ class _QuickCardOutlined extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MText.h4(title, color: MColor.kPrimary.normal),
+            MText.h4('워크플레이스', color: MColor.kPrimary.normal),
             const SizedBox(height: 6),
-            MText.bodyMicro(subtitle, color: MColor.kPrimary.normal),
+            MText.bodyMicro('내가 만든 블록을 확인해 보세요', color: MColor.kPrimary.normal),
             const Spacer(),
             Align(
               alignment: Alignment.bottomRight,

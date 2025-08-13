@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/ui/page/holder/home/widget/home_quick_actions.dart';
 
-class HomeWork extends StatelessWidget {
-  const HomeWork({
+class HomeLearn extends StatelessWidget {
+  const HomeLearn({
     super.key,
   });
 

@@ -7,6 +7,10 @@ import 'package:jjava_flutter/ui/page/holder/solved_question/solved_question_pag
 import 'package:jjava_flutter/ui/page/holder/workspace/workspace_page.dart';
 
 class MainHolder extends StatefulWidget {
+  const MainHolder({super.key, this.initialIndex = 0});
+
+  final int initialIndex;
+
   @override
   State<MainHolder> createState() => _MainHolderState();
 }
@@ -14,6 +18,15 @@ class MainHolder extends StatefulWidget {
 class _MainHolderState extends State<MainHolder> {
   int selectedIndex = 0;
   List<int> loadPages = [0];
+
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.initialIndex;
+    if (!loadPages.contains(selectedIndex)) {
+      loadPages.add(selectedIndex);
+    }
+  }
 
   void selectedBottomMenu(int index) {
     if (!loadPages.contains(index)) {

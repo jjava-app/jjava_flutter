@@ -5,9 +5,11 @@ class WorkspacePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: Text("워크스페이스 페이지"),
+    return Scaffold(
+      body: Center(
+        child: Container(
+          child: Text("워크스페이스 페이지"),
+        ),
       ),
     );
   }
