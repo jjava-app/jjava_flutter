@@ -128,16 +128,45 @@ class _QuestionPageState extends State<QuestionPage> {
                   ),
                 ),
               ),
+              // 웹뷰 위 UI
               Positioned(
                 left: 0,
                 right: 0,
                 bottom: 0,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   spacing: 8,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Color(0x29FF6969),
+                        ),
+                        child: InkWell(
+                          // TODO: 클릭 시 통신
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              spacing: 4,
+                              children: [
+                                Text(
+                                  '실행',
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFFF6969)),
+                                ),
+                                MIcon.page.question.polygon,
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     QuestionBlockTypeList(
-                      // TODO: 통신 받을 때 하드코딩 => List<model>로 변경하면 됨.
                       labels: repo.types,
                       selectedLabel: selectedType,
                       onSelected: (type) {
@@ -160,7 +189,33 @@ class _QuestionPageState extends State<QuestionPage> {
                           color: Color(0xFF333B4A),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text('터미널창'),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              spacing: 10,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '실행결과',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: MColor.kLabel.white,
+                                  ),
+                                ),
+                                Text(
+                                  '입력값 〉[1, 2, 3, 100, 99, 98]기댓값 〉[2, 2, 6, 50, 99, 49]실행 결과 〉실행한 결괏값 [1937329016,32591,1937329016,32591,0,0]이 기댓값 [2,2,6,50,99,49]과 다릅니다.입력값 〉[1, 2, 3, 100, 99, 98]기댓값 〉[2, 2, 6, 50, 99, 49]실행 결과 〉실행한 결괏값 [1937329016,32591,1937329016,32591,0,0]이 기댓값 [2,2,6,50,99,49]과 다릅니다.',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: MColor.kLabel.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
