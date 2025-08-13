@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
         "/solved-question": (context) => const SolvedQuestionPage(),
         "/mypage": (context) => const MyPagePage(),
         "/question-list": (context) => const QuestionListPage(),
-        "/question": (context) => const QuestionPage(),
       },
     );
   }
