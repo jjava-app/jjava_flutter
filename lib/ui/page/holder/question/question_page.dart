@@ -31,6 +31,40 @@ class _QuestionPageState extends State<QuestionPage> {
     if (_showPressPreview) setState(() => _showPressPreview = false);
   }
 
+  Future<void> _onFinishTap() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Color(0x99000000),
+      builder: (_) => const _QuestionLeaveDialog(
+        title: '학습 종료',
+        message: '학습을 종료하시겠습니까?',
+        cancelText: '취소',
+        confirmText: '종료',
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    // TODO: 종료 클릭 시 서버에 저장하고 이동
+    Navigator.of(context).pushNamedAndRemoveUntil('/main-holder', (route) => false);
+  }
+
+  Future<void> _onRestartTap() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Color(0x99000000),
+      builder: (_) => const _QuestionRestartDialog(
+        title: '다시 시작',
+        message: '문제를 다시 시작하시겠습니까?',
+        cancelText: '취소',
+        confirmText: '다시 시작',
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
+    Navigator.of(context).pushNamedAndRemoveUntil('/question', (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -83,12 +117,11 @@ class _QuestionPageState extends State<QuestionPage> {
                 ),
                 elevation: 8,
                 color: MColor.kBackground.normal,
-                onSelected: (value) {
+                onSelected: (value) async {
                   if (value == 'restart') {
-                    // TODO: 웹뷰에 있는 블록 쌓기 초기화
+                    await _onRestartTap();
                   } else if (value == 'finish') {
-                    // TODO: 클릭 시 삭제 확인 창 뜨고, 서버에 저장하고 이동
-                    Navigator.pushNamed(context, "/main-holder");
+                    await _onFinishTap();
                   }
                 },
                 itemBuilder: (context) => [
@@ -132,7 +165,7 @@ class _QuestionPageState extends State<QuestionPage> {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 0,
+                bottom: 8,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -221,6 +254,42 @@ class _QuestionPageState extends State<QuestionPage> {
                   ],
                 ),
               ),
+              // 컴파일 애니메이션 UI
+              Positioned.fill(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  child: Align(
+                    alignment: Alignment(0, -0.3),
+                    child: Container(
+                      width: 166,
+                      height: 58,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0x80FFFFFF),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 8,
+                        children: [
+                          Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Color(0xFFEAEAEA)),
+                          ),
+                          Text(
+                            'AI 분석중 ...',
+                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: MColor.kButton.active),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              //
             ],
           ),
         ),
@@ -243,6 +312,186 @@ class _QuestionPageState extends State<QuestionPage> {
             ),
           ),
       ],
+    );
+  }
+}
+
+// 학습 다시 시작 다이얼로그 창
+class _QuestionRestartDialog extends StatelessWidget {
+  const _QuestionRestartDialog({
+    required this.title,
+    required this.message,
+    this.cancelText = '취소',
+    this.confirmText = '다시 시작',
+  });
+
+  final String title;
+  final String message;
+  final String cancelText;
+  final String confirmText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: MColor.kBackground.normal,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: MColor.kLabel.normal,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  message,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: MColor.kLabel.neutral,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: MColor.kLine.normal),
+          SizedBox(
+            height: 48,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(
+                      cancelText,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: MColor.kLabel.normal,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                VerticalDivider(width: 1, color: MColor.kLine.normal),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: Text(
+                      confirmText,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: MColor.kStatus.destructive,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 학습 종료 다이얼로그 창
+class _QuestionLeaveDialog extends StatelessWidget {
+  const _QuestionLeaveDialog({
+    required this.title,
+    required this.message,
+    this.cancelText = '취소',
+    this.confirmText = '종료',
+  });
+
+  final String title;
+  final String message;
+  final String cancelText;
+  final String confirmText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: MColor.kBackground.normal,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: MColor.kLabel.normal,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  message,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: MColor.kLabel.neutral,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: MColor.kLine.normal),
+          SizedBox(
+            height: 48,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(
+                      cancelText,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: MColor.kLabel.normal,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                VerticalDivider(width: 1, color: MColor.kLine.normal),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: Text(
+                      confirmText,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: MColor.kStatus.destructive,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
