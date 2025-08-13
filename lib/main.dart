@@ -5,6 +5,9 @@ import 'package:jjava_flutter/ui/page/auth/join/join_page.dart';
 import 'package:jjava_flutter/ui/page/auth/login_page/login_page.dart';
 import 'package:jjava_flutter/ui/page/holder/home/home_page.dart';
 import 'package:jjava_flutter/ui/page/holder/main_holder.dart';
+import 'package:jjava_flutter/ui/page/holder/my_page/my_page_page.dart';
+import 'package:jjava_flutter/ui/page/holder/question/question_page.dart';
+import 'package:jjava_flutter/ui/page/holder/solved_question/solved_question_page.dart';
 import 'package:jjava_flutter/ui/page/holder/workspace/workspace_page.dart';
 import 'package:jjava_flutter/ui/page/splash/splash.dart';
 
@@ -30,6 +33,9 @@ class MyApp extends StatelessWidget {
         "/home": (context) => const HomePage(),
         "/main-holder": (context) => MainHolder(),
         "/workspace": (context) => const WorkspacePage(),
+        "/question": (context) => const QuestionPage(),
+        "/solved-question": (context) => const SolvedQuestionPage(),
+        "/mypage": (context) => const MyPagePage(),
       },
     );
   }
