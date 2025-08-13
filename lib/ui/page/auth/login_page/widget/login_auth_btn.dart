@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjava_flutter/data/enum/sign_up_type.dart';
 
 class LoginAuthBtn extends StatelessWidget {
   final Color btnColor;
@@ -27,7 +28,9 @@ class LoginAuthBtn extends StatelessWidget {
       width: double.infinity,
       height: 44,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/join', arguments: JoinType.social);
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
