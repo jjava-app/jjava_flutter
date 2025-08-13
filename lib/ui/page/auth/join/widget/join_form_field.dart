@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 
-class LoginFormField extends StatelessWidget {
-  final String inputText;
+class JoinFormField extends StatelessWidget {
+  final String labelText;
 
-  const LoginFormField({
+  const JoinFormField({
     super.key,
-    required this.inputText,
+    required this.labelText,
   });
 
   @override
@@ -19,7 +19,7 @@ class LoginFormField extends StatelessWidget {
           color: MColor.kLabel.neutral,
         ),
         decoration: InputDecoration(
-          hintText: inputText,
+          hintText: labelText,
           hintStyle: TextStyle(
             fontSize: 14,
             color: MColor.kLabel.assistive,
