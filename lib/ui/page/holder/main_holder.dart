@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/ui/page/holder/home/home_page.dart';
 import 'package:jjava_flutter/ui/page/holder/my_page/my_page_page.dart';
-import 'package:jjava_flutter/ui/page/holder/question/question_page.dart';
+import 'package:jjava_flutter/ui/page/holder/question/question_select_page/question_select_page.dart';
 import 'package:jjava_flutter/ui/page/holder/solved_question/solved_question_page.dart';
 
 class MainHolder extends StatefulWidget {
@@ -31,7 +31,7 @@ class _MainHolderState extends State<MainHolder> {
         children: [
           // rebuild에 의해 앞 번호의 화면들이 new 되는 문제 아직 존재.
           loadPages.contains(0) ? const HomePage() : Container(),
-          loadPages.contains(1) ? const QuestionPage() : Container(),
+          loadPages.contains(1) ? const QuestionSelectPage() : Container(),
           loadPages.contains(2) ? const HomePage() : Container(),
           loadPages.contains(3) ? const SolvedQuestionPage() : Container(),
           loadPages.contains(4) ? const MyPagePage() : Container(),

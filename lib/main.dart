@@ -5,6 +5,8 @@ import 'package:jjava_flutter/ui/page/auth/join_page/join_page.dart';
 import 'package:jjava_flutter/ui/page/auth/login_page/login_page.dart';
 import 'package:jjava_flutter/ui/page/holder/home/home_page.dart';
 import 'package:jjava_flutter/ui/page/holder/main_holder.dart';
+import 'package:jjava_flutter/ui/page/holder/question/question_page.dart';
+import 'package:jjava_flutter/ui/page/holder/question/quetion_list_page/question_list_page.dart';
 import 'package:jjava_flutter/ui/page/splash/splash.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
         "/login": (context) => const LoginPage(),
         "/home": (context) => const HomePage(),
         "/main-holder": (context) => MainHolder(),
+        "/question-list": (context) => QuestionListPage(),
+        "/question": (context) => QuestionPage(),
       },
     );
   }
