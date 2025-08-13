@@ -9,9 +9,12 @@ class QuestionListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: Center(
-        child: Container(
-          child: Text("학습 리스트 페이지"),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+        child: Center(
+          child: Container(
+            child: Text("학습 리스트 페이지"),
+          ),
         ),
       ),
     );
