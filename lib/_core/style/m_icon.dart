@@ -54,6 +54,7 @@ class _Page {
   final question = _Question();
   final solvedQuestion = _SolvedQuestion();
   final workspace = _Workspace();
+  final global = _Global();
 }
 
 class _Home {
@@ -79,6 +80,8 @@ class _Question {
   final Widget square = SvgPicture.asset('assets/icons/page_question_square.svg');
   final Widget warning1 = SvgPicture.asset('assets/icons/page_question_warning1.svg');
   final Widget warning2 = SvgPicture.asset('assets/icons/page_question_warning2.svg');
+  final Widget polygon = SvgPicture.asset('assets/icons/page_question_polygon.svg');
+  final Widget destructive = SvgPicture.asset('assets/icons/page_question_destructive.svg');
 }
 
 class _SolvedQuestion {
@@ -89,6 +92,9 @@ class _Workspace {
   final Widget copy = SvgPicture.asset('assets/icons/page_worksapce_copy.svg');
   final Widget arrowRight = SvgPicture.asset('assets/icons/page_workspace_arrow_right.svg');
   final Widget delete = SvgPicture.asset('assets/icons/page_workspace_delete.svg');
-  final Widget dot = SvgPicture.asset('assets/icons/page_workspace_dot.svg');
   final Widget plusSquare = SvgPicture.asset('assets/icons/page_workspace_plus_square.svg');
+}
+
+class _Global {
+  final Widget more = SvgPicture.asset('assets/icons/page_global_more.svg');
 }
