@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/ui/page/question/list_page/question_list_page.dart';
-import 'package:jjava_flutter/ui/page/question/select_page/widgets/select_question.dart';
+import 'package:jjava_flutter/ui/page/holder/question/list_page/question_list_page.dart';
+import 'package:jjava_flutter/ui/page/holder/question/select_page/widgets/select_question.dart';
 
 class QuestionSelectPage extends StatelessWidget {
   const QuestionSelectPage({super.key});
