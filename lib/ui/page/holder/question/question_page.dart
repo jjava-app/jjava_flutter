@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/data/repository/question_repository.dart';
+import 'package:jjava_flutter/ui/page/holder/question/widget/question_compile_animation.dart';
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -11,7 +12,10 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _QuestionPageState extends State<QuestionPage> {
-  // 컴파일 로딩 로직
+  // TODO: 통신 시 실행 로직들 분리하여 vm에 옮기기
+  // TODO: 웹뷰 처리 완료 후 오답 블럭 하이라이트 작업 진행
+
+  // 1. 컴파일 로딩 로직
   bool _isLoading = false;
 
   Future<void> _onRunPressed() async {
@@ -66,7 +70,7 @@ class _QuestionPageState extends State<QuestionPage> {
     Navigator.of(context).pushNamedAndRemoveUntil('/main-holder', (route) => false);
   }
 
-  // 문제 보여주기
+  // 2. 문제 보여주기
   bool _showIntro = true;
   bool _showPressPreview = false;
   void _startPressPreview([PointerDownEvent? _]) {
@@ -77,7 +81,7 @@ class _QuestionPageState extends State<QuestionPage> {
     if (_showPressPreview) setState(() => _showPressPreview = false);
   }
 
-  // 블록 더미
+  // 3. 블록 로직
   final repo = QuestionRepository();
   String? selectedType;
 
@@ -87,7 +91,7 @@ class _QuestionPageState extends State<QuestionPage> {
     selectedType = repo.types.isNotEmpty ? repo.types.first : null;
   }
 
-  // 학습종료 다이얼로그
+  // 4. 학습종료 다이얼로그 로직
   Future<void> _onFinishTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -105,7 +109,7 @@ class _QuestionPageState extends State<QuestionPage> {
     Navigator.of(context).pushNamedAndRemoveUntil('/main-holder', (route) => false);
   }
 
-  // 다시 시작 다이얼로그
+  // 5. 다시 시작 다이얼로그
   Future<void> _onRestartTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -123,165 +127,170 @@ class _QuestionPageState extends State<QuestionPage> {
     Navigator.of(context).pushNamedAndRemoveUntil('/question', (route) => false);
   }
 
+  // 6. 터미널 높이 조절 로직
+  double _terminalHeight = 148;
+  static const double _terminalMin = 148;
+
+  double get _terminalMax {
+    final size = MediaQuery.of(context).size;
+    final pad = MediaQuery.of(context).padding;
+    return (size.height - pad.top - pad.bottom) * 0.6;
+  }
+
+  void _onTerminalDragUpdate(DragUpdateDetails d) {
+    final next = _terminalHeight - d.delta.dy;
+    setState(() => _terminalHeight = next.clamp(_terminalMin, _terminalMax));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         // 아래층: 원래 화면
         Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-              '리스트(배열)',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: MColor.kLabel.normal,
-              ),
-            ),
-            leadingWidth: 90,
-            leading: Padding(
-              padding: EdgeInsets.only(left: 16, top: 10, bottom: 10),
-              child: Listener(
-                behavior: HitTestBehavior.opaque,
-                onPointerDown: _startPressPreview,
-                onPointerUp: _stopPressPreview,
-                onPointerCancel: _stopPressPreview,
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Color(0x2803C75A),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '문제보기',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: MColor.kPrimary.normal,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            actions: [
-              PopupMenuButton<String>(
-                icon: MIcon.page.global.more,
-                position: PopupMenuPosition.under,
-                offset: Offset(-16, 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 8,
-                color: MColor.kBackground.normal,
-                onSelected: (value) async {
-                  if (value == 'restart') {
-                    await _onRestartTap();
-                  } else if (value == 'finish') {
-                    await _onFinishTap();
-                  }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'restart',
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Center(
-                      child: Text(
-                        '다시 시작',
-                        style: TextStyle(fontSize: 14, color: MColor.kLabel.normal),
-                      ),
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'finish',
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Center(
-                      child: Text(
-                        '학습 종료',
-                        style: TextStyle(fontSize: 14, color: MColor.kLabel.normal),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          appBar: _appbar(),
           body: Stack(
             children: [
-              // 웹뷰 영역
-              Container(
-                decoration: BoxDecoration(border: Border.all(color: Colors.red, width: 3)),
-                child: Center(
-                  child: Text(
-                    '웹뷰 영역',
-                    style: TextStyle(fontSize: 26, color: Colors.red),
-                  ),
-                ),
-              ),
-              // 웹뷰 위 UI
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 8,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  spacing: 8,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Color(0x29FF6969),
-                        ),
-                        child: InkWell(
-                          // TODO: 클릭 시 통신
-                          onTap: _onRunPressed,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              spacing: 4,
-                              children: [
-                                Text(
-                                  '실행',
-                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFFF6969)),
+              Column(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Column(
+                          children: [
+                            // 블럭 쌓기 영역
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  '블럭 쌓기 영역',
+                                  style: TextStyle(fontSize: 26, color: Colors.red),
                                 ),
-                                MIcon.page.question.polygon,
+                              ),
+                            ),
+                            //블럭 UI
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              spacing: 8,
+                              children: [
+                                // 블럭 타입
+                                QuestionBlockTypeList(
+                                  labels: repo.types,
+                                  selectedLabel: selectedType,
+                                  onSelected: (type) {
+                                    setState(() {
+                                      selectedType = type;
+                                    });
+                                  },
+                                ),
+                                // 블럭 리스트
+                                if (selectedType != null)
+                                  QuestionBlockList(
+                                    labels: repo.blocksByType[selectedType] ?? [],
+                                  ),
+                                SizedBox(height: 0),
                               ],
+                            ),
+                          ],
+                        ),
+                        // 실행 버튼
+                        Positioned(
+                          bottom: 104,
+                          right: 16,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color(0x29FF6969),
+                            ),
+                            child: InkWell(
+                              // TODO: 클릭 시 통신
+                              onTap: _onRunPressed,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  spacing: 4,
+                                  children: [
+                                    Text(
+                                      '실행',
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFFF6969)),
+                                    ),
+                                    MIcon.page.question.polygon,
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                    QuestionBlockTypeList(
-                      labels: repo.types,
-                      selectedLabel: selectedType,
-                      onSelected: (type) {
-                        setState(() {
-                          selectedType = type;
-                        });
-                      },
+                  ),
+                  // 터미널
+                  // Container(
+                  //   width: double.infinity,
+                  //   height: 148,
+                  //   decoration: BoxDecoration(
+                  //     color: Color(0xFF333B4A),
+                  //   ),
+                  //   child: SingleChildScrollView(
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(8),
+                  //       child: Column(
+                  //         spacing: 10,
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: [
+                  //           Text(
+                  //             '실행결과',
+                  //             style: TextStyle(
+                  //               fontSize: 16,
+                  //               fontWeight: FontWeight.w400,
+                  //               color: MColor.kLabel.white,
+                  //             ),
+                  //           ),
+                  //           Text(
+                  //             '입력값 〉[1, 2, 3, 100, 99, 98]기댓값 〉[2, 2, 6, 50, 99, 49]실행 결과 〉실행한 결괏값 [1937329016,32591,1937329016,32591,0,0]이 기댓값 [2,2,6,50,99,49]과 다릅니다.입력값 〉[1, 2, 3, 100, 99, 98]기댓값 〉[2, 2, 6, 50, 99, 49]실행 결과 〉실행한 결괏값 [1937329016,32591,1937329016,32591,0,0]이 기댓값 [2,2,6,50,99,49]과 다릅니다.',
+                  //             style: TextStyle(
+                  //               fontSize: 16,
+                  //               fontWeight: FontWeight.w400,
+                  //               color: MColor.kLabel.white,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 120),
+                    curve: Curves.easeOut,
+                    width: double.infinity,
+                    height: _terminalHeight,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF333B4A),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    if (selectedType != null)
-                      QuestionBlockList(
-                        labels: repo.blocksByType[selectedType] ?? [],
-                      ),
-                    // 터미널
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16, right: 16, left: 16),
-                      child: Container(
-                        width: double.infinity,
-                        height: 148,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF333B4A),
-                          borderRadius: BorderRadius.circular(8),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onVerticalDragUpdate: _onTerminalDragUpdate,
+                          child: SizedBox(
+                            height: 18,
+                            child: Center(
+                              child: Container(
+                                width: 40,
+                                height: 4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(2),
+                                  color: Colors.white24,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                        child: SingleChildScrollView(
-                          child: Padding(
+                        Expanded(
+                          child: SingleChildScrollView(
                             padding: const EdgeInsets.all(8),
                             child: Column(
                               spacing: 10,
@@ -307,47 +316,14 @@ class _QuestionPageState extends State<QuestionPage> {
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // 컴파일 애니메이션 UI
-              if (_isLoading)
-                Positioned.fill(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    child: Align(
-                      alignment: Alignment(0, -0.3),
-                      child: Container(
-                        width: 166,
-                        height: 58,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Color(0x80FFFFFF),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 8,
-                          children: [
-                            Container(
-                              width: 20,
-                              height: 20,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Color(0xFFEAEAEA)),
-                            ),
-                            Text(
-                              'AI 분석중 ...',
-                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: MColor.kButton.active),
-                            ),
-                          ],
-                        ),
-                      ),
+                      ],
                     ),
                   ),
-                ),
+                ],
+              ),
+
+              // 컴파일 애니메이션 UI
+              if (_isLoading) QuestionCompileAnimation(),
               //
             ],
           ),
@@ -370,6 +346,87 @@ class _QuestionPageState extends State<QuestionPage> {
               child: _ProblemOverlay(absorbTouches: false),
             ),
           ),
+      ],
+    );
+  }
+
+  AppBar _appbar() {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: Text(
+        '리스트(배열)',
+        style: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: MColor.kLabel.normal,
+        ),
+      ),
+      leadingWidth: 90,
+      leading: Padding(
+        padding: EdgeInsets.only(left: 16, top: 10, bottom: 10),
+        child: Listener(
+          behavior: HitTestBehavior.opaque,
+          onPointerDown: _startPressPreview,
+          onPointerUp: _stopPressPreview,
+          onPointerCancel: _stopPressPreview,
+          child: Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Color(0x2803C75A),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '문제보기',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: MColor.kPrimary.normal,
+              ),
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        PopupMenuButton<String>(
+          icon: MIcon.page.global.more,
+          position: PopupMenuPosition.under,
+          offset: Offset(-16, 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          elevation: 8,
+          color: MColor.kBackground.normal,
+          onSelected: (value) async {
+            if (value == 'restart') {
+              await _onRestartTap();
+            } else if (value == 'finish') {
+              await _onFinishTap();
+            }
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: 'restart',
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(
+                child: Text(
+                  '다시 시작',
+                  style: TextStyle(fontSize: 14, color: MColor.kLabel.normal),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'finish',
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(
+                child: Text(
+                  '학습 종료',
+                  style: TextStyle(fontSize: 14, color: MColor.kLabel.normal),
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -871,7 +928,7 @@ class QuestionBlockType extends StatelessWidget {
   }
 }
 
-// 문제 내용 UI를 재사용 가능한 위젯으로 분리
+// 문제 내용 UI 위젯
 class _ProblemOverlay extends StatelessWidget {
   final bool absorbTouches; // true면 배경 터치 막음(인트로용)
   final VoidCallback? onClose; // 닫기 버튼 노출/동작 (인트로 때만)
