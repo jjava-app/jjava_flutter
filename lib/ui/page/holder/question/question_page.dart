@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
+import 'package:jjava_flutter/ui/page/holder/main_holder.dart';
 import 'package:jjava_flutter/ui/page/holder/question/widget/question_body.dart';
 import 'package:jjava_flutter/ui/page/holder/widget/dialog/leave_dialog.dart';
 import 'package:jjava_flutter/ui/page/holder/widget/dialog/restart_dialog.dart';
@@ -42,7 +43,10 @@ class _QuestionPageState extends State<QuestionPage> {
     );
     if (confirmed != true || !mounted) return;
     // TODO: 종료 클릭 시 서버에 저장하고 이동
-    Navigator.of(context).pushNamedAndRemoveUntil('/main-holder', (route) => false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => MainHolder()),
+    );
   }
 
   // 5. 다시 시작 다이얼로그
@@ -60,15 +64,14 @@ class _QuestionPageState extends State<QuestionPage> {
     );
     if (confirmed != true || !mounted) return;
     // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
-    Navigator.of(context).pushNamedAndRemoveUntil('/question', (route) => false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => QuestionPage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: Text("학습 페이지"),
-      ),
     return Stack(
       children: [
         Scaffold(

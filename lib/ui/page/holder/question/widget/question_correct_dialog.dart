@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
+import 'package:jjava_flutter/ui/page/holder/main_holder.dart';
 
 class QuestionCorrectDialog extends StatelessWidget {
   @override
@@ -91,7 +92,12 @@ class QuestionCorrectDialog extends StatelessWidget {
                 VerticalDivider(width: 1, color: MColor.kLine.normal),
                 Expanded(
                   child: TextButton(
-                    onPressed: () => Navigator.pop(context, true),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => MainHolder()),
+                      );
+                    },
                     child: Text(
                       '나가기',
                       style: TextStyle(
