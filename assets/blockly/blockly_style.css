@@ -1,0 +1,47 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+.blocklyScrollbarHorizontal,
+.blocklyScrollbarVertical {
+  opacity: 0 !important;
+}
+
+.blocklyScrollbarKnob {
+  opacity: 0 !important;
+}
+
+.tool_box {
+  background-color: transparent;
+}
+
+.blocklyToolbox {
+  height: 48px !important;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.blocklyToolboxCategoryGroup {
+  flex-wrap: nowrap;
+}
+
+.blocklyToolboxDiv {
+  height: 80px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  background: transparent;
+  scroll-behavior: smooth;
+}

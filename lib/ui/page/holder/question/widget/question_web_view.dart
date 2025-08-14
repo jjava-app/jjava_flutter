@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/data/repository/question_repository.dart';
+import 'package:jjava_flutter/ui/page/holder/question/widget/question_block_dashboard.dart';
 import 'package:jjava_flutter/ui/page/holder/question/widget/question_block_list.dart';
 import 'package:jjava_flutter/ui/page/holder/question/widget/question_block_type_list.dart';
 import 'package:jjava_flutter/ui/page/holder/question/widget/question_correct_dialog.dart';
@@ -83,14 +84,7 @@ class _QuestionWebViewState extends State<QuestionWebView> {
         Column(
           children: [
             // 블럭 쌓기 영역
-            Expanded(
-              child: Center(
-                child: Text(
-                  '블럭 쌓기 영역',
-                  style: TextStyle(fontSize: 26, color: Colors.red),
-                ),
-              ),
-            ),
+            Expanded(child: QuestionBlockDashboard()),
             //블럭 UI
             Column(
               mainAxisSize: MainAxisSize.min,

@@ -34,7 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  #  flutter_blockly_plus: ^2.0.2
+  flutter_blockly_plus: ^2.0.2
   webview_flutter: ^4.13.0
   dio: ^5.8.0+1
   flutter_riverpod: ^2.6.1
@@ -74,6 +74,8 @@ flutter:
     - assets/icons/
     - assets/animation/
     - assets/fonts/
+    - assets/blockly/blockly_editor.html
+    - assets/blockly/blockly_style.css
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
