@@ -13,17 +13,9 @@ class _Nav {
 }
 
 class _Top {
-  final Widget plus = SvgPicture.asset('assets/icons/nav_top_arrow_back.svg');
-  final Widget logo = SvgPicture.asset(
-    'assets/images/global/main_logo.svg',
-    width: 24,
-    height: 24,
-  );
-  final Widget profile = SvgPicture.asset(
-    'assets/images/profile.svg',
-    width: 24,
-    height: 24,
-  );
+  final Widget arrowBack = SvgPicture.asset('assets/icons/nav_top_arrow_back.svg');
+  final Widget logo = SvgPicture.asset('assets/images/global/main_logo.svg');
+  final Widget profile = SvgPicture.asset('assets/images/profile.svg');
 }
 
 class _Bottom {

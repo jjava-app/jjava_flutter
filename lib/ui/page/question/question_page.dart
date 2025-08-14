@@ -65,6 +65,10 @@ class _QuestionPageState extends State<QuestionPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        child: Text("학습 페이지"),
+      ),
     return Stack(
       children: [
         Scaffold(
