@@ -89,6 +89,7 @@ class _Question {
   final Widget warning1 = SvgPicture.asset('assets/icons/page_question_warning1.svg');
   final Widget warning2 = SvgPicture.asset('assets/icons/page_question_warning2.svg');
   final Widget polygon = SvgPicture.asset('assets/icons/page_question_polygon.svg');
+  final Widget destructive = SvgPicture.asset('assets/icons/page_question_destructive.svg');
 }
 
 class _SolvedQuestion {

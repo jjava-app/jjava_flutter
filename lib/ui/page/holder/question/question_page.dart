@@ -11,6 +11,7 @@ class QuestionPage extends StatefulWidget {
 }
 
 class _QuestionPageState extends State<QuestionPage> {
+  // 컴파일 로딩 로직
   bool _isLoading = false;
 
   Future<void> _onRunPressed() async {
@@ -29,21 +30,13 @@ class _QuestionPageState extends State<QuestionPage> {
 
     // 결과에 맞는 다이얼로그 표시
     if (isCorrect) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => _CorrectResultDialog(),
-      );
+      _onCorrectTap();
     } else {
-      // showDialog(
-      //   context: context,
-      //   barrierDismissible: false,
-      //   builder: (_) => _IncorrectResultDialog(),
-      // );
+      _onIncorrectTap();
     }
   }
 
-  bool _mockIsCorrect = true; // UI 테스트용
+  bool _mockIsCorrect = false; // UI 테스트용 임시 값
 
   Future<bool> _checkAnswerFromServer() async {
     // TODO: 실제 API 호출로 변경
@@ -51,9 +44,40 @@ class _QuestionPageState extends State<QuestionPage> {
     return _mockIsCorrect;
   }
 
+  Future<void> _onCorrectTap() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Color(0x99000000),
+      builder: (_) => _CorrectResultDialog(),
+    );
+    if (confirmed != true || !mounted) return;
+  }
+
+  Future<void> _onIncorrectTap() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Color(0x99000000),
+      builder: (_) => _IncorrectResultDialog(),
+    );
+    if (confirmed != true || !mounted) return;
+    // TODO: 풀기 완료한 문제 저장하고 페이지 이동
+    Navigator.of(context).pushNamedAndRemoveUntil('/main-holder', (route) => false);
+  }
+
+  // 문제 보여주기
   bool _showIntro = true;
   bool _showPressPreview = false;
+  void _startPressPreview([PointerDownEvent? _]) {
+    if (!_showPressPreview) setState(() => _showPressPreview = true);
+  }
 
+  void _stopPressPreview([PointerEvent? _]) {
+    if (_showPressPreview) setState(() => _showPressPreview = false);
+  }
+
+  // 블록 더미
   final repo = QuestionRepository();
   String? selectedType;
 
@@ -63,14 +87,7 @@ class _QuestionPageState extends State<QuestionPage> {
     selectedType = repo.types.isNotEmpty ? repo.types.first : null;
   }
 
-  void _startPressPreview([PointerDownEvent? _]) {
-    if (!_showPressPreview) setState(() => _showPressPreview = true);
-  }
-
-  void _stopPressPreview([PointerEvent? _]) {
-    if (_showPressPreview) setState(() => _showPressPreview = false);
-  }
-
+  // 학습종료 다이얼로그
   Future<void> _onFinishTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -88,6 +105,7 @@ class _QuestionPageState extends State<QuestionPage> {
     Navigator.of(context).pushNamedAndRemoveUntil('/main-holder', (route) => false);
   }
 
+  // 다시 시작 다이얼로그
   Future<void> _onRestartTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -436,11 +454,11 @@ class _CorrectResultDialog extends StatelessWidget {
                   child: TextButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
-                      '나가기',
+                      '계속하기',
                       style: TextStyle(
                         fontSize: 16,
-                        color: MColor.kLabel.normal,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
+                        color: MColor.kButton.active,
                       ),
                     ),
                   ),
@@ -450,16 +468,70 @@ class _CorrectResultDialog extends StatelessWidget {
                   child: TextButton(
                     onPressed: () => Navigator.pop(context, true),
                     child: Text(
-                      '계속하기',
+                      '나가기',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: MColor.kStatus.destructive,
+                        fontWeight: FontWeight.w500,
+                        color: MColor.kLabel.normal,
                       ),
                     ),
                   ),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 오답 다이얼로그 창
+class _IncorrectResultDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: MColor.kBackground.normal,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                MIcon.page.question.destructive,
+                SizedBox(height: 10),
+                Text(
+                  'Lorem ipsum dolor sit amet consectetur. Porta sed placerat dignissim facilisis congue viverra suspendisse neque maecenas.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: MColor.kLabel.neutral,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: MColor.kLine.normal),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                '닫기',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: MColor.kLabel.normal,
+                ),
+              ),
             ),
           ),
         ],
