@@ -75,6 +75,7 @@ flutter:
     - assets/animation/
     - assets/fonts/
     - assets/blockly/blockly_editor.html
+    - assets/blockly/hello.html
     - assets/blockly/blockly_style.css
   #   - images/a_dot_ham.jpeg
 

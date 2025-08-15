@@ -82,6 +82,7 @@ class _QuestionWebViewState extends State<QuestionWebView> {
     return Stack(
       children: [
         Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             // 블럭 쌓기 영역
             Expanded(child: QuestionBlockDashboard()),

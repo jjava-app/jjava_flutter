@@ -261,7 +261,11 @@ class _ProblemOverlay extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Text(
                             '닫기',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MColor.kLabel.normal),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: MColor.kLabel.normal,
+                            ),
                           ),
                         ),
                       ),

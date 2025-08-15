@@ -22,12 +22,6 @@ li {
   background-color: transparent;
 }
 
-.blocklyToolbox {
-  height: 48px !important;
-  overflow-x: auto;
-  white-space: nowrap;
-  scrollbar-width: none;
-}
 .scroll-container::-webkit-scrollbar {
   display: none;
 }
@@ -40,8 +34,19 @@ li {
   height: 80px !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
   background: transparent;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+}
+
+.blocklyToolbox {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.blocklyToolboxCategory {
+  display: inline-block;
+  margin-right: 8px;
 }

@@ -21,27 +21,31 @@ class _QuestionBlockDashboardState extends State<QuestionBlockDashboard> {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (u) => debugPrint('PAGE START: $u'),
+          onPageFinished: (u) => debugPrint('PAGE DONE: $u'),
+          onWebResourceError: (e) => debugPrint('WEB ERR ${e.errorCode} ${e.description}'),
+        ),
+      )
       ..addJavaScriptChannel(
         'FlutterChannel',
         onMessageReceived: (message) {
-          final code = json.decode(message.message);
+          // JS: window.FlutterChannel.postMessage(JSON.stringify({json:'...', javascript:'...'}))
+          final code = json.decode(message.message) as Map<String, dynamic>;
           setState(() {
-            jsonCode = code['json'];
-            print('🌐 JavaScript 코드: ${code['javascript']}');
-            print('📦 JSON 코드: ${code['json']}');
+            jsonCode = code['json'] as String?;
           });
-          //sendToServer(code['json'], code['java']); 서버 전송은 필요 시만
+          debugPrint('🌐 JS: ${code['javascript']}');
+          debugPrint('📦 JSON: ${code['json']}');
         },
       )
-      ..loadFlutterAsset('assets/blockly/blockly_editor.html');
+      ..loadFlutterAsset('assets/blockly/hello.html');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: WebViewWidget(controller: _controller),
-    );
+    return WebViewWidget(controller: _controller);
   }
 }
