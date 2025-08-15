@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/data/repository/question_list_repository.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/main_holder.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/question/list_page/widgets/ma_question_section.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/question/list_page/widgets/ma_question_list_body.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/ma_question_page.dart';
 
 class MaQuestionListPage extends StatelessWidget {
@@ -12,80 +10,10 @@ class MaQuestionListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Section> sections = QuestionListRepository.sections;
-    final isTablet = MediaQuery.sizeOf(context).shortestSide >= 600;
-
-    Widget content = Column(
-      children: [
-        Expanded(
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
-            itemCount: sections.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final s = sections[index];
-              return MaQuestionSection(section: s);
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: SizedBox(
-            height: 48,
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {},
-              style:
-                  ElevatedButton.styleFrom(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ).merge(
-                    ButtonStyle(
-                      overlayColor: WidgetStateProperty.resolveWith((states) {
-                        if (states.contains(WidgetState.pressed)) {
-                          return MColor.kPrimary.normal.withValues(alpha: 0.12);
-                        }
-                        return null;
-                      }),
-                      backgroundColor: WidgetStateProperty.resolveWith((
-                        states,
-                      ) {
-                        if (states.contains(WidgetState.disabled)) {
-                          return MColor.kLine.normal;
-                        }
-                        return MColor.kPrimary.normal;
-                      }),
-                      foregroundColor: WidgetStatePropertyAll(
-                        MColor.kLabel.white,
-                      ),
-                    ),
-                  ),
-              child: const Text('학습 시작'),
-            ),
-          ),
-        ),
-      ],
-    );
-
-    if (isTablet) {
-      content = Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 360),
-          child: content,
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: _appBar(context),
       body: SafeArea(
-        child: content,
+        child: MaQuestionListBody(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -95,7 +23,7 @@ class MaQuestionListPage extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: isTablet ? _bottomNavigationBar(context) : null,
+      bottomNavigationBar: _bottomNavigationBar(context),
     );
   }
 
