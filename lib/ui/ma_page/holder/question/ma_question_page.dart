@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/main_holder.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_body.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_leave_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_restart_dialog.dart';

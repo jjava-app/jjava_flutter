@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/main_holder.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 
 class MaHomeQuickActions extends StatelessWidget {
   const MaHomeQuickActions({super.key});

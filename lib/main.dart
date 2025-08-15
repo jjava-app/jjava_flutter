@@ -6,7 +6,7 @@ import 'package:jjava_flutter/_core/style/m_thema.dart';
 import 'package:jjava_flutter/ui/ma_page/auth/join/ma_join_page.dart';
 import 'package:jjava_flutter/ui/ma_page/auth/login_page/ma_login_page.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/home/ma_home_page.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/main_holder.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 import 'package:jjava_flutter/ui/ma_page/splash/ma_splash_page.dart';
 // 태블릿 페이지 import
 import 'package:jjava_flutter/ui/ta_page/auth/join/ta_join_page.dart';

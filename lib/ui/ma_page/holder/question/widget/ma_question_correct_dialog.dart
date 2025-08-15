@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/main_holder.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 
 class MaQuestionCorrectDialog extends StatelessWidget {
   @override

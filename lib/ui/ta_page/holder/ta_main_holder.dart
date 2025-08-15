@@ -12,10 +12,10 @@ class TaMainHolder extends StatefulWidget {
   final int initialIndex;
 
   @override
-  State<TaMainHolder> createState() => _MainHolderState();
+  State<TaMainHolder> createState() => _TaMainHolderState();
 }
 
-class _MainHolderState extends State<TaMainHolder> {
+class _TaMainHolderState extends State<TaMainHolder> {
   int selectedIndex = 0;
   List<int> loadPages = [0];
 
@@ -32,15 +32,13 @@ class _MainHolderState extends State<TaMainHolder> {
     if (!loadPages.contains(index)) {
       loadPages.add(index);
     }
-
-    selectedIndex = index;
-    setState(() {});
+    setState(() {
+      selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final isTablet = MediaQuery.sizeOf(context).shortestSide >= 600;
-
     return Scaffold(
       body: IndexedStack(
         index: selectedIndex,
@@ -52,15 +50,8 @@ class _MainHolderState extends State<TaMainHolder> {
           loadPages.contains(4) ? TaMyPagePage() : Container(),
         ],
       ),
-      bottomNavigationBar: _showBottomBar(isTablet)
-          ? _bottomNavigationBar()
-          : null,
+      bottomNavigationBar: _bottomNavigationBar(),
     );
-  }
-
-  bool _showBottomBar(bool isTablet) {
-    if (isTablet) return true;
-    return [0, 1, 2, 3, 4].contains(selectedIndex);
   }
 
   BottomNavigationBar _bottomNavigationBar() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/home/widget/ma_home_past_learning_list.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/main_holder.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 
 class MaHomeLeaningRecord extends StatelessWidget {
   const MaHomeLeaningRecord({
