@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/ui/page/holder/question/question_page.dart';
-import 'package:jjava_flutter/ui/page/question/question_page.dart';
 
 class QuestionListPage extends StatelessWidget {
   const QuestionListPage({super.key});
@@ -18,14 +16,6 @@ class QuestionListPage extends StatelessWidget {
             child: Text("학습 리스트 페이지"),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => QuestionPage()),
-          );
-        },
       ),
     );
   }

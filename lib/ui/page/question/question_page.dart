@@ -255,13 +255,19 @@ class _ProblemOverlay extends StatelessWidget {
                           padding: MaterialStateProperty.all(EdgeInsets.zero),
                           minimumSize: MaterialStateProperty.all(Size.zero),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: MaterialStateProperty.all(RoundedRectangleBorder()),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(),
+                          ),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Text(
                             '닫기',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: MColor.kLabel.normal),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: MColor.kLabel.normal,
+                            ),
                           ),
                         ),
                       ),
