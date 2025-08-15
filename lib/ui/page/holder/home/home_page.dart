@@ -7,9 +7,22 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.sizeOf(context).shortestSide >= 600;
+    Widget content = HomeBody();
+    if (isTablet) {
+      content = Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 360),
+          child: content,
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: _appbar(),
-      body: HomeBody(),
+      body: SafeArea(
+        child: content,
+      ),
     );
   }
 

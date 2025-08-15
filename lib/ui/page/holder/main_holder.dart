@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/ui/page/holder/home/home_page.dart';
 import 'package:jjava_flutter/ui/page/holder/my_page/my_page_page.dart';
+import 'package:jjava_flutter/ui/page/holder/question/select_page/question_select_page.dart';
 import 'package:jjava_flutter/ui/page/holder/solved_question/solved_question_page.dart';
 import 'package:jjava_flutter/ui/page/holder/workspace/workspace_page.dart';
-import 'package:jjava_flutter/ui/page/question/select_page/question_select_page.dart';
 
 class MainHolder extends StatefulWidget {
   const MainHolder({super.key, this.initialIndex = 0});
@@ -39,11 +39,12 @@ class _MainHolderState extends State<MainHolder> {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.sizeOf(context).shortestSide >= 600;
+
     return Scaffold(
       body: IndexedStack(
-        index: selectedIndex, // 변수가 되어야 한다. -> 상태로 등록
+        index: selectedIndex,
         children: [
-          // rebuild에 의해 앞 번호의 화면들이 new 되는 문제 아직 존재.
           loadPages.contains(0) ? HomePage() : Container(),
           loadPages.contains(1) ? QuestionSelectPage() : Container(),
           loadPages.contains(2) ? WorkspacePage() : Container(),
@@ -51,8 +52,13 @@ class _MainHolderState extends State<MainHolder> {
           loadPages.contains(4) ? MyPagePage() : Container(),
         ],
       ),
-      bottomNavigationBar: _bottomNavigationBar(),
+      bottomNavigationBar: _showBottomBar(isTablet) ? _bottomNavigationBar() : null,
     );
+  }
+
+  bool _showBottomBar(bool isTablet) {
+    if (isTablet) return true;
+    return [0, 1, 2, 3, 4].contains(selectedIndex);
   }
 
   BottomNavigationBar _bottomNavigationBar() {

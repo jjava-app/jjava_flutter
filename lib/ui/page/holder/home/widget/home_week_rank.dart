@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:jjava_flutter/_core/data/repository/home_repository.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/data/repository/home_repository.dart';
 
 class HomeWeekRank extends StatelessWidget {
   const HomeWeekRank({super.key});
