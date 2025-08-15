@@ -31,7 +31,7 @@ class _LabelColors {
   final Color strong = const Color(0xFF000000); // 진하게 강조
   final Color neutral = const Color(0xFF2E2F33); // 중립 텍스트
   final Color alternative = const Color(0xFF848588); // 대체 텍스트
-  final Color assistive = const Color(0xFFC7C8C9); // 보조 텍스트
+  final Color assistive = const Color(0x4737383C); // 보조 텍스트
   final Color disable = const Color(0xFFDFDFE0); // 비활성 텍스트
   final Color white = const Color(0xFFFFFFFF); // 흰색 텍스트 (어두운 배경용)
 }
