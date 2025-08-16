@@ -87,34 +87,34 @@ class _QuestionWebViewState extends State<QuestionWebView> {
             // 블럭 쌓기 영역
             Expanded(child: QuestionBlockDashboard()),
             //블럭 UI
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              spacing: 8,
-              children: [
-                // 블럭 타입
-                QuestionBlockTypeList(
-                  labels: repo.types,
-                  selectedLabel: selectedType,
-                  onSelected: (type) {
-                    setState(() {
-                      selectedType = type;
-                    });
-                  },
-                ),
-                // 블럭 리스트
-                if (selectedType != null)
-                  QuestionBlockList(
-                    labels: repo.blocksByType[selectedType] ?? [],
-                  ),
-                SizedBox(height: 0),
-              ],
-            ),
+            // Column(
+            //   mainAxisSize: MainAxisSize.min,
+            //   crossAxisAlignment: CrossAxisAlignment.end,
+            //   spacing: 8,
+            //   children: [
+            //     // 블럭 타입
+            //     QuestionBlockTypeList(
+            //       labels: repo.types,
+            //       selectedLabel: selectedType,
+            //       onSelected: (type) {
+            //         setState(() {
+            //           selectedType = type;
+            //         });
+            //       },
+            //     ),
+            //     // 블럭 리스트
+            //     if (selectedType != null)
+            //       QuestionBlockList(
+            //         labels: repo.blocksByType[selectedType] ?? [],
+            //       ),
+            //     SizedBox(height: 0),
+            //   ],
+            // ),
           ],
         ),
         // 실행 버튼
         Positioned(
-          bottom: 104,
+          bottom: 188,
           right: 16,
           child: Container(
             decoration: BoxDecoration(

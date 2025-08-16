@@ -1,143 +1,234 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블록클리 테스트 페이지</title>
+    <link rel="stylesheet" href="blockly_style.css">
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-    <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
-    <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
-    <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
-    <script src="https://unpkg.com/blockly/msg/kr.js"></script>
-    <link href="blockly_style.css" rel="stylesheet" />
 </head>
 <body>
-<div class="wrapper">
-    <div id="blocklyDiv" style="width: 100%; height: 100%;"></div>
-    <xml id="toolbox" style="display: none">
-        <!-- Logic -->
-        <category name="Logic" colour="#5C81A6">
-            <block type="controls_if"></block>
-            <block type="logic_compare"></block>
-            <block type="logic_operation">
-                <field name="OP">AND</field>
-            </block>
-            <block type="logic_operation">
-                <field name="OP">OR</field>
-            </block>
-            <block type="logic_boolean">
-                <field name="BOOL">TRUE</field>
-            </block>
-            <block type="logic_boolean">
-                <field name="BOOL">FALSE</field>
-            </block>
-            <block type="logic_negate"></block>
-            <block type="logic_null"></block>
-            <block type="logic_ternary"></block>
-        </category>
+<div id="blocklyDiv" style="height: 100vh; width: 100%;"></div>
+<xml id="toolbox" style="display: none">
+    <!-- Logic -->
+    <category name="Logic" colour="#5C81A6">
+        <block type="controls_if"></block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation">
+            <field name="OP">AND</field>
+        </block>
+        <block type="logic_operation">
+            <field name="OP">OR</field>
+        </block>
+        <block type="logic_boolean">
+            <field name="BOOL">TRUE</field>
+        </block>
+        <block type="logic_boolean">
+            <field name="BOOL">FALSE</field>
+        </block>
+        <block type="logic_negate"></block>
+        <block type="logic_null"></block>
+        <block type="logic_ternary"></block>
+    </category>
 
-        <!-- Math -->
-        <category name="Math" colour="#5CA65C">
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
-            <block type="math_single"></block>
-            <block type="math_trig"></block>
-            <block type="math_constant"></block>
-            <block type="math_number_property"></block>
-            <block type="math_round"></block>
-            <block type="math_on_list"></block>
-            <block type="math_modulo"></block>
-            <block type="math_constrain"></block>
-        </category>
+    <!-- Math -->
+    <category name="Math" colour="#5CA65C">
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="math_single"></block>
+        <block type="math_trig"></block>
+        <block type="math_constant"></block>
+        <block type="math_number_property"></block>
+        <block type="math_round"></block>
+        <block type="math_on_list"></block>
+        <block type="math_modulo"></block>
+        <block type="math_constrain"></block>
+    </category>
 
-        <!-- Text -->
-        <category name="Text" colour="#5CA68D">
-            <block type="text"></block>
-            <block type="text_print">
-                <value name="TEXT">
-                    <shadow type="text">
-                        <field name="TEXT">Hello, World!</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="text_join"></block>
-            <block type="text_length"></block>
-            <block type="text_isEmpty"></block>
-            <block type="text_indexOf"></block>
-            <block type="text_charAt"></block>
-            <block type="text_getSubstring"></block>
-            <block type="text_changeCase"></block>
-            <block type="text_trim"></block>
-        </category>
+    <!-- Text -->
+    <category name="Text" colour="#5CA68D">
+        <block type="text"></block>
+        <block type="text_print">
+            <value name="TEXT">
+                <shadow type="text">
+                    <field name="TEXT">Hello, World!</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="text_join"></block>
+        <block type="text_length"></block>
+        <block type="text_isEmpty"></block>
+        <block type="text_indexOf"></block>
+        <block type="text_charAt"></block>
+        <block type="text_getSubstring"></block>
+        <block type="text_changeCase"></block>
+        <block type="text_trim"></block>
+    </category>
 
-        <!-- Loops -->
-        <category name="Loops" colour="#5CA699">
-            <block type="controls_repeat_ext"></block>
-            <block type="controls_whileUntil"></block>
-            <block type="controls_for"></block>
-            <block type="controls_forEach"></block>
-            <block type="controls_flow_statements"></block>
-        </category>
+    <!-- Loops -->
+    <category name="Loops" colour="#5CA699">
+        <block type="controls_repeat_ext"></block>
+        <block type="controls_whileUntil"></block>
+        <block type="controls_for"></block>
+        <block type="controls_forEach"></block>
+        <block type="controls_flow_statements"></block>
+    </category>
 
-        <!-- Lists -->
-        <category name="Lists" colour="#745CA6">
-            <block type="lists_create_empty"></block>
-            <block type="lists_create_with"></block>
-            <block type="lists_repeat"></block>
-            <block type="lists_length"></block>
-            <block type="lists_isEmpty"></block>
-            <block type="lists_indexOf"></block>
-            <block type="lists_getIndex"></block>
-            <block type="lists_setIndex"></block>
-            <block type="lists_getSublist"></block>
-        </category>
+    <!-- Lists -->
+    <category name="Lists" colour="#745CA6">
+        <block type="lists_create_empty"></block>
+        <block type="lists_create_with"></block>
+        <block type="lists_repeat"></block>
+        <block type="lists_length"></block>
+        <block type="lists_isEmpty"></block>
+        <block type="lists_indexOf"></block>
+        <block type="lists_getIndex"></block>
+        <block type="lists_setIndex"></block>
+        <block type="lists_getSublist"></block>
+    </category>
 
-        <!-- Variables -->
-        <category
-                name="Variables"
-                custom="VARIABLE"
-                colour="#A6745C"
-        ></category>
+    <!-- Variables -->
+    <category
+            name="Variables"
+            custom="VARIABLE"
+            colour="#A6745C"
+    ></category>
 
-        <!-- Functions -->
-        <category
-                name="Functions"
-                custom="PROCEDURE"
-                colour="#A65C81"
-        ></category>
-    </xml>
-</div>
+    <!-- Functions -->
+    <category
+            name="Functions"
+            custom="PROCEDURE"
+            colour="#A65C81"
+    ></category>
+</xml>
+
 
 <script>
-    const workspace = Blockly.inject("blocklyDiv", {
-      toolbox: document.getElementById("toolbox"),
-      horizontalLayout: true,
-      toolboxPosition: "end",
-      move: { scrollbars: true, drag: true, wheel: true },
+    const workspace = Blockly.inject('blocklyDiv', {
+      toolbox: document.getElementById('toolbox'),
+      media: './media/',
       trashcan: true,
+      renderer: 'zelos',
+      toolboxPosition: "end",
+      horizontalLayout: true,
+      zoom: { controls: true, wheel: true, startScale: 0.9 }
     });
 
     function getXmlJson() {
-      const xmlDom = Blockly.Xml.workspaceToDom(workspace);
-      const xmlText = Blockly.Xml.domToText(xmlDom);
-      return xmlText;
+        const xmlDom = Blockly.Xml.workspaceToDom(workspace);
+        const xmlText = Blockly.Xml.domToText(xmlDom);
+        return xmlText;
     }
 
     function getJavaScriptCode() {
-      return Blockly.JavaScript.workspaceToCode(workspace);
+        return Blockly.JavaScript.workspaceToCode(workspace);
     }
 
     function getJsonObject() {
-      return Blockly.serialization.workspaces.save(workspace);
+        return Blockly.serialization.workspaces.save(workspace);
     }
 
     window.addEventListener("message", (event) => {
-      if (event.data === "get_all") {
-        const result = {
-          json: getJsonObject(), // XML 형식
-          javascript: getJavaScriptCode(), // JS Generator 결과
-        };
-        FlutterChannel.postMessage(JSON.stringify(result));
-      }
+        if (event.data === "get_all") {
+            const result = {
+                json: getJsonObject(),       // XML 형식
+                javascript: getJavaScriptCode(), // JS Generator 결과
+            };
+            FlutterChannel.postMessage(JSON.stringify(result));
+        }
     });
+
+    // 커스텀
+    // === 1) '다시 눌러도 접히지 않는' 카테고리로 기본 카테고리 교체 ===
+    class AlwaysOpenCategory extends Blockly.ToolboxCategory {
+        constructor(categoryDef, toolbox, opt_parent) {
+        super(categoryDef, toolbox, opt_parent);
+        }
+        // 카테고리 클릭 시 동작 오버라이드
+        onClick_(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (e && e.stopPropagation) e.stopPropagation();
+
+        const tb = this.getToolbox();
+        const ws = tb.getWorkspace();
+        const flyout = ws.getFlyout();
+
+        // 이미 선택된 상태라면: 접지 말고 내용만 다시 보여주기
+        if (this.isSelected && this.isSelected()) {
+            if (flyout && typeof this.getContents === 'function') {
+            flyout.show(this.getContents());
+            }
+            return;
+        }
+        // 선택되지 않았다면 정상 선택
+        if (typeof tb.setSelectedItem === 'function') {
+            tb.setSelectedItem(this);
+        } else if (typeof this.setSelected === 'function') {
+            this.setSelected(true);
+        }
+        }
+        // 접힘 방지: 항상 펼쳐진 상태로 유지
+        setExpanded(_) { super.setExpanded(true); }
+    }
+
+    // 기본 카테고리 타입을 위 구현으로 덮어쓰기
+    Blockly.registry.register(
+        Blockly.registry.Type.TOOLBOX_ITEM,
+        Blockly.ToolboxCategory.registrationName,
+        AlwaysOpenCategory,
+        /*allowOverrides=*/true
+    );
+
+    // === 2) 플라이아웃을 '항상 열려 있게' (자동 닫힘 방지) ===
+    (function keepFlyoutOpen(ws) {
+        const flyout = ws.getFlyout && ws.getFlyout();
+        if (!flyout) return;
+        if (typeof flyout.setAutoClose === 'function') {
+        flyout.setAutoClose(false);
+        } else {
+        flyout.autoClose = false;
+        }
+    })(workspace);
+
+    // === 3) 초기 진입 시 첫 카테고리 강제 선택 & 내용 표시 ===
+    (function selectFirstCategory(ws) {
+        const tb = ws.getToolbox && ws.getToolbox();
+        if (!tb) return;
+
+        // getToolboxItems 중 카테고리만 필터 (separator 등 제외)
+        const items = (tb.getToolboxItems?.() || []).filter(
+        i => typeof i.getContents === 'function'
+        );
+        if (!items.length) return;
+
+        // 첫 카테고리 활성화
+        if (typeof tb.setSelectedItem === 'function') {
+        tb.setSelectedItem(items[0]);
+        } else if (typeof items[0].setSelected === 'function') {
+        items[0].setSelected(true);
+        }
+
+        // 내용이 안 보일 경우 방어적으로 한번 더 show
+        const flyout = ws.getFlyout && ws.getFlyout();
+        if (flyout && typeof items[0].getContents === 'function') {
+        flyout.show(items[0].getContents());
+        }
+    })(workspace);
+
+    // === 4) (선택) 워크스페이스 클릭 등으로 플라이아웃이 가끔 숨겨지면 즉시 재표시 ===
+    // 대부분은 2)로 충분하지만, 혹시 테마/버전에 따라 닫히면 아래 구문을 켜세요.
+    /*
+    workspace.addChangeListener(() => {
+        const flyout = workspace.getFlyout();
+        if (flyout && flyout.isVisible && !flyout.isVisible()) {
+        const tb = workspace.getToolbox();
+        const sel = tb && tb.getSelectedItem && tb.getSelectedItem();
+        if (sel && typeof sel.getContents === 'function') {
+            flyout.show(sel.getContents());
+        }
+        }
+    });
+    */
 </script>
 </body>
 </html>
