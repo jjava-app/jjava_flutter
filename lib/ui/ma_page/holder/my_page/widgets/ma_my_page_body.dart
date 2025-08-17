@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/my_page/update/ma_update_my_page.dart';
 
 class MaPageBody extends StatelessWidget {
   const MaPageBody({super.key});
@@ -51,7 +52,23 @@ class MaPageBody extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     MText.h4('프로필'),
-                    MText.h5('프로필 수정', color: MColor.kLabel.assistive),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size(0, 0),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => MaUpdateMyPage()),
+                        );
+                      },
+                      child: MText.h5(
+                        '프로필 수정',
+                        color: MColor.kLabel.assistive,
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 16),
@@ -127,9 +144,9 @@ class MaPageBody extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(width: 6),
-                                Text(
+                                MText.s12Bold(
                                   'seohoejeong@gmail.com',
-                                  style: TextStyle(fontSize: 13),
+                                  color: MColor.kLabel.alternative,
                                 ),
                               ],
                             ),
