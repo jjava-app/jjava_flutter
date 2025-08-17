@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/my_page/update/ma_update_my_page.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/my_page/update/ta_update_my_page.dart';
 
 class TaPageBody extends StatelessWidget {
   const TaPageBody({super.key});
@@ -61,7 +61,7 @@ class TaPageBody extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => MaUpdateMyPage()),
+                          MaterialPageRoute(builder: (_) => TaUpdateMyPage()),
                         );
                       },
                       child: MText.h5(
