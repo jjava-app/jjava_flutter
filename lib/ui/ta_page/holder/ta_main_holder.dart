@@ -4,7 +4,7 @@ import 'package:jjava_flutter/ui/ta_page/holder/home/ta_home_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/my_page/my_page_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/question/select_page/ta_question_select_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/solved_question/ta_solved_question_page.dart';
-import 'package:jjava_flutter/ui/ta_page/holder/workspace/ta_workspace_page.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/workspace/list/ta_workspace_list_page.dart';
 
 class TaMainHolder extends StatefulWidget {
   const TaMainHolder({super.key, this.initialIndex = 0});
@@ -45,7 +45,7 @@ class _TaMainHolderState extends State<TaMainHolder> {
         children: [
           loadPages.contains(0) ? TaHomePage() : Container(),
           loadPages.contains(1) ? TaQuestionSelectPage() : Container(),
-          loadPages.contains(2) ? TaWorkspacePage() : Container(),
+          loadPages.contains(2) ? TaWorkspaceListPage() : Container(),
           loadPages.contains(3) ? TaSolvedQuestionPage() : Container(),
           loadPages.contains(4) ? TaMyPagePage() : Container(),
         ],
