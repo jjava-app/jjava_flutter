@@ -32,18 +32,35 @@ class MText {
     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: color),
   );
 
+  static Text h7(String text, {Color? color}) => Text(
+    text,
+    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
+  );
+
   // --- Body ---
-  static Text bodyL(String text, {Color? color, FontWeight fontWeight = FontWeight.w600}) => Text(
+  static Text bodyL(
+    String text, {
+    Color? color,
+    FontWeight fontWeight = FontWeight.w600,
+  }) => Text(
     text,
     style: TextStyle(fontSize: 17, fontWeight: fontWeight, color: color),
   );
 
-  static Text bodyM(String text, {Color? color, FontWeight fontWeight = FontWeight.w500}) => Text(
+  static Text bodyM(
+    String text, {
+    Color? color,
+    FontWeight fontWeight = FontWeight.w500,
+  }) => Text(
     text,
     style: TextStyle(fontSize: 16, fontWeight: fontWeight, color: color),
   );
 
-  static Text bodyS(String text, {Color? color, FontWeight fontWeight = FontWeight.w400}) => Text(
+  static Text bodyS(
+    String text, {
+    Color? color,
+    FontWeight fontWeight = FontWeight.w400,
+  }) => Text(
     text,
     style: TextStyle(fontSize: 14, fontWeight: fontWeight, color: color),
   );
@@ -53,7 +70,11 @@ class MText {
     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: color),
   );
 
-  static Text bodyXXS(String text, {Color? color, FontWeight fontWeight = FontWeight.w500}) => Text(
+  static Text bodyXXS(
+    String text, {
+    Color? color,
+    FontWeight fontWeight = FontWeight.w500,
+  }) => Text(
     text,
     style: TextStyle(fontSize: 12, fontWeight: fontWeight, color: color),
   );
@@ -96,7 +117,11 @@ class MText {
     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: color),
   );
 
-  static Text buttonM(String text, {Color? color, FontWeight fontWeight = FontWeight.w600}) => Text(
+  static Text buttonM(
+    String text, {
+    Color? color,
+    FontWeight fontWeight = FontWeight.w600,
+  }) => Text(
     text,
     style: TextStyle(fontSize: 16, fontWeight: fontWeight, color: color),
   );
@@ -114,5 +139,10 @@ class MText {
   static Text s14Bold(String text, {Color? color}) => Text(
     text,
     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: color),
+  );
+
+  static Text s16Bold(String text, {Color? color}) => Text(
+    text,
+    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: color),
   );
 }
