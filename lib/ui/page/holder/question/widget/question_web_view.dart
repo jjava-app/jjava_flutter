@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/data/repository/question_repository.dart';
 import 'package:jjava_flutter/ui/page/holder/question/widget/question_block_dashboard.dart';
-import 'package:jjava_flutter/ui/page/holder/question/widget/question_block_list.dart';
-import 'package:jjava_flutter/ui/page/holder/question/widget/question_block_type_list.dart';
 import 'package:jjava_flutter/ui/page/holder/question/widget/question_correct_dialog.dart';
 import 'package:jjava_flutter/ui/page/holder/question/widget/question_incorrect_dialog.dart';
 
@@ -84,38 +82,13 @@ class _QuestionWebViewState extends State<QuestionWebView> {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 블럭 쌓기 영역
             Expanded(child: QuestionBlockDashboard()),
-            //블럭 UI
-            // Column(
-            //   mainAxisSize: MainAxisSize.min,
-            //   crossAxisAlignment: CrossAxisAlignment.end,
-            //   spacing: 8,
-            //   children: [
-            //     // 블럭 타입
-            //     QuestionBlockTypeList(
-            //       labels: repo.types,
-            //       selectedLabel: selectedType,
-            //       onSelected: (type) {
-            //         setState(() {
-            //           selectedType = type;
-            //         });
-            //       },
-            //     ),
-            //     // 블럭 리스트
-            //     if (selectedType != null)
-            //       QuestionBlockList(
-            //         labels: repo.blocksByType[selectedType] ?? [],
-            //       ),
-            //     SizedBox(height: 0),
-            //   ],
-            // ),
           ],
         ),
         // 실행 버튼
         Positioned(
-          bottom: 188,
-          right: 16,
+          top: 8,
+          left: 16,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),

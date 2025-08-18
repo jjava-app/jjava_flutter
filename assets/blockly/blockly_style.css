@@ -37,7 +37,7 @@ li {
 
 .blocklyToolbox {
   background-color: #eaeaea !important;
-  overflow-x: hidden !important;
+  overflow-x: blocklyScrollbarKnob !important;
   overflow-y: hidden !important;
   display: flex;
   align-items: center;
@@ -46,6 +46,7 @@ li {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   padding: 8px 0;
+  /* bottom: 133px !important; */
 }
 
 /* 블럭 카테고리 리스트 */
@@ -93,8 +94,8 @@ li {
 
 .blocklyFlyout,
 .blocklyToolboxFlyout {
-  background-color: #eaeaea !important;
   height: 133px !important;
+  bottom: 32px;
   transform: translateY(0) !important;
 }
 
@@ -103,3 +104,8 @@ li {
   background-color: transparent;
   fill: transparent !important;
 }
+
+/* .blocklyWorkspace {
+  position: absolute;
+  bottom: 0;
+} */

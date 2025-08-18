@@ -8,238 +8,125 @@
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
 </head>
 <body>
-<div id="blocklyDiv" style="height: 100vh; width: 100%">
-    <xml id="toolbox">
-        <!-- Logic -->
-        <category name="Logic" colour="#5C81A6">
-            <block type="controls_if"></block>
-            <block type="logic_compare"></block>
-            <block type="logic_operation">
-                <field name="OP">AND</field>
-            </block>
-            <block type="logic_operation">
-                <field name="OP">OR</field>
-            </block>
-            <block type="logic_boolean">
-                <field name="BOOL">TRUE</field>
-            </block>
-            <block type="logic_boolean">
-                <field name="BOOL">FALSE</field>
-            </block>
-            <block type="logic_negate"></block>
-            <block type="logic_null"></block>
-            <block type="logic_ternary"></block>
-        </category>
+<div id="container">
+    <div id="blocklyDiv" style="width: 100%; height: 100vh">
+        <xml id="toolbox">
+            <!-- Logic -->
+            <category name="Logic" colour="#5C81A6">
+                <block type="controls_if"></block>
+                <block type="logic_compare"></block>
+                <block type="logic_operation">
+                    <field name="OP">AND</field>
+                </block>
+                <block type="logic_operation">
+                    <field name="OP">OR</field>
+                </block>
+                <block type="logic_boolean">
+                    <field name="BOOL">TRUE</field>
+                </block>
+                <block type="logic_boolean">
+                    <field name="BOOL">FALSE</field>
+                </block>
+                <block type="logic_negate"></block>
+                <block type="logic_null"></block>
+                <block type="logic_ternary"></block>
+            </category>
 
-        <!-- Math -->
-        <category name="Math" colour="#5CA65C">
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
-            <block type="math_single"></block>
-            <block type="math_trig"></block>
-            <block type="math_constant"></block>
-            <block type="math_number_property"></block>
-            <block type="math_round"></block>
-            <block type="math_on_list"></block>
-            <block type="math_modulo"></block>
-            <block type="math_constrain"></block>
-        </category>
+            <!-- Math -->
+            <category name="Math" colour="#5CA65C">
+                <block type="math_number"></block>
+                <block type="math_arithmetic"></block>
+                <block type="math_single"></block>
+                <block type="math_trig"></block>
+                <block type="math_constant"></block>
+                <block type="math_number_property"></block>
+                <block type="math_round"></block>
+                <block type="math_on_list"></block>
+                <block type="math_modulo"></block>
+                <block type="math_constrain"></block>
+            </category>
 
-        <!-- Text -->
-        <category name="Text" colour="#5CA68D">
-            <block type="text"></block>
-            <block type="text_print">
-                <value name="TEXT">
-                    <shadow type="text">
-                        <field name="TEXT">Hello, World!</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="text_join"></block>
-            <block type="text_length"></block>
-            <block type="text_isEmpty"></block>
-            <block type="text_indexOf"></block>
-            <block type="text_charAt"></block>
-            <block type="text_getSubstring"></block>
-            <block type="text_changeCase"></block>
-            <block type="text_trim"></block>
-        </category>
+            <!-- Text -->
+            <category name="Text" colour="#5CA68D">
+                <block type="text"></block>
+                <block type="text_print">
+                    <value name="TEXT">
+                        <shadow type="text">
+                            <field name="TEXT">Hello, World!</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_join"></block>
+                <block type="text_length"></block>
+                <block type="text_isEmpty"></block>
+                <block type="text_indexOf"></block>
+                <block type="text_charAt"></block>
+                <block type="text_getSubstring"></block>
+                <block type="text_changeCase"></block>
+                <block type="text_trim"></block>
+            </category>
 
-        <!-- Loops -->
-        <category name="Loops" colour="#5CA699">
-            <block type="controls_repeat_ext"></block>
-            <block type="controls_whileUntil"></block>
-            <block type="controls_for"></block>
-            <block type="controls_forEach"></block>
-            <block type="controls_flow_statements"></block>
-        </category>
+            <!-- Loops -->
+            <category name="Loops" colour="#5CA699">
+                <block type="controls_repeat_ext"></block>
+                <block type="controls_whileUntil"></block>
+                <block type="controls_for"></block>
+                <block type="controls_forEach"></block>
+                <block type="controls_flow_statements"></block>
+            </category>
 
-        <!-- Lists -->
-        <category name="Lists" colour="#745CA6">
-            <block type="lists_create_empty"></block>
-            <block type="lists_create_with"></block>
-            <block type="lists_repeat"></block>
-            <block type="lists_length"></block>
-            <block type="lists_isEmpty"></block>
-            <block type="lists_indexOf"></block>
-            <block type="lists_getIndex"></block>
-            <block type="lists_setIndex"></block>
-            <block type="lists_getSublist"></block>
-        </category>
+            <!-- Lists -->
+            <category name="Lists" colour="#745CA6">
+                <block type="lists_create_empty"></block>
+                <block type="lists_create_with"></block>
+                <block type="lists_repeat"></block>
+                <block type="lists_length"></block>
+                <block type="lists_isEmpty"></block>
+                <block type="lists_indexOf"></block>
+                <block type="lists_getIndex"></block>
+                <block type="lists_setIndex"></block>
+                <block type="lists_getSublist"></block>
+            </category>
 
-        <!-- Variables -->
-        <category
-                name="Variables"
-                custom="VARIABLE"
-                colour="#A6745C"
-        ></category>
+            <!-- Variables -->
+            <category
+                    name="Variables"
+                    custom="VARIABLE"
+                    colour="#A6745C"
+            ></category>
 
-        <!-- Functions -->
-        <category
-                name="Functions"
-                custom="PROCEDURE"
-                colour="#A65C81"
-        ></category>
-    </xml>
+            <!-- Functions -->
+            <category
+                    name="Functions"
+                    custom="PROCEDURE"
+                    colour="#A65C81"
+            ></category>
+        </xml>
+    </div>
 </div>
 
 <script>
-    // var toolbox = {
-    //   kind: "categoryToolbox",
-    //   contents: [
-    //     {
-    //       kind: "category",
-    //       name: "Logic",
-    //       colour: "#5C81A6",
-    //       contents: [
-    //         { kind: "block", type: "controls_if" },
-    //         { kind: "block", type: "logic_compare" },
-    //         { kind: "block", type: "logic_operation", fields: { OP: "AND" } },
-    //         { kind: "block", type: "logic_operation", fields: { OP: "OR" } },
-    //         {
-    //           kind: "block",
-    //           type: "logic_boolean",
-    //           fields: { BOOL: "TRUE" },
-    //         },
-    //         {
-    //           kind: "block",
-    //           type: "logic_boolean",
-    //           fields: { BOOL: "FALSE" },
-    //         },
-    //         { kind: "block", type: "logic_negate" },
-    //         { kind: "block", type: "logic_null" },
-    //         { kind: "block", type: "logic_ternary" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Math",
-    //       colour: "#5CA65C",
-    //       contents: [
-    //         { kind: "block", type: "math_number" },
-    //         { kind: "block", type: "math_arithmetic" },
-    //         { kind: "block", type: "math_single" },
-    //         { kind: "block", type: "math_trig" },
-    //         { kind: "block", type: "math_constant" },
-    //         { kind: "block", type: "math_number_property" },
-    //         { kind: "block", type: "math_round" },
-    //         { kind: "block", type: "math_on_list" },
-    //         { kind: "block", type: "math_modulo" },
-    //         { kind: "block", type: "math_constrain" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Text",
-    //       colour: "#5CA68D",
-    //       contents: [
-    //         { kind: "block", type: "text" },
-    //         {
-    //           kind: "block",
-    //           type: "text_print",
-    //           inputs: {
-    //             TEXT: {
-    //               shadow: {
-    //                 type: "text",
-    //                 fields: { TEXT: "Hello, World!" },
-    //               },
-    //             },
-    //           },
-    //         },
-    //         { kind: "block", type: "text_join" },
-    //         { kind: "block", type: "text_length" },
-    //         { kind: "block", type: "text_isEmpty" },
-    //         { kind: "block", type: "text_indexOf" },
-    //         { kind: "block", type: "text_charAt" },
-    //         { kind: "block", type: "text_getSubstring" },
-    //         { kind: "block", type: "text_changeCase" },
-    //         { kind: "block", type: "text_trim" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Loops",
-    //       colour: "#5CA699",
-    //       contents: [
-    //         { kind: "block", type: "controls_repeat_ext" },
-    //         { kind: "block", type: "controls_whileUntil" },
-    //         { kind: "block", type: "controls_for" },
-    //         { kind: "block", type: "controls_forEach" },
-    //         { kind: "block", type: "controls_flow_statements" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Lists",
-    //       colour: "#745CA6",
-    //       contents: [
-    //         { kind: "block", type: "lists_create_empty" },
-    //         { kind: "block", type: "lists_create_with" },
-    //         { kind: "block", type: "lists_repeat" },
-    //         { kind: "block", type: "lists_length" },
-    //         { kind: "block", type: "lists_isEmpty" },
-    //         { kind: "block", type: "lists_indexOf" },
-    //         { kind: "block", type: "lists_getIndex" },
-    //         { kind: "block", type: "lists_setIndex" },
-    //         { kind: "block", type: "lists_getSublist" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Variables",
-    //       colour: "#A6745C",
-    //       custom: "VARIABLE",
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Functions",
-    //       colour: "#A65C81",
-    //       custom: "PROCEDURE",
-    //     },
-    //   ],
-    // };
-
-    // The toolbox gets passed to the configuration options during injection.
     const workspace = Blockly.inject(document.getElementById("blocklyDiv"), {
       toolbox: document.getElementById("toolbox"),
       toolboxPosition: "end",
       horizontalLayout: true,
-      collapse: true,
-      comments: true,
       sounds: false,
       scrollbars: false,
       move: { drag: true, wheel: false },
-      zoom: {
-        controls: false,
-        wheel: false,
-        startScale: 1.0,
-        maxScale: 3,
-        minScale: 0.3,
-        scaleSpeed: 1.2,
-        pinch: true,
-      },
-      trashcan: false,
+      zoom:
+         {controls: false,
+          wheel: false,
+          startScale: 1.0,
+          maxScale: 3,
+          minScale: 0.3,
+          scaleSpeed: 1.2,
+          pinch: true},
+     trashcan: false
+     media: 'blockly/media/'
     });
+
+    var category = workspace.getToolbox().getToolboxItems()[0];
+    category.AlwaysOpenCategory;
 
     // === 1) 플라이아웃 자동 닫힘 방지 ===
     const flyout = workspace.getFlyout();
@@ -251,170 +138,7 @@
       }
     }
 
-    // === 2) 첫 번째 카테고리 자동 선택 ===
-    function selectCategoryByIndex(ws, index = 0) {
-      const tb = ws.getToolbox();
-      if (!tb) return;
 
-      const items = tb
-        .getToolboxItems()
-        .filter((i) => typeof i.getContents === "function");
-      if (items.length > index) {
-        tb.setSelectedItem(items[index]);
-      }
-    }
-    // inject 직후 실행
-    setTimeout(() => selectCategoryByIndex(workspace, 0), 100);
-
-    // === 3) 같은 카테고리 클릭해도 접히지 않게 오버라이드 ===
-    class AlwaysOpenCategory extends Blockly.ToolboxCategory {
-      onClick_(e) {
-        if (e) {
-          e.preventDefault?.();
-          e.stopPropagation?.();
-        }
-        const tb = this.getToolbox();
-        const ws = tb.getWorkspace();
-        const flyout = ws.getFlyout();
-
-        // 이미 선택된 경우 → 그냥 다시 show()
-        if (this.isSelected && this.isSelected()) {
-          if (flyout && typeof this.getContents === "function") {
-            flyout.show(this.getContents());
-          }
-          return;
-        }
-        tb.setSelectedItem(this);
-      }
-    }
-
-    // 기본 ToolboxCategory 덮어쓰기
-    // Blockly.registry.register(
-    //   Blockly.registry.Type.TOOLBOX_ITEM,
-    //   Blockly.ToolboxCategory.registrationName,
-    //   AlwaysOpenCategory,
-    //   true
-    // );
 </script>
-
-<!-- <script>
-  const workspace = Blockly.inject("blocklyDiv", {
-    toolbox: document.getElementById("toolbox"),
-    renderer: "zelos",
-    trashcan: false,
-    toolboxPosition: "end",
-    horizontalLayout: true,
-    zoom: { controls: true, wheel: true, startScale: 0.9 },
-  });
-
-  function getXmlJson() {
-    const xmlDom = Blockly.Xml.workspaceToDom(workspace);
-    const xmlText = Blockly.Xml.domToText(xmlDom);
-    return xmlText;
-  }
-
-  function getJavaScriptCode() {
-    return Blockly.JavaScript.workspaceToCode(workspace);
-  }
-
-  function getJsonObject() {
-    return Blockly.serialization.workspaces.save(workspace);
-  }
-
-  window.addEventListener("message", (event) => {
-    if (event.data === "get_all") {
-      const result = {
-        json: getJsonObject(), // XML 형식
-        javascript: getJavaScriptCode(), // JS Generator 결과
-      };
-      FlutterChannel.postMessage(JSON.stringify(result));
-    }
-  });
-</script> -->
-
-<!-- <script>
-    // 커스텀
-  // === 1) 다시 눌러도 접히지 않는 카테고리로 기본 카테고리 교체 ===
-  class AlwaysOpenCategory extends Blockly.ToolboxCategory {
-    constructor(categoryDef, toolbox, opt_parent) {
-      super(categoryDef, toolbox, opt_parent);
-    }
-    // 카테고리 클릭 시 동작 오버라이드
-    onClick_(e) {
-      if (e && e.preventDefault) e.preventDefault();
-      if (e && e.stopPropagation) e.stopPropagation();
-
-      const tb = this.getToolbox();
-      const ws = tb.getWorkspace();
-      const flyout = ws.getFlyout();
-
-      // 이미 선택된 상태라면: 접지 말고 내용만 다시 보여주기
-      if (this.isSelected && this.isSelected()) {
-        if (flyout && typeof this.getContents === "function") {
-          flyout.show(this.getContents());
-        }
-        return;
-      }
-      // 선택되지 않았다면 정상 선택
-      if (typeof tb.setSelectedItem === "function") {
-        tb.setSelectedItem(this);
-      } else if (typeof this.setSelected === "function") {
-        this.setSelected(true);
-      }
-    }
-    // 접힘 방지: 항상 펼쳐진 상태로 유지
-    setExpanded(_) {
-      super.setExpanded(true);
-    }
-  }
-
-  // 기본 카테고리 타입을 위 구현으로 덮어쓰기
-  Blockly.registry.register(
-    Blockly.registry.Type.TOOLBOX_ITEM,
-    Blockly.ToolboxCategory.registrationName,
-    AlwaysOpenCategory,
-    /*allowOverrides=*/ true
-  );
-
-  // === 2) 플라이아웃을 항상 열려 있게 (자동 닫힘 방지) ===
-  (function keepFlyoutOpen(ws) {
-    const flyout = ws.getFlyout && ws.getFlyout();
-    if (!flyout) return;
-    if (typeof flyout.setAutoClose === "function") {
-      flyout.setAutoClose(false);
-    } else {
-      flyout.autoClose = false;
-    }
-  })(workspace);
-
-  // === 3) 초기 진입 시 첫 카테고리 강제 선택 & 내용 표시 ===
-  function selectCategoryByIndex(ws, index = 0) {
-    const tb = ws.getToolbox();
-    if (!tb) return;
-
-    const items = tb
-      .getToolboxItems()
-      .filter((i) => typeof i.getContents === "function");
-    if (items.length > index) {
-      tb.setSelectedItem(items[index]); // 내부 로직으로 선택
-    }
-  }
-
-  // inject 끝난 후 호출
-  setTimeout(() => selectCategoryByIndex(workspace, 0), 200);
-
-  // === 4) (선택) 워크스페이스 클릭 등으로 플라이아웃이 가끔 숨겨지면 즉시 재표시 ===
-  // 대부분은 2)로 충분하지만 혹시 테마/버전에 따라 닫히면 아래 구문을 켜세요.
-  // workspace.addChangeListener(() => {
-  //     const flyout = workspace.getFlyout();
-  //     if (flyout && flyout.isVisible && !flyout.isVisible()) {
-  //     const tb = workspace.getToolbox();
-  //     const sel = tb && tb.getSelectedItem && tb.getSelectedItem();
-  //     if (sel && typeof sel.getContents === 'function') {
-  //         flyout.show(sel.getContents());
-  //     }
-  //     }
-  // });
-</script> -->
 </body>
 </html>
