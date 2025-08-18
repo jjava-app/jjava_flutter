@@ -41,7 +41,7 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
           debugPrint('📦 JSON: ${code['json']}');
         },
       )
-      ..loadFlutterAsset('assets/blockly/hello.html');
+      ..loadFlutterAsset('assets/blockly/blockly_editor.html');
   }
 
   @override
