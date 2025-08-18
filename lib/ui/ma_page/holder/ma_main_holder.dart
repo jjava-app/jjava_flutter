@@ -4,7 +4,7 @@ import 'package:jjava_flutter/ui/ma_page/holder/home/ma_home_page.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/my_page/ma_my_page_page.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/select_page/ma_question_select_page.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/solved_question/ma_solved_question_page.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/workspace/ma_workspace_page.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/workspace/list/ma_workspace_list_page.dart';
 
 class MaMainHolder extends StatefulWidget {
   const MaMainHolder({super.key, this.initialIndex = 0});
@@ -45,7 +45,7 @@ class _MainHolderState extends State<MaMainHolder> {
         children: [
           loadPages.contains(0) ? MaHomePage() : Container(),
           loadPages.contains(1) ? MaQuestionSelectPage() : Container(),
-          loadPages.contains(2) ? MaWorkspacePage() : Container(),
+          loadPages.contains(2) ? MaWorkspaceListPage() : Container(),
           loadPages.contains(3) ? MaSolvedQuestionPage() : Container(),
           loadPages.contains(4) ? MaMyPagePage() : Container(),
         ],
