@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jjava_flutter/_core/style/m_thema.dart';
-// 모바일 페이지 import
 import 'package:jjava_flutter/ui/ma_page/auth/join/ma_join_page.dart';
 import 'package:jjava_flutter/ui/ma_page/auth/login_page/ma_login_page.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/home/ma_home_page.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 import 'package:jjava_flutter/ui/ma_page/splash/ma_splash_page.dart';
-// 태블릿 페이지 import
 import 'package:jjava_flutter/ui/ta_page/auth/join/ta_join_page.dart';
 import 'package:jjava_flutter/ui/ta_page/auth/login_page/ta_login_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/home/ta_home_page.dart';
@@ -41,14 +39,10 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               home: isTablet ? TaSplashPage() : MaSplashPage(),
               routes: {
-                "/join": (context) =>
-                    isTablet ? const TaJoinPage() : const MaJoinPage(),
-                "/login": (context) =>
-                    isTablet ? const TaLoginPage() : const MaLoginPage(),
-                "/home": (context) =>
-                    isTablet ? const TaHomePage() : const MaHomePage(),
-                "/main-holder": (context) =>
-                    isTablet ? const TaMainHolder() : const MaMainHolder(),
+                "/join": (context) => isTablet ? const TaJoinPage() : const MaJoinPage(),
+                "/login": (context) => isTablet ? const TaLoginPage() : const MaLoginPage(),
+                "/home": (context) => isTablet ? const TaHomePage() : const MaHomePage(),
+                "/main-holder": (context) => isTablet ? const TaMainHolder() : const MaMainHolder(),
               },
             );
           },

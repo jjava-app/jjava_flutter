@@ -115,6 +115,9 @@ class _Question {
 class _SolvedQuestion {
   final Widget copy = SvgPicture.asset(
     'assets/icons/page_solved_question_copy.svg',
+    width: 17,
+    height: 17,
+    color: Colors.white,
   );
 }
 
