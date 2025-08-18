@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jjava_flutter/_core/style/m_color.dart';
 
 class MIcon {
   static final nav = _Nav();
@@ -88,9 +89,20 @@ class _Login {
 }
 
 class _MyPage {
-  final Widget logout = SvgPicture.asset('assets/icons/page_mypage_logout.svg');
+  final Widget logout = SvgPicture.asset(
+    'assets/icons/page_mypage_logout.svg',
+    width: 15,
+    height: 14,
+    color: MColor.kStatus.destructive,
+  );
   final Widget naver = SvgPicture.asset(
     'assets/icons/page_mypage_naver_logo.svg',
+  );
+  final Widget kakao = SvgPicture.asset(
+    'assets/icons/page_mypage_kakao_logo.svg',
+  );
+  final Widget google = SvgPicture.asset(
+    'assets/icons/page_mypage_google_logo.svg',
   );
 }
 

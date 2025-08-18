@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/my_page/widgets/ma_my_page_body.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/my_page/update/widget/ma_update_my_page_body.dart';
 
-class MaMyPagePage extends StatelessWidget {
-  MaMyPagePage({super.key});
+class MaUpdateMyPage extends StatelessWidget {
+  MaUpdateMyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: MaPageBody(),
+      body: MaUpdateMyPageBody(),
     );
   }
 

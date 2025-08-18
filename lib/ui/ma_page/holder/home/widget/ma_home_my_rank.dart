@@ -15,7 +15,7 @@ class MaHomeMyRank extends StatelessWidget {
         color: MColor.kFill.normal,
         borderRadius: BorderRadius.circular(8),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -30,7 +30,7 @@ class MaHomeMyRank extends StatelessWidget {
           Row(
             children: [
               _RankChip(label: "155 위"),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _RankChip(label: "2530점"),
             ],
           ),
@@ -50,13 +50,10 @@ class _RankChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: MColor.kLabel.white,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Text(
-        label,
-        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-      ),
+      child: MText.buttonS(label, color: MColor.kLabel.normal),
     );
   }
 }
