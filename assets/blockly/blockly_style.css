@@ -1,124 +1,105 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 
-  ul,
-  li {
-    list-style: none;
-  }
+ul,
+li {
+  list-style: none;
+}
 
-  /* 기본 세팅 값 */
+/* 기본 세팅 값 */
 
-  .blocklyScrollbarHorizontal,
-  .blocklyScrollbarVertical {
-    opacity: 0 !important;
-  }
+.blocklyScrollbarHorizontal,
+.blocklyScrollbarVertical {
+  opacity: 0 !important;
+}
 
-  .blocklyScrollbarKnob {
-    opacity: 0 !important;
-  }
+.blocklyScrollbarKnob {
+  opacity: 0 !important;
+}
 
-  .scroll-container::-webkit-scrollbar {
-    display: none;
-  }
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
 
-  /* 툴박스 영역역 */
+.blocklyZoomOut,
+.blocklyZoomIn {
+  display: none;
+}
 
-  .blocklyToolbox {
-    background-color: #eaeaea !important;
-    overflow-x: hidden !important;
-    overflow-y: hidden !important;
-    display: flex;
-    align-items: center;
-    background: transparent;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    padding: 8px 0;
-    bottom: 133px !important;
-  }
+.blocklyZoom.blocklyZoomReset {
+  transform: translate(0, 0);
+}
 
-  /* 블럭 카테고리 리스트 */
+/* 툴박스 영역역 */
 
-  .blocklyToolboxCategoryContainer {
-    margin: 0px !important;
-  }
+.blocklyToolbox {
+  background-color: #eaeaea !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding: 8px 0;
+}
 
-  .blocklyToolboxCategoryGroup {
-    flex-wrap: nowrap;
-    gap: 8px;
-    padding: 0px 16px;
-  }
+/* 블럭 카테고리 리스트 */
 
-  .blocklyToolboxCategory {
-    height: 32px !important;
-    display: inline-block;
-    margin-bottom: 0px;
-    padding: 0px 8px !important;
-    background-color: white !important;
-    border-width: 2px !important;
-    border-style: solid !important;
-    border-color: rgba(112, 115, 124, 0.22) !important;
-    border-radius: 16px;
-    box-sizing: border-box;
-  }
+.blocklyToolboxCategoryContainer {
+  margin: 0px !important;
+}
 
-  .blocklyToolboxSelected {
-    background-color: white !important;
-    border-color: #03C75A !important;
-  }
+.blocklyToolboxCategoryGroup {
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 0px 16px;
+}
 
-  .blocklyToolboxCategoryLabel {
-    font-family:"Roboto", sans-serif;
-    font-size: 16px;
-    line-height: 1.2;
-    color: rgba(55, 56, 60, 0.28);
-  }
+.blocklyToolboxCategory {
+  height: 32px !important;
+  display: inline-block;
+  margin-bottom: 0px;
+  padding: 0px 8px !important;
+  background-color: white !important;
+  border-width: 2px !important;
+  border-style: solid !important;
+  border-color: rgba(112, 115, 124, 0.22) !important;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
 
-  .blocklyToolboxSelected .blocklyToolboxCategoryLabel {
-    color: #03C75A;
-  }
+.blocklyToolboxSelected {
+  background-color: white !important;
+  border-color: #03c75a !important;
+}
 
-  /* 블럭 리스트 */
+.blocklyToolboxCategoryLabel {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  line-height: 1.2;
+  color: rgba(55, 56, 60, 0.28);
+}
 
-  .blocklyFlyout,
-  .blocklyToolboxFlyout {
-    background-color: #eaeaea !important;
-    height: 133px !important;
-    transform: translateY(calc(100vh - 133px)) !important;
-  }
+.blocklyToolboxSelected .blocklyToolboxCategoryLabel {
+  color: #03c75a;
+}
 
-  .blocklyFlyoutBackground {
-    height: 133px !important;
-    background-color: transparent;
-    fill: transparent !important;
-  }
+/* 블럭 리스트 */
 
-  .blocklyWorkspace {
-      position: absolute;
-      bottom: 0;
-  }
+.blocklyFlyout,
+.blocklyToolboxFlyout {
+  background-color: #eaeaea !important;
+  height: 133px !important;
+  transform: translateY(0) !important;
+}
 
-  /* 블럭 커스텀 */
-  /* .blocklyPath {
-    fill: rgba(112, 115, 124, 0.08);
-  }
-
-  .blocklyDropDownDiv {
-    background-color: #FAFAFA !important;
-    border-radius: 6px;
-    border-color: antiquewhite !important;
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.08);
-  }
-
-  .blocklyMenuItemHighlight {
-    border-radius: 6px;
-  }
-
-  .zelos-renderer.classic-theme.blocklyDropDownDiv .blocklyMenuItemContent {
-    font-weight: 600;
-    color: #03C75A !important;
-  } */
-
+.blocklyFlyoutBackground {
+  height: 133px !important;
+  background-color: transparent;
+  fill: transparent !important;
+}
