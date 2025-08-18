@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/home/ta_home_page.dart';
-import 'package:jjava_flutter/ui/ta_page/holder/my_page/my_page_page.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/my_page/ta_my_page_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/question/select_page/ta_question_select_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/solved_question/ta_solved_question_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/list/ta_workspace_list_page.dart';
