@@ -18,7 +18,7 @@ class _MaSplashPageState extends ConsumerState<MaSplashPage> {
     try {
       // ✅ 소셜 액세스 토큰 → 서버 로그인 → GVM이 저장/헤더세팅/화면이동
       const providerToken =
-          'AAAANx-tTW7Vgo8k8kxv87Ob0wNzI5KVhoY08QDj7BNe-7bwKnKH48FZq-Xm4hFeSWoSNHepwJh4yo6UdT1WIs2kgto';
+          'AAAAN0hBxmtjFGTGc0Ss3_86UkUrU1Y4v6BrLWr9DDSIBUN-0TBH761yi4PBupfNwkFqQdeFjMyYvKow8yrF0vqpqq8';
       await ref
           .read(sessionProvider.notifier)
           .oauthLogin(
