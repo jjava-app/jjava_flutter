@@ -18,21 +18,21 @@ class TaRestartDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: MColor.kBackground.normal,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 460),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: MColor.kLabel.normal,
                   ),
@@ -41,7 +41,7 @@ class TaRestartDialog extends StatelessWidget {
                 Text(
                   message,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: MColor.kLabel.neutral,
                   ),
@@ -51,7 +51,7 @@ class TaRestartDialog extends StatelessWidget {
           ),
           Divider(height: 1, color: MColor.kLine.normal),
           SizedBox(
-            height: 48,
+            height: 58,
             child: Row(
               children: [
                 Expanded(
@@ -60,7 +60,7 @@ class TaRestartDialog extends StatelessWidget {
                     child: Text(
                       cancelText,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: MColor.kLabel.normal,
                         fontWeight: FontWeight.w500,
                       ),
@@ -74,7 +74,7 @@ class TaRestartDialog extends StatelessWidget {
                     child: Text(
                       confirmText,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: MColor.kStatus.destructive,
                       ),

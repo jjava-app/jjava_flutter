@@ -41,7 +41,7 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
           debugPrint('📦 JSON: ${code['json']}');
         },
       )
-      ..loadFlutterAsset('assets/blockly/blockly_editor.html');
+      ..loadFlutterAsset('assets/blockly/tablet/ta_blockly_editor.html');
   }
 
   @override

@@ -7,26 +7,28 @@ class TaQuestionIncorrectDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: MColor.kBackground.normal,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 440),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 MIcon.page.question.destructive,
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 Text(
                   'Lorem ipsum dolor sit amet consectetur. Porta sed placerat dignissim facilisis congue viverra suspendisse neque maecenas.',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: MColor.kLabel.neutral,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
@@ -34,7 +36,7 @@ class TaQuestionIncorrectDialog extends StatelessWidget {
           Divider(height: 1, color: MColor.kLine.normal),
           SizedBox(
             width: double.infinity,
-            height: 48,
+            height: 64,
             child: TextButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -42,7 +44,7 @@ class TaQuestionIncorrectDialog extends StatelessWidget {
               child: Text(
                 '닫기',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: MColor.kLabel.normal,
                 ),

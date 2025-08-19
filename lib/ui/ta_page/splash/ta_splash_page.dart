@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/question/ma_question_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/question/ta_question_page.dart';
 
 class TaSplashPage extends StatelessWidget {
@@ -34,7 +35,18 @@ class TaSplashPage extends StatelessWidget {
           SizedBox(height: 10),
           FloatingActionButton(
             heroTag: 'btn3',
-            child: Text('블록코딩\n대시보드'),
+            child: Text('모바일학습\n대시보드'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => MaQuestionPage()),
+              );
+            },
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: 'btn4',
+            child: Text('태블릿학습\n대시보드'),
             onPressed: () {
               Navigator.push(
                 context,

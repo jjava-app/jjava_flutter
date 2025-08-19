@@ -103,7 +103,7 @@ class _QuestionPageState extends State<TaQuestionPage> {
               child: Center(
                 child: Text(
                   '다시 시작',
-                  style: TextStyle(fontSize: 14, color: MColor.kLabel.normal),
+                  style: TextStyle(fontSize: 16, color: MColor.kLabel.normal),
                 ),
               ),
             ),
@@ -113,7 +113,7 @@ class _QuestionPageState extends State<TaQuestionPage> {
               child: Center(
                 child: Text(
                   '학습 종료',
-                  style: TextStyle(fontSize: 14, color: MColor.kLabel.normal),
+                  style: TextStyle(fontSize: 16, color: MColor.kLabel.normal),
                 ),
               ),
             ),
