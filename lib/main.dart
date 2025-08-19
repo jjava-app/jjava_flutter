@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jjava_flutter/_core/style/m_thema.dart';
-import 'package:jjava_flutter/ui/page/auth/join/join_page.dart';
-import 'package:jjava_flutter/ui/page/auth/login_page/login_page.dart';
-import 'package:jjava_flutter/ui/page/holder/home/home_page.dart';
-import 'package:jjava_flutter/ui/page/holder/main_holder.dart';
-import 'package:jjava_flutter/ui/page/holder/my_page/my_page_page.dart';
-import 'package:jjava_flutter/ui/page/holder/question/question_page.dart';
-import 'package:jjava_flutter/ui/page/holder/solved_question/solved_question_page.dart';
-import 'package:jjava_flutter/ui/page/holder/workspace/workspace_page.dart';
-import 'package:jjava_flutter/ui/page/splash/splash.dart';
+import 'package:jjava_flutter/ui/ma_page/auth/join/ma_join_page.dart';
+import 'package:jjava_flutter/ui/ma_page/auth/login_page/ma_login_page.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/home/ma_home_page.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
+import 'package:jjava_flutter/ui/ma_page/splash/ma_splash_page.dart';
+import 'package:jjava_flutter/ui/ta_page/auth/join/ta_join_page.dart';
+import 'package:jjava_flutter/ui/ta_page/auth/login_page/ta_login_page.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/home/ta_home_page.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/ta_main_holder.dart';
+import 'package:jjava_flutter/ui/ta_page/splash/ta_splash_page.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -22,20 +24,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: mTheme(),
-      navigatorKey: navigatorKey,
-      debugShowCheckedModeBanner: false,
-      home: SplashPage(),
-      routes: {
-        "/join": (context) => const JoinPage(),
-        "/login": (context) => const LoginPage(),
-        "/home": (context) => const HomePage(),
-        "/main-holder": (context) => MainHolder(),
-        "/workspace": (context) => const WorkspacePage(),
-        "/question": (context) => const QuestionPage(),
-        "/solved-question": (context) => const SolvedQuestionPage(),
-        "/mypage": (context) => const MyPagePage(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isTablet = constraints.biggest.shortestSide >= 600;
+
+        return ScreenUtilInit(
+          designSize: const Size(375, 812), // 기본 디자인 시안 크기
+          minTextAdapt: true, // 폰트 크기 자동 조정
+          splitScreenMode: true, // 분할 화면 대응
+          builder: (_, __) {
+            return MaterialApp(
+              theme: mTheme(),
+              navigatorKey: navigatorKey,
+              debugShowCheckedModeBanner: false,
+              home: isTablet ? TaSplashPage() : MaSplashPage(),
+              routes: {
+                "/join": (context) => isTablet ? const TaJoinPage() : const MaJoinPage(),
+                "/login": (context) => isTablet ? const TaLoginPage() : const MaLoginPage(),
+                "/home": (context) => isTablet ? const TaHomePage() : const MaHomePage(),
+                "/main-holder": (context) => isTablet ? const TaMainHolder() : const MaMainHolder(),
+              },
+            );
+          },
+        );
       },
     );
   }
