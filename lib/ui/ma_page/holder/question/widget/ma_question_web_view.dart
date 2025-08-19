@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
-import 'package:jjava_flutter/data/repository/question_repository.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_block_dashboard.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_correct_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_incorrect_dialog.dart';
@@ -64,17 +63,6 @@ class _MaQuestionWebViewState extends State<MaQuestionWebView> {
     Navigator.of(
       context,
     ).pushNamedAndRemoveUntil('/main-holder', (route) => false);
-  }
-
-  // 3. 블록 로직
-  final repo = QuestionRepository();
-
-  String? selectedType;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedType = repo.types.isNotEmpty ? repo.types.first : null;
   }
 
   @override
