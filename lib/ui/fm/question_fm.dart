@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final questionProvider = NotifierProvider<QuestionFm, QuestionModel>(() {
-  return QuestionFm();
+final questionProvider = NotifierProvider<QuestionFM, QuestionModel>(() {
+  return QuestionFM();
 });
 
-class QuestionFm extends Notifier<QuestionModel> {
+class QuestionFM extends Notifier<QuestionModel> {
   @override
   QuestionModel build() {
     return QuestionModel("", "", "", "", "");

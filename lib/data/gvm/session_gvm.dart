@@ -6,6 +6,7 @@ import 'package:jjava_flutter/data/model/user.dart';
 import 'package:jjava_flutter/data/repository/user_repository.dart';
 import 'package:jjava_flutter/main.dart';
 import 'package:jjava_flutter/ui/fm/join_fm.dart';
+import 'package:jjava_flutter/ui/fm/user_update_fm.dart';
 import 'package:logger/logger.dart';
 
 final sessionProvider = NotifierProvider<SessionGVM, SessionModel>(() {
@@ -67,14 +68,41 @@ class SessionGVM extends Notifier<SessionModel> {
     Navigator.pushNamedAndRemoveUntil(mContext, "/login", (route) => false);
   }
 
-  // 3. 회원가입 후 추가 정보 등록
+  /* 3. 회원 정보 수정 ( OAuth 로그인 혹은 마이페이지 회원정보 수정에서 사용)
+  * @UserUpdateModel 은 update 시 사용되는 공통 모델
+  * */
+  Future<void> update(UserUpdateModel model) async {
+    // 1. 유효성 검사
+
+    // 2. 통신
+    Logger().d("회원 정보 수정 데이터: ${model.toMap()}");
+
+    Map<String, dynamic> data = await UserRepository().update(model.toMap());
+    if (data["status"] != 200) {
+      ScaffoldMessenger.of(mContext).showSnackBar(
+        SnackBar(content: Text("${data["msg"]}")),
+      );
+      return;
+    }
+
+    // 3. 세션 모델 갱신
+    state = SessionModel.fromMap(data["body"]);
+    Logger().d('update : ${state}');
+    Logger().d('update : ${dio.options.headers["Authorization"]}');
+
+    // 4. 페이지 이동
+    Navigator.pop(mContext);
+  }
+
+  // 4. 이메일 인증
+  // 5. 닉네임 중복 검사
   Future<void> writeAdditionalInfo(JoinModel model) async {
     // 1. 유효성 검사
 
     // 2. 통신
     Logger().d("추가정보 요청 데이터: ${model.toMap()}");
 
-    Map<String, dynamic> data = await UserRepository().writeAdditionalInfo(model.toMap());
+    Map<String, dynamic> data = await UserRepository().update(model.toMap());
     if (data["status"] != 200) {
       ScaffoldMessenger.of(mContext).showSnackBar(
         SnackBar(content: Text("${data["msg"]}")),
@@ -92,30 +120,6 @@ class SessionGVM extends Notifier<SessionModel> {
     Navigator.pop(mContext);
     Navigator.pushNamed(mContext, "/main-holder");
   }
-
-  // 4. 회원 정보 수정 (만드십쇼)
-  // Future<void> update(UserUpdateModel model) async {
-  //   // 1. 유효성 검사
-  //
-  //   // 2. 통신
-  //   Logger().d("회원 정보 수정 데이터: ${model.toMap()}");
-  //
-  //   Map<String, dynamic> data = await UserRepository().update(model.toMap());
-  //   if (data["status"] != 200) {
-  //     ScaffoldMessenger.of(mContext).showSnackBar(
-  //       SnackBar(content: Text("${data["msg"]}")),
-  //     );
-  //     return;
-  //   }
-  //
-  //   // 3. 세션 모델 갱신
-  //   state = SessionModel.fromMap(data["body"]);
-  //   Logger().d('update : ${state}');
-  //   Logger().d('update : ${dio.options.headers["Authorization"]}');
-  //
-  //   // 4. 페이지 이동
-  //   Navigator.pop(mContext);
-  // }
 }
 
 /// 3. 창고 데이터 타입

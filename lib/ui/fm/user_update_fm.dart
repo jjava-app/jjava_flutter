@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final myPageProvider = NotifierProvider<MyPageFM, MyPageModel>(() {
-  return MyPageFM();
+final userUpdateProvider = NotifierProvider<UserUpdateFM, UserUpdateModel>(() {
+  return UserUpdateFM();
 });
 
-class MyPageFM extends Notifier<MyPageModel> {
+class UserUpdateFM extends Notifier<UserUpdateModel> {
   @override
-  MyPageModel build() {
-    return MyPageModel("", "");
+  UserUpdateModel build() {
+    return UserUpdateModel("", "");
   }
 
   void nickname(String nickname) {
@@ -23,11 +23,11 @@ class MyPageFM extends Notifier<MyPageModel> {
   }
 }
 
-class MyPageModel {
+class UserUpdateModel {
   String? nickname;
   String? level;
 
-  MyPageModel(
+  UserUpdateModel(
     this.nickname,
     this.level,
   );
@@ -36,13 +36,13 @@ class MyPageModel {
     return {"nickname": nickname, "level": level};
   }
 
-  MyPageModel copyWith({
+  UserUpdateModel copyWith({
     String? email,
     String? password,
     String? nickname,
     String? level,
   }) {
-    return MyPageModel(
+    return UserUpdateModel(
       nickname ?? this.nickname,
       level ?? this.level,
     );
@@ -50,6 +50,6 @@ class MyPageModel {
 
   @override
   String toString() {
-    return 'MyPageModel{nickname: $nickname, level: $level}';
+    return 'UserUpdateModel{nickname: $nickname, level: $level}';
   }
 }

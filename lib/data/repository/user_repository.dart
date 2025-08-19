@@ -61,32 +61,6 @@ class UserRepository {
     return responseBody;
   }
 
-  Future<Map<String, dynamic>> writeAdditionalInfo(Map<String, dynamic> data) async {
-    Response response = await dio.put("/s/user/addtion-info", data: data);
-    final responseBody = response.data;
-    // final responseBody = {
-    //   "status": 200,
-    //   "msg": "성공",
-    //   "body": {
-    //     "username": "NAVER_j6Ccsr_gsenBwfXBf1wHK5pS9NtEgwBnPXdnEakhEV0",
-    //     "name": "김주희",
-    //     "nickname": "jh",
-    //     "teamId": 7,
-    //     "teamName": "롯데 자이언츠",
-    //     "phoneNumber": "010-3268-9720",
-    //     "email": "wngml9720@naver.com",
-    //     "birthDate": "2000-08-26",
-    //     "gender": "FEMALE",
-    //     "profileUrl":
-    //         "https://ssl.pstatic.net/static/pwe/address/img_profile.png",
-    //     "providerType": "NAVER",
-    //     "userRole": "USER"
-    //   }
-    // };
-    Logger().d('UserRepository의 writeAdditionalInfo: ${responseBody}');
-    return responseBody;
-  }
-
   Future<Map<String, dynamic>> update(Map<String, dynamic> data) async {
     Response response = await dio.put("/s/api/users", data: data);
     Logger().d("update data : $data");

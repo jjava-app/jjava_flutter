@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final loginProvider = NotifierProvider<LoginFm, LoginModel>(() {
-  return LoginFm();
+final loginProvider = NotifierProvider<LoginFM, LoginModel>(() {
+  return LoginFM();
 });
 
-class LoginFm extends Notifier<LoginModel> {
+class LoginFM extends Notifier<LoginModel> {
   @override
   LoginModel build() {
     return LoginModel("", "");
