@@ -32,215 +32,97 @@
             <block type="logic_ternary"></block>
         </category>
 
-        <!-- Math -->
-        <category name="Math" colour="#5CA65C">
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
-            <block type="math_single"></block>
-            <block type="math_trig"></block>
-            <block type="math_constant"></block>
-            <block type="math_number_property"></block>
-            <block type="math_round"></block>
-            <block type="math_on_list"></block>
-            <block type="math_modulo"></block>
-            <block type="math_constrain"></block>
-        </category>
+            <!-- Math -->
+            <category name="Math" colour="#5CA65C">
+                <block type="math_number"></block>
+                <block type="math_arithmetic"></block>
+                <block type="math_single"></block>
+                <block type="math_trig"></block>
+                <block type="math_constant"></block>
+                <block type="math_number_property"></block>
+                <block type="math_round"></block>
+                <block type="math_on_list"></block>
+                <block type="math_modulo"></block>
+                <block type="math_constrain"></block>
+            </category>
 
-        <!-- Text -->
-        <category name="Text" colour="#5CA68D">
-            <block type="text"></block>
-            <block type="text_print">
-                <value name="TEXT">
-                    <shadow type="text">
-                        <field name="TEXT">Hello, World!</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="text_join"></block>
-            <block type="text_length"></block>
-            <block type="text_isEmpty"></block>
-            <block type="text_indexOf"></block>
-            <block type="text_charAt"></block>
-            <block type="text_getSubstring"></block>
-            <block type="text_changeCase"></block>
-            <block type="text_trim"></block>
-        </category>
+            <!-- Text -->
+            <category name="Text" colour="#5CA68D">
+                <block type="text"></block>
+                <block type="text_print">
+                    <value name="TEXT">
+                        <shadow type="text">
+                            <field name="TEXT">Hello, World!</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_join"></block>
+                <block type="text_length"></block>
+                <block type="text_isEmpty"></block>
+                <block type="text_indexOf"></block>
+                <block type="text_charAt"></block>
+                <block type="text_getSubstring"></block>
+                <block type="text_changeCase"></block>
+                <block type="text_trim"></block>
+            </category>
 
-        <!-- Loops -->
-        <category name="Loops" colour="#5CA699">
-            <block type="controls_repeat_ext"></block>
-            <block type="controls_whileUntil"></block>
-            <block type="controls_for"></block>
-            <block type="controls_forEach"></block>
-            <block type="controls_flow_statements"></block>
-        </category>
+            <!-- Loops -->
+            <category name="Loops" colour="#5CA699">
+                <block type="controls_repeat_ext"></block>
+                <block type="controls_whileUntil"></block>
+                <block type="controls_for"></block>
+                <block type="controls_forEach"></block>
+                <block type="controls_flow_statements"></block>
+            </category>
 
-        <!-- Lists -->
-        <category name="Lists" colour="#745CA6">
-            <block type="lists_create_empty"></block>
-            <block type="lists_create_with"></block>
-            <block type="lists_repeat"></block>
-            <block type="lists_length"></block>
-            <block type="lists_isEmpty"></block>
-            <block type="lists_indexOf"></block>
-            <block type="lists_getIndex"></block>
-            <block type="lists_setIndex"></block>
-            <block type="lists_getSublist"></block>
-        </category>
+            <!-- Lists -->
+            <category name="Lists" colour="#745CA6">
+                <block type="lists_create_empty"></block>
+                <block type="lists_create_with"></block>
+                <block type="lists_repeat"></block>
+                <block type="lists_length"></block>
+                <block type="lists_isEmpty"></block>
+                <block type="lists_indexOf"></block>
+                <block type="lists_getIndex"></block>
+                <block type="lists_setIndex"></block>
+                <block type="lists_getSublist"></block>
+            </category>
 
-        <!-- Variables -->
-        <category
-                name="Variables"
-                custom="VARIABLE"
-                colour="#A6745C"
-        ></category>
+            <!-- Variables -->
+            <category
+                    name="Variables"
+                    custom="VARIABLE"
+                    colour="#A6745C"
+            ></category>
 
-        <!-- Functions -->
-        <category
-                name="Functions"
-                custom="PROCEDURE"
-                colour="#A65C81"
-        ></category>
-    </xml>
-</div>
+            <!-- Functions -->
+            <category
+                    name="Functions"
+                    custom="PROCEDURE"
+                    colour="#A65C81"
+            ></category>
+        </xml>
+    </div>
 </div>
 
 <script>
-    // var toolbox = {
-    //   kind: "categoryToolbox",
-    //   contents: [
-    //     {
-    //       kind: "category",
-    //       name: "Logic",
-    //       colour: "#5C81A6",
-    //       contents: [
-    //         { kind: "block", type: "controls_if" },
-    //         { kind: "block", type: "logic_compare" },
-    //         { kind: "block", type: "logic_operation", fields: { OP: "AND" } },
-    //         { kind: "block", type: "logic_operation", fields: { OP: "OR" } },
-    //         {
-    //           kind: "block",
-    //           type: "logic_boolean",
-    //           fields: { BOOL: "TRUE" },
-    //         },
-    //         {
-    //           kind: "block",
-    //           type: "logic_boolean",
-    //           fields: { BOOL: "FALSE" },
-    //         },
-    //         { kind: "block", type: "logic_negate" },
-    //         { kind: "block", type: "logic_null" },
-    //         { kind: "block", type: "logic_ternary" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Math",
-    //       colour: "#5CA65C",
-    //       contents: [
-    //         { kind: "block", type: "math_number" },
-    //         { kind: "block", type: "math_arithmetic" },
-    //         { kind: "block", type: "math_single" },
-    //         { kind: "block", type: "math_trig" },
-    //         { kind: "block", type: "math_constant" },
-    //         { kind: "block", type: "math_number_property" },
-    //         { kind: "block", type: "math_round" },
-    //         { kind: "block", type: "math_on_list" },
-    //         { kind: "block", type: "math_modulo" },
-    //         { kind: "block", type: "math_constrain" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Text",
-    //       colour: "#5CA68D",
-    //       contents: [
-    //         { kind: "block", type: "text" },
-    //         {
-    //           kind: "block",
-    //           type: "text_print",
-    //           inputs: {
-    //             TEXT: {
-    //               shadow: {
-    //                 type: "text",
-    //                 fields: { TEXT: "Hello, World!" },
-    //               },
-    //             },
-    //           },
-    //         },
-    //         { kind: "block", type: "text_join" },
-    //         { kind: "block", type: "text_length" },
-    //         { kind: "block", type: "text_isEmpty" },
-    //         { kind: "block", type: "text_indexOf" },
-    //         { kind: "block", type: "text_charAt" },
-    //         { kind: "block", type: "text_getSubstring" },
-    //         { kind: "block", type: "text_changeCase" },
-    //         { kind: "block", type: "text_trim" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Loops",
-    //       colour: "#5CA699",
-    //       contents: [
-    //         { kind: "block", type: "controls_repeat_ext" },
-    //         { kind: "block", type: "controls_whileUntil" },
-    //         { kind: "block", type: "controls_for" },
-    //         { kind: "block", type: "controls_forEach" },
-    //         { kind: "block", type: "controls_flow_statements" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Lists",
-    //       colour: "#745CA6",
-    //       contents: [
-    //         { kind: "block", type: "lists_create_empty" },
-    //         { kind: "block", type: "lists_create_with" },
-    //         { kind: "block", type: "lists_repeat" },
-    //         { kind: "block", type: "lists_length" },
-    //         { kind: "block", type: "lists_isEmpty" },
-    //         { kind: "block", type: "lists_indexOf" },
-    //         { kind: "block", type: "lists_getIndex" },
-    //         { kind: "block", type: "lists_setIndex" },
-    //         { kind: "block", type: "lists_getSublist" },
-    //       ],
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Variables",
-    //       colour: "#A6745C",
-    //       custom: "VARIABLE",
-    //     },
-    //     {
-    //       kind: "category",
-    //       name: "Functions",
-    //       colour: "#A65C81",
-    //       custom: "PROCEDURE",
-    //     },
-    //   ],
-    // };
-
-    // The toolbox gets passed to the configuration options during injection.
     const workspace = Blockly.inject(document.getElementById("blocklyDiv"), {
       toolbox: document.getElementById("toolbox"),
       toolboxPosition: "end",
       horizontalLayout: true,
-      collapse: true,
-      comments: true,
       sounds: false,
       scrollbars: false,
       move: { drag: true, wheel: false },
-      zoom: {
-        controls: false,
-        wheel: false,
-        startScale: 1.0,
-        maxScale: 3,
-        minScale: 0.3,
-        scaleSpeed: 1.2,
-        pinch: true,
-      },
-      trashcan: false,
+      zoom:
+         {controls: false,
+          wheel: false,
+          startScale: 1.0,
+          maxScale: 3,
+          minScale: 0.3,
+          scaleSpeed: 1.2,
+          pinch: true},
+         trashcan: false,
+         media: 'blockly/media/',
     });
 
     var category = workspace.getToolbox().getToolboxItems()[0];

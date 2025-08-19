@@ -89,8 +89,8 @@ class _MaQuestionWebViewState extends State<MaQuestionWebView> {
         ),
         // 실행 버튼
         Positioned(
-          bottom: 104,
-          right: 16,
+          top: 8,
+          left: 16,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
