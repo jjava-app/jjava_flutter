@@ -42,6 +42,17 @@ class MaSplashPage extends StatelessWidget {
               );
             },
           ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: 'btn3',
+            child: Text('워크스페이스\n대시보드'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => MaWorkspacePage()),
+              );
+            },
+          ),
         ],
       ),
     );
