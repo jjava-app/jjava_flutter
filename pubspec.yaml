@@ -45,6 +45,8 @@ dependencies:
   flutter_dotenv: ^5.2.1
   carousel_slider: ^5.0.0
   flutter_screenutil: ^5.9.3
+  flutter_secure_storage: ^9.2.4 #테스트용 임시
+
 
 dev_dependencies:
   flutter_test:
