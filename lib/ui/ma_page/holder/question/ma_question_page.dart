@@ -10,10 +10,10 @@ class MaQuestionPage extends StatefulWidget {
   const MaQuestionPage({super.key});
 
   @override
-  State<MaQuestionPage> createState() => _QuestionPageState();
+  State<MaQuestionPage> createState() => _MaQuestionPageState();
 }
 
-class _QuestionPageState extends State<MaQuestionPage> {
+class _MaQuestionPageState extends State<MaQuestionPage> {
   // TODO: 통신 시 실행 로직들(1 ~ 6번) 분리하여 vm에 옮기기
   // TODO: 웹뷰 처리 완료 후 오답 블럭 하이라이트 작업 진행
 
