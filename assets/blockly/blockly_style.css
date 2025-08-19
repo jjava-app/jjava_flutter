@@ -36,9 +36,8 @@ li {
 /* 툴박스 영역역 */
 
 .blocklyToolbox {
-  background-color: #eaeaea !important;
-  overflow-x: blocklyScrollbarKnob !important;
   overflow-y: hidden !important;
+  overflow-x: scroll;
   display: flex;
   align-items: center;
   background: transparent;
@@ -104,8 +103,3 @@ li {
   background-color: transparent;
   fill: transparent !important;
 }
-
-/* .blocklyWorkspace {
-  position: absolute;
-  bottom: 0;
-} */
