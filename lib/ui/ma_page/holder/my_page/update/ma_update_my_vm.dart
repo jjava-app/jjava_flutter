@@ -54,7 +54,7 @@ class MaUpdateMyVm extends AutoDisposeNotifier<MyPageModel?> {
         'level': s.levelEnum,
       };
 
-      final res = await _session.auth.put('/users/mypage/level', data: req);
+      final res = await _session.auth.put('/users/mypage', data: req);
       if (res.statusCode != 200 || (res.data is Map && res.data['status'] != 200)) {
         final msg = (res.data is Map) ? (res.data['msg'] ?? '저장 실패') : '저장 실패';
         throw Exception(msg);

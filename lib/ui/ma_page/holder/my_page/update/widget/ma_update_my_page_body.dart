@@ -13,7 +13,7 @@ class MaUpdateMyPageBody extends ConsumerStatefulWidget {
 }
 
 class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
-  final _nickC = TextEditingController();
+  final _nickCotroller = TextEditingController();
   bool _ctrlInitialized = false;
 
   @override
@@ -25,13 +25,13 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
 
   @override
   void dispose() {
-    _nickC.dispose();
+    _nickCotroller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // ✅ VM만 사용
+    // todo: VM만 사용 fm추가사용으로 바꿀예정
     final model = ref.watch(myPageProvider); // MyPageModel?
     final vm = ref.read(myPageProvider.notifier); // MaUpdateMyVm
 
@@ -41,7 +41,7 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
 
     // TextField 초기값 1회 세팅
     if (!_ctrlInitialized) {
-      _nickC.text = model.username;
+      _nickCotroller.text = model.username;
       _ctrlInitialized = true;
     }
 
@@ -80,8 +80,8 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
           MText.h5('닉네임', color: MColor.kLabel.alternative),
           const SizedBox(height: 4),
           TextField(
-            controller: _nickC,
-            onChanged: vm.changeNickname, // ✅ VM으로 반영
+            controller: _nickCotroller,
+            onChanged: vm.changeNickname, //
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -123,7 +123,7 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
                   min: 0,
                   max: 2,
                   divisions: 2,
-                  onChanged: (v) => vm.changeLevel(v.round()), // ✅ VM으로 반영
+                  onChanged: (v) => vm.changeLevel(v.round()), // VM으로 반영
                 ),
               ),
             ],
@@ -144,7 +144,7 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
                 ? null
                 : () async {
                     try {
-                      await vm.save(); // ✅ MaUpdateMyVm.save()
+                      await vm.save(); // MaUpdateMyVm.save()
                       if (!mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('저장되었습니다.')),

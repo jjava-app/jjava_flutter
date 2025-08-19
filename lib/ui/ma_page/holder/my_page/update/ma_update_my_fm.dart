@@ -7,7 +7,7 @@ final myPageFProvider = NotifierProvider<MyPageFM, MyPageFModel>(() => MyPageFM(
 /// 2) 창고(FM) - 화면 전용 상태만 관리
 class MyPageFM extends Notifier<MyPageFModel> {
   @override
-  MyPageFModel build() => MyPageFModel.initial();
+  MyPageFModel build() => const MyPageFModel();
 
   /// 서버 응답(/users/mypage body)으로 초기화
   void loadFromServerBody(Map<String, dynamic> body) {
@@ -28,11 +28,6 @@ class MyPageFM extends Notifier<MyPageFModel> {
     state = state.copyWith(levelIndex: fixed);
   }
 
-  /// 저장 중/로딩 플래그 (UI에서 버튼 비활성화 등에 사용)
-  void setSaving(bool v) => state = state.copyWith(saving: v);
-
-  void setLoading(bool v) => state = state.copyWith(loading: v);
-
   /// 서버 업데이트 요청 바디로 변환
   Map<String, dynamic> toUpdateRequest() {
     final req = {
@@ -52,32 +47,21 @@ class MyPageFModel {
   final String email;
   final int score;
   final int rank;
-  final String? photoUrl; // 표시만(업로드 X)
   final String? loginProvider; // 'kakao'|'naver'|'google'|'local' (표시용)
 
   // 폼 값
   final String nickname; // 입력 중 닉네임
   final int levelIndex; // 0~2 (LV1~3)
 
-  // UI 상태
-  final bool loading;
-  final bool saving;
-
   const MyPageFModel({
     this.id,
     this.email = '',
     this.score = 0,
     this.rank = 0,
-    this.photoUrl,
     this.loginProvider,
     this.nickname = '',
     this.levelIndex = 0,
-    this.loading = false,
-    this.saving = false,
   });
-
-  /// 초기 상태
-  factory MyPageFModel.initial() => const MyPageFModel(loading: true);
 
   /// 서버 응답으로부터 생성 (GET /users/mypage 의 body)
   factory MyPageFModel.fromServerBody(Map<String, dynamic> b) {
@@ -87,12 +71,9 @@ class MyPageFModel {
       email: (b['email'] as String?) ?? '',
       score: (b['score'] as num?)?.toInt() ?? 0,
       rank: (b['rank'] as num?)?.toInt() ?? 0,
-      photoUrl: b['photoUrl'] as String?,
       loginProvider: (b['loginProvider'] as String?)?.toLowerCase(),
       nickname: (b['username'] as String?) ?? '',
       levelIndex: _levelIndexOf(level),
-      loading: false,
-      saving: false,
     );
   }
 
@@ -101,24 +82,18 @@ class MyPageFModel {
     String? email,
     int? score,
     int? rank,
-    String? photoUrl,
     String? loginProvider,
     String? nickname,
     int? levelIndex,
-    bool? loading,
-    bool? saving,
   }) {
     return MyPageFModel(
       id: id ?? this.id,
       email: email ?? this.email,
       score: score ?? this.score,
       rank: rank ?? this.rank,
-      photoUrl: photoUrl ?? this.photoUrl,
       loginProvider: loginProvider ?? this.loginProvider,
       nickname: nickname ?? this.nickname,
       levelIndex: levelIndex ?? this.levelIndex,
-      loading: loading ?? this.loading,
-      saving: saving ?? this.saving,
     );
   }
 

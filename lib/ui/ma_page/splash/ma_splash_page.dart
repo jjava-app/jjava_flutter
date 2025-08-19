@@ -16,9 +16,9 @@ class _MaSplashPageState extends ConsumerState<MaSplashPage> {
     if (_loading) return;
     setState(() => _loading = true);
     try {
-      // ✅ 소셜 액세스 토큰 → 서버 로그인 → GVM이 저장/헤더세팅/화면이동
+      // 소셜 액세스 토큰 → 서버 로그인 → GVM이 저장/헤더세팅/화면이동
       const providerToken =
-          'AAAAN0hBxmtjFGTGc0Ss3_86UkUrU1Y4v6BrLWr9DDSIBUN-0TBH761yi4PBupfNwkFqQdeFjMyYvKow8yrF0vqpqq8';
+          'AAAAOAjnfzggtdwDfLCUitAVyto6tFaLWK7Wci4GLo0qVHbDfP5jONkcp9ACuIIQH3Wh-iuz-ak33xhctqYIy7jW7gY';
       await ref
           .read(sessionProvider.notifier)
           .oauthLogin(
