@@ -77,7 +77,7 @@ flutter:
     - assets/fonts/
     - assets/blockly/blockly_editor.html
     - assets/blockly/blockly_style.css
-    - assets/blockly/media
+    - assets/blockly/media/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

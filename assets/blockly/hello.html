@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>블록클리 테스트 페이지</title>
-    <link rel="stylesheet" href="blockly_style.css" />
-    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-</head>
-<body>
-<div id="container">
-    <div id="blocklyDiv" style="width: 100%; height: 100vh"></div>
-    <xml id="toolbox" style="display: none">
-        <!-- Logic -->
-        <category name="Logic" colour="#5C81A6">
-            <block type="controls_if"></block>
-            <block type="logic_compare"></block>
-            <block type="logic_operation">
-                <field name="OP">AND</field>
-            </block>
-            <block type="logic_operation">
-                <field name="OP">OR</field>
-            </block>
-            <block type="logic_boolean">
-                <field name="BOOL">TRUE</field>
-            </block>
-            <block type="logic_boolean">
-                <field name="BOOL">FALSE</field>
-            </block>
-            <block type="logic_negate"></block>
-            <block type="logic_null"></block>
-            <block type="logic_ternary"></block>
-        </category>
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+        <link href="blockly_style.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="blocklyDiv" style="height: 100vh; width: 100%;"></div>
+        <xml id="toolbox" style="display: none">
+            <!-- Logic -->
+            <category name="Logic" colour="#5C81A6">
+                <block type="controls_if"></block>
+                <block type="logic_compare"></block>
+                <block type="logic_operation">
+                    <field name="OP">AND</field>
+                </block>
+                <block type="logic_operation">
+                    <field name="OP">OR</field>
+                </block>
+                <block type="logic_boolean">
+                    <field name="BOOL">TRUE</field>
+                </block>
+                <block type="logic_boolean">
+                    <field name="BOOL">FALSE</field>
+                </block>
+                <block type="logic_negate"></block>
+                <block type="logic_null"></block>
+                <block type="logic_ternary"></block>
+            </category>
 
             <!-- Math -->
             <category name="Math" colour="#5CA65C">
@@ -102,31 +99,42 @@
                     colour="#A65C81"
             ></category>
         </xml>
-    </div>
-</div>
 
-<script>
-    const workspace = Blockly.inject(document.getElementById("blocklyDiv"), {
-      toolbox: document.getElementById("toolbox"),
-      toolboxPosition: "end",
-      horizontalLayout: true,
-      sounds: false,
-      scrollbars: false,
-      move: { drag: true, wheel: false },
-      zoom:
-         {controls: false,
-          wheel: false,
-          startScale: 1.0,
-          maxScale: 3,
-          minScale: 0.3,
-          scaleSpeed: 1.2,
-          pinch: true},
-         trashcan: false,
-         media: 'blockly/media/',
-    });
 
-    var category = workspace.getToolbox().getToolboxItems()[0];
-    category.AlwaysOpenCategory;
-</script>
-</body>
+        <script>
+            const workspace = Blockly.inject('blocklyDiv', {
+              toolbox: document.getElementById('toolbox'),
+              media: './media/',
+              trashcan: true,
+              renderer: 'zelos',
+              toolboxPosition: "end",
+              horizontalLayout: true,
+              zoom: { controls: true, wheel: true, startScale: 0.9 }
+            });
+
+            function getXmlJson() {
+                const xmlDom = Blockly.Xml.workspaceToDom(workspace);
+                const xmlText = Blockly.Xml.domToText(xmlDom);
+                return xmlText;
+            }
+
+            function getJavaScriptCode() {
+                return Blockly.JavaScript.workspaceToCode(workspace);
+            }
+
+            function getJsonObject() {
+                return Blockly.serialization.workspaces.save(workspace);
+            }
+
+            window.addEventListener("message", (event) => {
+                if (event.data === "get_all") {
+                    const result = {
+                        json: getJsonObject(),       // XML 형식
+                        javascript: getJavaScriptCode(), // JS Generator 결과
+                    };
+                    FlutterChannel.postMessage(JSON.stringify(result));
+                }
+            });
+        </script>
+    </body>
 </html>
