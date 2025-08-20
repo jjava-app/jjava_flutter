@@ -1,104 +1,112 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
+import 'package:jjava_flutter/data/gvm/session_gvm.dart';
+import 'package:jjava_flutter/main.dart' show navigatorKey;
 
-/// 1) 창고 관리자
-final myPageFProvider = NotifierProvider<MyPageFM, MyPageFModel>(() => MyPageFM());
+// 1. Provider
+final maUpdateMyProvider = NotifierProvider<MaUpdateMyFM, MaUpdateMyFModel>(() => MaUpdateMyFM());
 
-/// 2) 창고(FM) - 화면 전용 상태만 관리
-class MyPageFM extends Notifier<MyPageFModel> {
+// 2. FormModel (닉네임 + 레벨 상태 관리)
+class MaUpdateMyFM extends Notifier<MaUpdateMyFModel> {
+  SessionGVM get _session => ref.read(sessionProvider.notifier);
+
   @override
-  MyPageFModel build() => const MyPageFModel();
+  MaUpdateMyFModel build() => const MaUpdateMyFModel();
 
-  /// 서버 응답(/users/mypage body)으로 초기화
-  void loadFromServerBody(Map<String, dynamic> body) {
-    Logger().d("[FM] loadFromServerBody 호출");
-    state = MyPageFModel.fromServerBody(body);
-  }
-
-  /// 닉네임 입력 변경(로컬 상태)
+  // --- 닉네임 ---
   void changeNickname(String v) {
-    Logger().d("[FM] changeNickname: $v");
     state = state.copyWith(nickname: v);
   }
 
-  /// 레벨 인덱스(0~2) 변경(로컬 상태)
-  void changeLevelIndex(int idx) {
-    final fixed = idx.clamp(0, 2);
-    Logger().d("[FM] changeLevelIndex: $fixed");
-    state = state.copyWith(levelIndex: fixed);
+  void updateNickname(String v) => changeNickname(v); // 별칭
+
+  // --- 레벨 ---
+  void changeLevel(int index) {
+    state = state.copyWith(levelIndex: index.clamp(0, 2));
   }
 
-  /// 서버 업데이트 요청 바디로 변환
-  Map<String, dynamic> toUpdateRequest() {
-    final req = {
-      'username': state.nickname.trim(),
-      'level': state.levelEnum, // 'BEGINNER' | 'INTERMEDIATE' | 'EXPERT'
-      // 사진은 이번 단계에서 미사용(전송 안 함)
-    };
-    Logger().d("[FM] toUpdateRequest: $req");
-    return req;
+  void updateLevelIndex(int v) => changeLevel(v); // 별칭
+  void changeLevelIndex(int v) => changeLevel(v); // (빈 메서드 교체)
+
+  // 서버에서 유저 정보 조회해서 초기 상태 설정
+  Future<void> fetchUserInfo() async {
+    try {
+      final me = await _session.fetchMe();
+      state = MaUpdateMyFModel.fromServerBody(me);
+    } catch (e) {
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+        SnackBar(content: Text('프로필 불러오기 실패: $e')),
+      );
+    }
+  }
+
+  // 저장 요청
+  Future<void> save(BuildContext context) async {
+    final user = ref.read(sessionProvider).user;
+    if (user == null) return;
+
+    try {
+      final req = state.toUpdateRequest();
+      // 디버깅에 도움: print(req);
+      final res = await ref
+          .read(sessionProvider.notifier)
+          .auth
+          .put(
+            '/users/update',
+            data: req,
+          );
+
+      // 백엔드가 {"status":200, ...} 형태면 아래 체크로 충분
+      final ok = res.statusCode == 200 && (res.data is Map ? (res.data['status'] == 200) : true);
+
+      if (!ok) {
+        throw Exception((res.data is Map) ? (res.data['msg'] ?? '저장 실패') : '저장 실패');
+      }
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('저장되었습니다.')),
+        );
+        await Future.delayed(const Duration(milliseconds: 200));
+        Navigator.of(context).pop(true);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('저장 실패: $e')),
+        );
+      }
+    }
   }
 }
 
-/// 3) 화면용 모델
-class MyPageFModel {
-  // 서버 원본(표시용)
-  final int? id;
-  final String email;
-  final int score;
-  final int rank;
-  final String? loginProvider; // 'kakao'|'naver'|'google'|'local' (표시용)
+class MaUpdateMyFModel {
+  final String nickname;
+  final int levelIndex; // 0: BEGINNER, 1: INTERMEDIATE, 2: EXPERT
 
-  // 폼 값
-  final String nickname; // 입력 중 닉네임
-  final int levelIndex; // 0~2 (LV1~3)
+  const MaUpdateMyFModel({this.nickname = '', this.levelIndex = 0});
 
-  const MyPageFModel({
-    this.id,
-    this.email = '',
-    this.score = 0,
-    this.rank = 0,
-    this.loginProvider,
-    this.nickname = '',
-    this.levelIndex = 0,
-  });
-
-  /// 서버 응답으로부터 생성 (GET /users/mypage 의 body)
-  factory MyPageFModel.fromServerBody(Map<String, dynamic> b) {
-    final level = (b['level'] as String?) ?? 'BEGINNER';
-    return MyPageFModel(
-      id: b['id'] as int?,
-      email: (b['email'] as String?) ?? '',
-      score: (b['score'] as num?)?.toInt() ?? 0,
-      rank: (b['rank'] as num?)?.toInt() ?? 0,
-      loginProvider: (b['loginProvider'] as String?)?.toLowerCase(),
-      nickname: (b['username'] as String?) ?? '',
-      levelIndex: _levelIndexOf(level),
-    );
-  }
-
-  MyPageFModel copyWith({
-    int? id,
-    String? email,
-    int? score,
-    int? rank,
-    String? loginProvider,
-    String? nickname,
-    int? levelIndex,
-  }) {
-    return MyPageFModel(
-      id: id ?? this.id,
-      email: email ?? this.email,
-      score: score ?? this.score,
-      rank: rank ?? this.rank,
-      loginProvider: loginProvider ?? this.loginProvider,
+  MaUpdateMyFModel copyWith({String? nickname, int? levelIndex}) {
+    return MaUpdateMyFModel(
       nickname: nickname ?? this.nickname,
       levelIndex: levelIndex ?? this.levelIndex,
     );
   }
 
-  // ---------- 편의 ----------
-  String get levelDisplay => 'LV. ${levelIndex + 1}';
+  factory MaUpdateMyFModel.fromServerBody(Map<String, dynamic> b) {
+    final level = (b['level'] as String?) ?? 'BEGINNER';
+    return MaUpdateMyFModel(
+      nickname: (b['username'] as String?) ?? '',
+      levelIndex: _levelIndexOf(level),
+    );
+  }
+
+  Map<String, dynamic> toUpdateRequest() {
+    return {
+      'username': nickname.trim(),
+      'level': levelEnum,
+    };
+  }
 
   String get levelEnum {
     switch (levelIndex) {
@@ -112,14 +120,15 @@ class MyPageFModel {
     }
   }
 
+  String get levelDisplay => 'LV. ${levelIndex + 1}';
+
   static int _levelIndexOf(String level) {
     switch (level) {
-      case 'BEGINNER':
-        return 0;
       case 'INTERMEDIATE':
         return 1;
       case 'EXPERT':
         return 2;
+      case 'BEGINNER':
       default:
         return 0;
     }

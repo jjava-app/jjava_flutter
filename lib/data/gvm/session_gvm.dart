@@ -123,6 +123,10 @@ class SessionGVM extends Notifier<SessionModel> {
     }
     return Map<String, dynamic>.from(map['body'] as Map);
   }
+
+  String? getCachedEmail() => state.user?.email;
+
+  String? getCachedProvider() => state.user?.role.toLowerCase();
 }
 
 // 아래 User/SessionModel은 이전 답변 그대로 사용
