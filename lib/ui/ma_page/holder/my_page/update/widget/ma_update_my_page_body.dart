@@ -44,46 +44,46 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
     final emailText = vmState?.email ?? ''; // 없으면 빈값
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 22),
       width: double.infinity,
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MText.h4('프로필 수정'),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
+            padding: EdgeInsets.symmetric(horizontal: 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MText.h5('이메일 주소 / SNS 계정 ID', color: MColor.kLabel.alternative),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Row(
                   children: [
                     Container(
                       width: 20,
                       height: 20,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFEE500), // 카카오 노랑 유지
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFEE500),
                         shape: BoxShape.circle,
                       ),
                       child: Center(
                         child: SizedBox(width: 12, height: 12, child: MIcon.page.login.kakao),
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6),
                     MText.s20Bold(
                       emailText.isEmpty ? '-' : emailText, // VM에서 가져온 이메일
                       color: MColor.kLabel.disable,
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 // 닉네임
                 MText.h5('닉네임', color: MColor.kLabel.alternative),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 TextField(
                   controller: _nickCtrl, // FM 로드 후 initState에서 세팅
                   onChanged: fm.changeNickname, // FM 상태로 반영
@@ -94,7 +94,7 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
                   ),
                   decoration: InputDecoration(
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: MColor.kFill.normal),
@@ -110,11 +110,11 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
                   ),
                 ),
 
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
 
                 // 레벨
                 MText.h5('설정 학습 난이도', color: MColor.kLabel.alternative),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
 
                 // 👉 StatefulBuilder는 유지하되, 값/변경은 FM과 직접 연결
                 StatefulBuilder(
@@ -133,7 +133,7 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
                             );
                           }),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         SliderTheme(
                           data: SliderTheme.of(context).copyWith(
                             trackHeight: 4,
@@ -164,13 +164,13 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
             ),
           ),
 
-          const SizedBox(height: 36),
-          const Spacer(),
+          SizedBox(height: 36),
+          Spacer(),
 
           // 완료 버튼 -> FM 저장
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 48),
+              minimumSize: Size(double.infinity, 48),
               backgroundColor: MColor.kPrimary.normal,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
