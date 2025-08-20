@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
-import 'package:jjava_flutter/ui/ma_page/auth/login_page/ma_login_page.dart';
+import 'package:jjava_flutter/ui/ta_page/auth/login_page/ta_login_page.dart';
 
-class MaOnboardingSlidePage extends StatelessWidget {
+class TaOnboardingSlide extends StatelessWidget {
   final String title;
   final String description;
   final String assetName;
 
-  const MaOnboardingSlidePage({
+  const TaOnboardingSlide({
     super.key,
     required this.title,
     required this.description,
@@ -53,7 +53,7 @@ class MaOnboardingSlidePage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => MaLoginPage()),
+                    MaterialPageRoute(builder: (_) => TaLoginPage()),
                   );
                 },
                 child: Text(
