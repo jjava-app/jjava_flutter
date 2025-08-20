@@ -36,7 +36,7 @@ class MaPageBody extends ConsumerWidget {
                 children: [
                   MText.s14Bold("내 랭킹", color: MColor.kLabel.neutral),
                   SizedBox(width: 16),
-                  MText.s14Bold(model.username, color: MColor.kPrimary.normal),
+                  MText.s14Bold(model.nickname, color: MColor.kPrimary.normal),
                 ],
               ),
               Row(
@@ -95,7 +95,7 @@ class MaPageBody extends ConsumerWidget {
                       SizedBox(height: 12),
                       MText.h5('닉네임', color: MColor.kLabel.alternative),
                       SizedBox(height: 4),
-                      MText.s20Bold(model.username, color: MColor.kLabel.neutral),
+                      MText.s20Bold(model.nickname, color: MColor.kLabel.neutral),
 
                       SizedBox(height: 12),
                       MText.h5('설정 학습 난이도', color: MColor.kLabel.alternative),

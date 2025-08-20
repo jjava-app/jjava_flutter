@@ -16,29 +16,26 @@ class MyPageRepository {
 
 /// 프로필 모델
 class MyPageProfile {
-  final int id;
   final String email;
-  final String username;
-  final String level; // "BEGINNER" | "INTERMEDIATE" | "EXPERT"
+  final String nickname;
   final int score;
   final int rank;
+  final String level; // "BEGINNER" | "INTERMEDIATE" | "EXPERT"
 
   MyPageProfile({
-    required this.id,
     required this.email,
-    required this.username,
-    required this.level,
+    required this.nickname,
     required this.score,
     required this.rank,
+    required this.level,
   });
 
   factory MyPageProfile.fromBody(Map<String, dynamic> b) => MyPageProfile(
-    id: b['id'] as int,
     email: (b['email'] as String?) ?? '',
-    username: b['username'] as String,
-    level: b['level'] as String,
+    nickname: b['username'] as String,
     score: (b['score'] as num).toInt(),
     rank: (b['rank'] as num).toInt(),
+    level: b['level'] as String,
   );
 
   String get levelDisplay {
