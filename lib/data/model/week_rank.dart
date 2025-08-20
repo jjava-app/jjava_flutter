@@ -2,15 +2,15 @@ class WeekRank {
   final int userId;
   final String username;
   final int score;
-  final int rank;
   final int delta;
+  final int rank;
 
   WeekRank({
     required this.userId,
     required this.username,
     required this.score,
-    required this.rank,
     required this.delta,
+    required this.rank,
   });
 
   factory WeekRank.fromMap(Map<String, dynamic> data) {
@@ -18,8 +18,8 @@ class WeekRank {
       userId: data['userId'],
       username: data['username'],
       score: data['score'],
-      rank: data['rank'],
       delta: data['delta'],
+      rank: data['rank'],
     );
   }
 
@@ -28,13 +28,13 @@ class WeekRank {
       'userId': userId,
       'username': username,
       'score': score,
-      'rank': rank,
       'delta': delta,
+      'rank': rank,
     };
   }
 
   @override
   String toString() {
-    return 'WeekRank(userId: $userId, username: $username, score: $score, rank: $rank, delta: $delta)';
+    return 'WeekRank(userId: $userId, username: $username, score: $score, delta: $delta, rank: $rank)';
   }
 }

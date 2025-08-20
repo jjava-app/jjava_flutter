@@ -10,7 +10,7 @@ class TaHomeWeekRank extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeRepository = HomeRepository();
-    final rankingList = homeRepository.getMockRankingList();
+    final response = await homeRepository.getHome();
 
     return Container(
       padding: const EdgeInsets.all(16),
