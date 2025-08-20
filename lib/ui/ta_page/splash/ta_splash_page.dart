@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/question/ma_question_page.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/workspace/ta_workspace_page.dart';
 
 class TaSplashPage extends StatelessWidget {
   @override
@@ -34,11 +34,11 @@ class TaSplashPage extends StatelessWidget {
           SizedBox(height: 10),
           FloatingActionButton(
             heroTag: 'btn3',
-            child: Text('블록코딩\n대시보드'),
+            child: Text('태블릿\n워크스페이스'),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => MaQuestionPage()),
+                MaterialPageRoute(builder: (_) => TaWorkspacePage()),
               );
             },
           ),

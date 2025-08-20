@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 
-class TaQuestionIncorrectDialog extends StatelessWidget {
+class TaWorkspaceIncorrectDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(

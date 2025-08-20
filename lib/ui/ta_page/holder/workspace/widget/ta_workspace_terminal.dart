@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 
-class TaQuestionTerminal extends StatelessWidget {
-  const TaQuestionTerminal({
+class TaWorkspaceTerminal extends StatelessWidget {
+  const TaWorkspaceTerminal({
     super.key,
   });
 

@@ -75,8 +75,10 @@ flutter:
     - assets/icons/
     - assets/animation/
     - assets/fonts/
-    - assets/blockly/blockly_editor.html
-    - assets/blockly/blockly_style.css
+    - assets/blockly/mobile/ma_blockly_editor.html
+    - assets/blockly/mobile/ma_blockly_style.css
+    - assets/blockly/tablet/ta_blockly_editor.html
+    - assets/blockly/tablet/ta_blockly_style.css
     - assets/blockly/media/
   #   - images/a_dot_ham.jpeg
 
