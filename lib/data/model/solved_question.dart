@@ -1,26 +1,28 @@
 class SolvedQuestion {
   final int? id; // PK
-  final String? email; // 이메일 (Unique)
-  final String? username; // 사용자명
-  final int? level; // 레벨
-  final int? score; // 점수
-  final String? accessToken;
-  final bool? isNewUser;
+  final String? qusetionType; // 타입
+  final String? title; // 지난 학습 제목
+  final String? date; // 날짜
+  final String? questionContent; // 문제 내용
+  final String? aiContent; // ai첨삭 내용
+  final String? codeType; // 코드 언어
+  final String? code; // 코드
 
-  SolvedQuestion({this.id, this.email, this.username, this.level = 1, this.score = 0, this.accessToken, this.isNewUser});
+  SolvedQuestion({this.id, this.qusetionType, this.title, this.date, this.questionContent, this.aiContent, this.codeType, this.code});
 
   // Map → User
   SolvedQuestion.fromMap(Map<String, dynamic> data)
-    : id = data['id'] ?? data['userId'],
-      email = data['email'],
-      username = data['username'],
-      level = data['level'],
-      score = data['score'],
-      accessToken = data['accessToken'],
-      isNewUser = data['isNewUser'];
+    : id = data['id'],
+      qusetionType = data['qusetionType'],
+      title = data['title'],
+      date = data['date'],
+      questionContent = data['questionContent'],
+      aiContent = data['aiContent'],
+      codeType = data['codeType'],
+      code = data['code'];
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, username: $username, level: $level, score: $score, accessToken: $accessToken, isNewUser: $isNewUser)';
+    return 'SolvedQuestion{id: $id, qusetionType: $qusetionType, title: $title, date: $date, questionContent: $questionContent, aiContent: $aiContent, codeType: $codeType, code: $code}';
   }
 }
