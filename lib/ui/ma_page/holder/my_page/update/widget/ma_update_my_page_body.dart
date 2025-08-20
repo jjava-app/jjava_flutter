@@ -116,7 +116,7 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
                 MText.h5('설정 학습 난이도', color: MColor.kLabel.alternative),
                 SizedBox(height: 4),
 
-                // 👉 StatefulBuilder는 유지하되, 값/변경은 FM과 직접 연결
+                // StatefulBuilder는 유지하되, 값/변경은 FM과 직접 연결
                 StatefulBuilder(
                   builder: (context, setSB) {
                     final activeIdx = fmState.levelIndex; // FM 상태로 표시

@@ -28,21 +28,21 @@ class MaPageBody extends ConsumerWidget {
             color: MColor.kFill.normal,
             borderRadius: BorderRadius.circular(8),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   MText.s14Bold("내 랭킹", color: MColor.kLabel.neutral),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   MText.s14Bold(model.username, color: MColor.kPrimary.normal),
                 ],
               ),
               Row(
                 children: [
                   _RankChip(label: "${model.rank} 위"),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   _RankChip(label: "${model.score}점"),
                 ],
               ),
@@ -53,7 +53,7 @@ class MaPageBody extends ConsumerWidget {
         // 본문
         Expanded(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 22),
             width: double.infinity,
             color: Colors.white,
             child: Column(
@@ -67,7 +67,7 @@ class MaPageBody extends ConsumerWidget {
                     TextButton(
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
-                        minimumSize: const Size(0, 0),
+                        minimumSize: Size(0, 0),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       onPressed: () {
@@ -80,7 +80,7 @@ class MaPageBody extends ConsumerWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // 프로필 상세
                 Padding(
@@ -89,23 +89,23 @@ class MaPageBody extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MText.h5('이메일 주소 / SNS 계정 ID', color: MColor.kLabel.alternative),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       MText.s20Bold(email, color: MColor.kLabel.neutral),
 
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       MText.h5('닉네임', color: MColor.kLabel.alternative),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       MText.s20Bold(model.username, color: MColor.kLabel.neutral),
 
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       MText.h5('설정 학습 난이도', color: MColor.kLabel.alternative),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       MText.s20Bold(model.levelDisplay, color: MColor.kPrimary.normal),
                     ],
                   ),
                 ),
 
-                const SizedBox(height: 36),
+                SizedBox(height: 36),
 
                 // 계정 연동 (현재는 예시 1개)
                 Column(
@@ -113,7 +113,7 @@ class MaPageBody extends ConsumerWidget {
                   children: [
                     MText.h4('계정 연동'),
                     Padding(
-                      padding: const EdgeInsets.all(6),
+                      padding: EdgeInsets.all(6),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -135,7 +135,7 @@ class MaPageBody extends ConsumerWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 6),
+                              SizedBox(width: 6),
                               MText.s12Bold(email, color: MColor.kLabel.alternative),
                             ],
                           ),
@@ -145,12 +145,12 @@ class MaPageBody extends ConsumerWidget {
                   ],
                 ),
 
-                const Spacer(),
+                Spacer(),
 
                 // 로그아웃
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
+                    minimumSize: Size(double.infinity, 48),
                     side: BorderSide(color: MColor.kStatus.destructive),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
@@ -161,7 +161,7 @@ class MaPageBody extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MText.s16Bold('로그아웃', color: MColor.kStatus.destructive),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       MIcon.page.myPage.logout,
                     ],
                   ),
