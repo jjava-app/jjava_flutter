@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class MaQuestionBlockDashboard extends StatefulWidget {
-  const MaQuestionBlockDashboard({
+class TaWorkspaceBlockDashboard extends StatefulWidget {
+  const TaWorkspaceBlockDashboard({
     super.key,
   });
 
   @override
-  State<MaQuestionBlockDashboard> createState() => _MaQuestionBlockDashboardState();
+  State<TaWorkspaceBlockDashboard> createState() => _TaWorkspaceBlockDashboardState();
 }
 
-class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
+class _TaWorkspaceBlockDashboardState extends State<TaWorkspaceBlockDashboard> {
   late final WebViewController _controller;
   String? jsonCode;
 
@@ -41,7 +41,7 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
           debugPrint('📦 JSON: ${code['json']}');
         },
       )
-      ..loadFlutterAsset('assets/blockly/mobile/ma_blockly_editor.html');
+      ..loadFlutterAsset('assets/blockly/tablet/ta_blockly_editor.html');
   }
 
   @override

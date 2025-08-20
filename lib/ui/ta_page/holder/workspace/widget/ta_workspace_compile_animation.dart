@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 
-class TaQuestionCompileAnimation extends StatelessWidget {
-  const TaQuestionCompileAnimation({
+class TaWorkspaceCompileAnimation extends StatelessWidget {
+  const TaWorkspaceCompileAnimation({
     super.key,
   });
 
