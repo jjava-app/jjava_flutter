@@ -21,6 +21,7 @@ class MyPageProfile {
   final int score;
   final int rank;
   final String level; // "BEGINNER" | "INTERMEDIATE" | "EXPERT"
+  // final List<LinkedAccount> linked;
 
   MyPageProfile({
     required this.email,
@@ -28,6 +29,7 @@ class MyPageProfile {
     required this.score,
     required this.rank,
     required this.level,
+    // required this.linked,
   });
 
   factory MyPageProfile.fromBody(Map<String, dynamic> b) => MyPageProfile(
