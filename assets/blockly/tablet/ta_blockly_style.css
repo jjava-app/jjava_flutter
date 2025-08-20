@@ -36,40 +36,45 @@ li {
 /* 툴박스 영역역 */
 
 .blocklyToolbox {
-  overflow-y: hidden !important;
-  overflow-x: scroll;
-  display: flex;
-  align-items: center;
+  width: 140px;
+  overflow-y: scroll !important;
+  display: flex !important;
+  align-items: start;
+  justify-content: end;
   background: transparent;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  padding: 8px 0;
-  /* bottom: 133px !important; */
+  padding: 16px;
+  background-color: #f7f7f8;
 }
 
 /* 블럭 카테고리 리스트 */
 
 .blocklyToolboxCategoryContainer {
+  width: 100% !important;
   margin: 0px !important;
 }
 
 .blocklyToolboxCategoryGroup {
+  width: 100%;
   flex-wrap: nowrap;
   gap: 8px;
-  padding: 0px 16px;
 }
 
 .blocklyToolboxCategory {
-  height: 32px !important;
-  display: inline-block;
+  width: 100%;
+  height: 48px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 0px;
   padding: 0px 8px !important;
   background-color: white !important;
-  border-width: 2px !important;
+  border-width: 1px !important;
   border-style: solid !important;
   border-color: rgba(112, 115, 124, 0.22) !important;
-  border-radius: 16px;
+  border-radius: 8px;
   box-sizing: border-box;
 }
 
@@ -89,17 +94,34 @@ li {
   color: #03c75a;
 }
 
+.blocklyToolboxCategoryContainer {
+  display: flex;
+  justify-content: end;
+}
+
+.blocklyTreeRowContentContainer {
+  height: 28px;
+}
+
 /* 블럭 리스트 */
 
 .blocklyFlyout,
 .blocklyToolboxFlyout {
-  height: 133px !important;
-  bottom: 32px;
-  transform: translateY(0) !important;
+  /* overflow: hidden; */
+
+  box-shadow: -2px 0 20px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
 }
 
 .blocklyFlyoutBackground {
-  height: 133px !important;
-  background-color: transparent;
-  fill: transparent !important;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background-color: #f7f7f8;
+  fill: #f7f7f8;
+}
+
+.blocklyToolboxCategoryIcon {
+  display: none !important;
 }

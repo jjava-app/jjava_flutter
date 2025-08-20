@@ -7,16 +7,16 @@ class TaQuestionCorrectDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: MColor.kBackground.normal,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 350),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 28),
             child: Column(
-              spacing: 10,
+              spacing: 20,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
@@ -25,7 +25,7 @@ class TaQuestionCorrectDialog extends StatelessWidget {
                     Text(
                       '성공 😇',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
                         color: MColor.kLabel.normal,
                       ),
@@ -34,7 +34,7 @@ class TaQuestionCorrectDialog extends StatelessWidget {
                     Text(
                       '다음 문제도 풀어볼까요?',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: MColor.kLabel.neutral,
                       ),
@@ -45,7 +45,7 @@ class TaQuestionCorrectDialog extends StatelessWidget {
                   spacing: 10,
                   children: [
                     Row(
-                      spacing: 6,
+                      spacing: 12,
                       children: [
                         Container(
                           width: 16,
@@ -58,7 +58,7 @@ class TaQuestionCorrectDialog extends StatelessWidget {
                         Text(
                           'AI 첨삭',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: MColor.kButton.active,
                           ),
@@ -68,19 +68,51 @@ class TaQuestionCorrectDialog extends StatelessWidget {
                     Text(
                       'Lorem ipsum dolor sit amet consectetur. Porta sed placerat dignissim facilisis congue viverra suspendisse neque maecenas. Ut venenatis proin mi id id sit lectus ut nam.',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 20,
                         fontWeight: FontWeight.w400,
                         color: MColor.kLabel.normal,
                       ),
                     ),
                   ],
                 ),
+                Container(
+                  height: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Color(0xE6333B4A),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    child: Column(
+                      spacing: 10,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'java',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: MColor.kLabel.white,
+                          ),
+                        ),
+                        Text(
+                          'Lorem ipsum dolor sit amet consectetur. Ullamcorper non pretium dictum diam sit. Urna et ipsum enim feugiat pulvinar tristique blandit.',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: MColor.kLabel.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           Divider(height: 1, color: MColor.kLine.normal),
           SizedBox(
-            height: 48,
+            height: 64,
             child: Row(
               children: [
                 Expanded(
@@ -89,7 +121,7 @@ class TaQuestionCorrectDialog extends StatelessWidget {
                     child: Text(
                       '계속하기',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: MColor.kButton.active,
                       ),
@@ -108,7 +140,7 @@ class TaQuestionCorrectDialog extends StatelessWidget {
                     child: Text(
                       '나가기',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                         color: MColor.kLabel.normal,
                       ),
