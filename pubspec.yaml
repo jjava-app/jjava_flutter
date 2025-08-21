@@ -82,6 +82,9 @@ flutter:
     - assets/blockly/tablet/ta_blockly_editor.html
     - assets/blockly/tablet/ta_blockly_style.css
     - assets/blockly/media/
+    - assets/blockly/dialog_override.js
+    - assets/blockly/java_generator.js
+    - assets/blockly/toolbox_skin.js
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

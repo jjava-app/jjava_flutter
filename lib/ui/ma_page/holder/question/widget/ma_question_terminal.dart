@@ -2,29 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 
 class MaQuestionTerminal extends StatefulWidget {
-  static const double _terminalMin = 148;
-
   @override
   State<MaQuestionTerminal> createState() => _MaQuestionTerminalState();
 }
 
 class _MaQuestionTerminalState extends State<MaQuestionTerminal> {
-  // 웹뷰 유동높이 불가 이슈로 기능 삭제
-
-  // 6. 터미널 높이 조절 로직
-  // double _terminalHeight = 148;
-  //
-  // double get _terminalMax {
-  //   final size = MediaQuery.of(context).size;
-  //   final pad = MediaQuery.of(context).padding;
-  //   return (size.height - pad.top - pad.bottom) * 0.6;
-  // }
-  //
-  // void _onTerminalDragUpdate(DragUpdateDetails d) {
-  //   final next = _terminalHeight - d.delta.dy;
-  //   setState(() => _terminalHeight = next.clamp(QuestionTerminal._terminalMin, _terminalMax));
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(

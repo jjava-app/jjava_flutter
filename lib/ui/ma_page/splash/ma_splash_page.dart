@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/dashboard/ma_dashboard.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/ma_question_page.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/workspace/ma_workspace_page.dart';
 
@@ -45,12 +46,22 @@ class MaSplashPage extends StatelessWidget {
           ),
           SizedBox(height: 10),
           FloatingActionButton(
-            heroTag: 'btn3',
+            heroTag: 'btn4',
             child: Text('워크스페이스\n대시보드'),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => MaWorkspacePage()),
+              );
+            },
+          ),
+          FloatingActionButton(
+            heroTag: 'btn5',
+            child: Text('대시보드'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => MaDashboard()),
               );
             },
           ),
