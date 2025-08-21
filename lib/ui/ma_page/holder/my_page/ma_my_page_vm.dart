@@ -21,6 +21,11 @@ class MyPageVM extends AutoDisposeNotifier<MyPageProfile?> {
   Future<void> init() async {
     try {
       final body = await _session.fetchMe(); // ← 서버 요청
+
+      print('📥 /users/mypage body: $body'); // 원본
+
+      final profile = MyPageProfile.fromBody(body);
+
       state = MyPageProfile.fromBody(body);
     } catch (e) {
       // 예외 무시 or 로그만 찍어도 됨 (조회 실패 시 null 유지)

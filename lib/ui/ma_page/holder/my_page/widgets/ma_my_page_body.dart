@@ -17,6 +17,8 @@ class MaPageBody extends ConsumerWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
+    final linkedProviders = model.linked?.map((link) => link.provider).toSet() ?? {};
+
     final email = model.email.isEmpty ? '연동 이메일 없음' : model.email;
 
     return Column(
@@ -112,35 +114,57 @@ class MaPageBody extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     MText.h4('계정 연동'),
+
                     Padding(
                       padding: EdgeInsets.all(6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          MText.s12Bold('연동된 계정', color: MColor.kLabel.alternative),
-                          Row(
+                      child: MText.s12Bold('연동된 계정', color: MColor.kLabel.alternative),
+                    ),
+
+                    if (model.linked != null && model.linked!.isNotEmpty)
+                      ...model.linked!.map((linkedAccount) {
+                        final provider = linkedAccount.provider;
+                        final email = linkedAccount.email;
+                        final providerIcon = _getProviderIconAndColor(provider);
+
+                        return Padding(
+                          padding: EdgeInsets.all(6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Container(
-                                width: 20,
-                                height: 20,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFFEE500),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: SizedBox(
-                                    width: 12,
-                                    height: 12,
-                                    child: MIcon.page.login.kakao,
-                                  ),
-                                ),
+                              Row(
+                                children: [
+                                  _getProviderIconAndColor(provider),
+                                  SizedBox(width: 6),
+                                  MText.s12Bold(email, color: MColor.kLabel.alternative),
+                                ],
                               ),
-                              SizedBox(width: 6),
-                              MText.s12Bold(email, color: MColor.kLabel.alternative),
                             ],
                           ),
-                        ],
+                        );
+                      }).toList(),
+                    if (model.linked == null || model.linked!.isEmpty)
+                      // 연동된 계정이 없을 때 보여줄 위젯 (예: '연동된 계정 없음' 텍스트)
+                      Padding(
+                        padding: EdgeInsets.all(6),
+                        child: MText.s12Bold('연동된 계정 없음', color: MColor.kLabel.alternative),
                       ),
+
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        // 연동 가능한 모든 프로바이더 정의
+                        ...['kakao', 'naver', 'google'].map((provider) {
+                          // 이미 연동된 프로바이더인지 확인
+                          if (!linkedProviders.contains(provider)) {
+                            // 연동되지 않은 경우에만 아이콘 위젯 반환
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 14),
+                              child: _getLoginIconWidget(provider), // 아이콘 위젯을 반환하는 헬퍼 함수
+                            );
+                          }
+                          return const SizedBox.shrink(); // 이미 연동된 경우, 빈 위젯 반환
+                        }).toList(),
+                      ],
                     ),
                   ],
                 ),
@@ -190,5 +214,128 @@ class _RankChip extends StatelessWidget {
       ),
       child: MText.buttonS(label, color: MColor.kLabel.normal),
     );
+  }
+}
+
+Widget _getProviderIconAndColor(String? provider) {
+  if (provider == null) {
+    return const SizedBox.shrink();
+  }
+
+  BoxDecoration decoration;
+  Widget icon;
+  double iconSize = 12.0;
+
+  switch (provider) {
+    case 'naver':
+      decoration = const BoxDecoration(
+        color: Color(0xFF03C75A),
+        shape: BoxShape.circle,
+      );
+      icon = MIcon.page.login.naver;
+      break;
+    case 'kakao':
+      decoration = const BoxDecoration(
+        color: Color(0xFFFEE500),
+        shape: BoxShape.circle,
+      );
+      icon = MIcon.page.login.kakao;
+      break;
+    case 'google':
+      decoration = BoxDecoration(
+        color: const Color(0xFFFFFFFF),
+        shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFFE9EEF5)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.10),
+            blurRadius: 8,
+            spreadRadius: 1,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      );
+      icon = MIcon.page.login.google;
+      iconSize = 15.0; // 구글 아이콘은 크기를 조금 다르게 설정
+      break;
+    default:
+      return const SizedBox.shrink();
+  }
+
+  return Container(
+    width: 20,
+    height: 20,
+    decoration: decoration,
+    child: Center(
+      child: SizedBox(
+        width: iconSize,
+        height: iconSize,
+        child: icon,
+      ),
+    ),
+  );
+}
+
+Widget _getLoginIconWidget(String provider) {
+  switch (provider) {
+    case 'kakao':
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: const BoxDecoration(
+          color: Color(0xFFFEE500),
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: SizedBox(
+            width: 20,
+            height: 18,
+            child: MIcon.page.login.kakao,
+          ),
+        ),
+      );
+    case 'naver':
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: const BoxDecoration(
+          color: Color(0xFF03C75A),
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: SizedBox(
+            width: 20,
+            height: 18,
+            child: MIcon.page.login.naver,
+          ),
+        ),
+      );
+    case 'google':
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFFFFF),
+          shape: BoxShape.circle,
+          border: Border.all(color: const Color(0xFFE9EEF5)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.10),
+              blurRadius: 8,
+              spreadRadius: 1,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Center(
+          child: SizedBox(
+            width: 30,
+            height: 24,
+            child: MIcon.page.login.google,
+          ),
+        ),
+      );
+    default:
+      return const SizedBox.shrink();
   }
 }
