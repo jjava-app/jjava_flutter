@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/data/repository/worksapce_list_repository.dart';
+import 'package:jjava_flutter/data/repository/workspace_list_repository.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/workspace/list/widgets/ma_workspace_list_button.dart';
 
 class MaWorkspaceListBody extends StatelessWidget {
@@ -9,6 +9,7 @@ class MaWorkspaceListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // vm에서 리스트 받아와야 함 - ConsumerWidget
     final items = WorkspaceListRepository.items;
 
     return SafeArea(
