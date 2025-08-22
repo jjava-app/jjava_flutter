@@ -23,13 +23,6 @@ class WorkspaceVM extends FamilyNotifier<WorkspaceModel?, int> {
     state = WorkspaceModel.fromMap(body["response"]);
   }
 
-  // 워크 스페이스 생성
-  Future<void> create() async {
-    Map<String, dynamic> body = await WorkspaceRepository().createWorkspace();
-    state = WorkspaceModel.fromMap(body['response']);
-    // 워크 스페이스 detail 진입
-  }
-
   // 워크 스페이스 저장
   Future<void> update(int workspaceId, String title, String serializedJson, String libraryJson) async {
     Map<String, dynamic> reqBody = {"title": title, "serializedJson": serializedJson, "libraryJson": libraryJson};
