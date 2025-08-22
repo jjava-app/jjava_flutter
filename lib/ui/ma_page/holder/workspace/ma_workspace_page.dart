@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_leave_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_restart_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_save_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/workspace/widget/ma_workspace_body.dart';
 
 class MaWorkspacePage extends StatefulWidget {
-  const MaWorkspacePage({super.key});
+  final int workspaceId;
+
+  const MaWorkspacePage({
+    super.key,
+    required this.workspaceId,
+  });
 
   @override
   State<MaWorkspacePage> createState() => _MaWorkspacePageState();
@@ -34,7 +38,9 @@ class _MaWorkspacePageState extends State<MaWorkspacePage> {
     // TODO: 종료 클릭 시 서버에 저장하고 이동
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => MaMainHolder()),
+      MaterialPageRoute(
+        builder: (_) => MaWorkspacePage(workspaceId: widget.workspaceId),
+      ),
     );
   }
 

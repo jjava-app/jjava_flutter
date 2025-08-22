@@ -8,7 +8,12 @@ import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_save_dialog.dar
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/widget/ta_workspace_body.dart';
 
 class TaWorkspacePage extends StatefulWidget {
-  const TaWorkspacePage({super.key});
+  final int workspaceId;
+
+  const TaWorkspacePage({
+    super.key,
+    required this.workspaceId,
+  });
 
   @override
   State<TaWorkspacePage> createState() => _WorkspacePageState();

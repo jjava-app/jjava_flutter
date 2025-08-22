@@ -1,9 +1,11 @@
-import 'package:flutter/src/widgets/basic.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/data/model/workspace.dart';
 import 'package:jjava_flutter/data/repository/workspace_list_repository.dart';
 import 'package:jjava_flutter/data/repository/workspace_repository.dart';
 import 'package:jjava_flutter/main.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/workspace/ma_workspace_page.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/workspace/ta_workspace_page.dart';
 
 /// 1. 창고 관리자
 final workspaceListProvider = NotifierProvider<WorkspaceListVM, WorkspaceListModel?>(() {
@@ -33,12 +35,19 @@ class WorkspaceListVM extends Notifier<WorkspaceListModel?> {
   // 워크 스페이스 생성
   Future<void> create() async {
     Map<String, dynamic> body = await WorkspaceRepository().createWorkspace();
-    Workspace workspace = Workspace.fromMap(body['response']);
+    Workspace workspace = Workspace.fromMap(body['body']);
 
     List<Workspace> newWorkspaceList = [workspace, ...state!.workspaces];
     state = state!.copyWith(workspaces: newWorkspaceList);
 
-    // 워크 스페이스 detail 진입
+    final isTablet = MediaQuery.of(mContext).size.shortestSide >= 600;
+
+    Navigator.push(
+      mContext,
+      MaterialPageRoute(
+        builder: (_) => isTablet ? TaWorkspacePage(workspaceId: workspace.id) : MaWorkspacePage(workspaceId: workspace.id),
+      ),
+    );
   }
 }
 
@@ -48,8 +57,7 @@ class WorkspaceListModel {
 
   WorkspaceListModel(this.workspaces);
 
-  WorkspaceListModel.fromMap(Map<String, dynamic> data)
-    : workspaces = (data['workspaceList'] as List).map((e) => Workspace.fromMap(e)).toList();
+  WorkspaceListModel.fromMap(Map<String, dynamic> data) : workspaces = (data['workspaceList'] as List).map((e) => Workspace.fromMap(e)).toList();
 
   WorkspaceListModel copyWith({
     List<Workspace>? workspaces,
