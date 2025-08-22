@@ -8,23 +8,28 @@ class TaEmailInputPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          spacing: 12,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 22),
-            Text(
-              '이메일',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: MColor.kLabel.normal,
-              ),
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              spacing: 12,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 22),
+                Text(
+                  '이메일',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: MColor.kLabel.normal,
+                  ),
+                ),
+                TaJoinFormField(labelText: '이메일을 입력해주세요.'),
+              ],
             ),
-            TaJoinFormField(labelText: '이메일을 입력해주세요.'),
-          ],
+          ),
         ),
       ),
     );
