@@ -15,7 +15,7 @@ class SolvedQuestion {
     : id = data['id'],
       qusetionType = data['qusetionType'],
       title = data['title'],
-      createdAt = data['createdAt'],
+      createdAt = formatCreatedAt(data['createdAt']),
       questionContent = data['questionContent'],
       aiContent = data['aiContent'],
       codeType = data['codeType'],
