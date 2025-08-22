@@ -26,8 +26,14 @@ class TaPasswordPage extends StatelessWidget {
                     color: MColor.kLabel.normal,
                   ),
                 ),
-                TaJoinFormField(labelText: '비밀번호를 입력해 주세요'),
-                TaJoinFormField(labelText: '비밀번호를 재입력해 주세요'),
+                TaJoinFormField(
+                  labelText: '비밀번호를 입력해 주세요',
+                  isPassword: true,
+                ),
+                TaJoinFormField(
+                  labelText: '비밀번호를 재입력해 주세요',
+                  isPassword: true,
+                ),
               ],
             ),
           ),
