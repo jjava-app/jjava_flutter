@@ -16,7 +16,10 @@ class TaLoginEmail extends StatelessWidget {
         // 이메일 입력
         TaLoginFormField(inputText: '이메일'),
         // 비밀번호 입력
-        TaLoginFormField(inputText: '패스워드'),
+        TaLoginFormField(
+          inputText: '패스워드',
+          isPassword: true,
+        ),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
