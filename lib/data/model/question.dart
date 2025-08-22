@@ -6,7 +6,14 @@ class Question {
   final String? testVariable; // 테스트 값
   final String? testAnswer; // 테스트 정답
 
-  Question({this.id, this.type, this.title, this.content, this.testVariable, this.testAnswer});
+  Question({
+    this.id,
+    this.type,
+    this.title,
+    this.content,
+    this.testVariable,
+    this.testAnswer,
+  });
 
   // Map → User
   Question.fromMap(Map<String, dynamic> data)
