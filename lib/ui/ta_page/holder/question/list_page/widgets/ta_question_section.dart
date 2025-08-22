@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/data/repository/question_list_repository.dart';
+import 'package:jjava_flutter/data/model/question.dart';
+import 'package:jjava_flutter/data/model/section.dart';
 
 class TaQuestionSection extends StatefulWidget {
   final Section section;
   final bool initiallyExpanded;
-  final void Function(Problem problem)? onProblemTap;
+  final void Function(Question question)? onProblemTap;
 
   const TaQuestionSection({
     super.key,
@@ -24,6 +25,9 @@ class _SectionTileState extends State<TaQuestionSection> {
 
   @override
   Widget build(BuildContext context) {
+    final title = widget.section.type ?? '제목 없음';
+    final items = widget.section.questions;
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -41,7 +45,7 @@ class _SectionTileState extends State<TaQuestionSection> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: MText.h5(
-                widget.section.title,
+                title,
                 color: expanded
                     ? MColor.kPrimary.normal
                     : MColor.kLabel.assistive,
@@ -54,10 +58,9 @@ class _SectionTileState extends State<TaQuestionSection> {
           if (expanded)
             Column(
               children: [
-                for (var i = 0; i < widget.section.problems.length; i++) ...[
+                for (var i = 0; i < items.length; i++) ...[
                   InkWell(
-                    onTap: () =>
-                        widget.onProblemTap?.call(widget.section.problems[i]),
+                    onTap: () => widget.onProblemTap?.call(items[i]),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -66,15 +69,13 @@ class _SectionTileState extends State<TaQuestionSection> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(widget.section.problems[i].title),
+                            child: Text(items[i].title ?? '제목 없음'),
                           ),
-                          const SizedBox(width: 8),
-                          Text('Lv.${widget.section.problems[i].level}'),
                         ],
                       ),
                     ),
                   ),
-                  if (i != widget.section.problems.length - 1)
+                  if (i != items.length - 1)
                     Divider(
                       height: 1,
                       thickness: 1,
