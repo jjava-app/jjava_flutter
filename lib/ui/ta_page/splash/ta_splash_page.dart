@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jjava_flutter/ui/ta_page/holder/question/ta_question_page.dart';
+import 'package:jjava_flutter/ui/ta_page/onboarding/ta_onboarding_page.dart';
 
 class TaSplashPage extends StatelessWidget {
   @override
@@ -34,11 +34,11 @@ class TaSplashPage extends StatelessWidget {
           SizedBox(height: 10),
           FloatingActionButton(
             heroTag: 'btn3',
-            child: Text('태블릿\n학습하기'),
+            child: Text('태블릿\n온보딩'),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => TaQuestionPage()),
+                MaterialPageRoute(builder: (_) => TaOnboardingPage()),
               );
             },
           ),
