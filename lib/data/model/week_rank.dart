@@ -17,20 +17,10 @@ class WeekRank {
     return WeekRank(
       userId: data['userId'],
       username: data['username'],
-      score: data['score'],
+      score: data['currentScore'],
       delta: data['delta'],
       rank: data['rank'],
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'userId': userId,
-      'username': username,
-      'score': score,
-      'delta': delta,
-      'rank': rank,
-    };
   }
 
   @override

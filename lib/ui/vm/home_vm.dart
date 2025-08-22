@@ -32,13 +32,25 @@ class HomeVM extends AutoDisposeNotifier<HomeModel?> {
 
   Future<void> init() async {
     Map<String, dynamic> data = await HomeRepository().getHome();
+    Logger().d("getHome 반환값: $data");
+
     if (data["status"] != 200) {
       ScaffoldMessenger.of(mContext!).showSnackBar(
         SnackBar(content: Text(" : ${data["msg"]}")),
       );
       return;
     }
-    state = HomeModel.fromMap(data["body"]);
+
+    try {
+      state = HomeModel.fromMap(data["body"]);
+      Logger().d("state 세팅 완료: $state");
+    } catch (e, s) {
+      Logger().e(
+        "HomeModel.fromMap 실패",
+        error: e,
+        stackTrace: s,
+      );
+    }
   }
 }
 
@@ -52,9 +64,9 @@ class HomeModel {
 
   factory HomeModel.fromMap(Map<String, dynamic> data) {
     return HomeModel(
-      user: User.fromMap(data['userDTO']),
-      weekRank: (data['leaderboardDTO']['rankingList'] as List<dynamic>).map((e) => WeekRank.fromMap(e)).toList(),
-      solvedQuestion: (data['sqDTO']['sqList'] as List<dynamic>).map((e) => SolvedQuestion.fromMap(e)).toList(),
+      user: User.fromMap(data['userInfo']),
+      weekRank: (data['leaderboard']['rankingList'] as List<dynamic>).map((e) => WeekRank.fromMap(e)).toList(), // leaderboardDTO → leaderboard
+      solvedQuestion: (data['sqList']['sqList'] as List<dynamic>).map((e) => SolvedQuestion.fromMap(e)).toList(), // sqDTO → sqList
     );
   }
 

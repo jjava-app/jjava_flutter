@@ -1,17 +1,16 @@
-import 'package:dio/dio.dart';
-import 'package:jjava_flutter/_core/util/m_http.dart';
 import 'package:logger/logger.dart';
 
 class HomeRepository {
   // 통신 전에 더미
   Future<Map<String, dynamic>> getHome() async {
-    Response response = await dio.get("/home");
+    // Response response = await dio.get("/home");
     // final responseBody = response.data;
     final responseBody = {
       "status": 200,
       "msg": "성공",
       "body": {
-        "leaderboardDTO": {
+        "userInfo": {"id": 1, "username": "mockUser", "email": "mock@test.com", "level": "BEGINNER", "score": 1, "rank": 1},
+        "leaderboard": {
           "rankingList": [
             {"userId": 1, "username": "vV최강개발자Vv", "currentScore": 2530, "delta": 200, "rank": 1},
             {"userId": 2, "username": "코드장인", "currentScore": 2450, "delta": 150, "rank": 2},
@@ -19,8 +18,7 @@ class HomeRepository {
             {"userId": 4, "username": "Bug Slayer", "currentScore": 1980, "delta": 80, "rank": 4},
           ],
         },
-        "sqDTO": {"sqList": []},
-        "userDTO": {"id": 0, "username": "mockUser", "email": "mock@test.com", "level": "BEGINNER", "score": 0, "rank": 1},
+        "sqList": {"sqList": []},
       },
     };
 
