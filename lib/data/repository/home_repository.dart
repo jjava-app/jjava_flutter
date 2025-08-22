@@ -1,9 +1,11 @@
+import 'package:dio/dio.dart';
+import 'package:jjava_flutter/_core/util/m_http.dart';
 import 'package:logger/logger.dart';
 
 class HomeRepository {
   // 통신 전에 더미
   Future<Map<String, dynamic>> getHome() async {
-    // Response response = await dio.get("/home");
+    Response response = await dio.get("/home");
     // final responseBody = response.data;
     final responseBody = {
       "status": 200,
