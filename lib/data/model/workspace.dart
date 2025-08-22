@@ -1,3 +1,5 @@
+import 'package:jjava_flutter/_core/util/m_date_format.dart';
+
 class Workspace {
   final int id;
   final int userId;
@@ -19,7 +21,7 @@ class Workspace {
     : id = data['id'],
       userId = data['userId'],
       title = data['title'],
-      serializedJson = data['serializedJson'],
-      libraryJson = data['libraryJson'],
-      createdAt = DateTime.parse(data['createdAt']).toString();
+      serializedJson = data['serializedJson'] ?? '',
+      libraryJson = data['libraryJson'] ?? '',
+      createdAt = formatCreatedAt(data['createdAt']);
 }
