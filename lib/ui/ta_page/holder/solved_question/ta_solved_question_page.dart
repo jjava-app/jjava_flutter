@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/solved_question/widgets/ta_solved_question_body.dart';
 
@@ -26,10 +25,7 @@ class TaSolvedQuestionPage extends StatelessWidget {
 
 AppBar _appBar(BuildContext context) {
   return AppBar(
-    leading: IconButton(
-      icon: MIcon.nav.top.arrowBack,
-      onPressed: () => Navigator.pop(context),
-    ),
+    automaticallyImplyLeading: false,
     title: MText.h1('지난 학습'),
     centerTitle: true,
   );

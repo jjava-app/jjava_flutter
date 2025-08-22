@@ -16,10 +16,7 @@ class MaMyPagePage extends StatelessWidget {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
-      leading: IconButton(
-        icon: MIcon.nav.top.arrowBack,
-        onPressed: () => Navigator.maybePop(context),
-      ),
+      automaticallyImplyLeading: false,
       title: MText.h1('마이페이지'),
       centerTitle: true,
     );
