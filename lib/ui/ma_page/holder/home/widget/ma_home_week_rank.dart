@@ -2,15 +2,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/data/repository/home_repository.dart';
+import 'package:jjava_flutter/data/model/week_rank.dart';
 
 class MaHomeWeekRank extends StatelessWidget {
-  const MaHomeWeekRank({super.key});
+  final List<WeekRank> rankingList;
+
+  const MaHomeWeekRank({
+    super.key,
+    required this.rankingList,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final homeRepository = HomeRepository();
-    final rankingList = homeRepository.getMockRankingList();
+    if (rankingList.isEmpty) {
+      return const Center(child: Text("랭킹 데이터가 없습니다."));
+    }
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -19,7 +25,6 @@ class MaHomeWeekRank extends StatelessWidget {
         children: [
           MText.h2("이번 주 랭킹", color: MColor.kLabel.neutral),
           const SizedBox(height: 8),
-
           Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
@@ -50,14 +55,14 @@ class MaHomeWeekRank extends StatelessWidget {
                         Row(
                           children: [
                             MText.h5(
-                              "${rank["position"]}위",
+                              "${rank.rank}위",
                               color: MColor.kLabel.neutral,
                             ),
                             const SizedBox(width: 16),
-                            MText.h5(rank["name"], color: MColor.kLabel.normal),
+                            MText.h5(rank.username, color: MColor.kLabel.normal),
                             const SizedBox(width: 4),
                             MText.buttonS(
-                              "[${rank["score"]}점]",
+                              "[${rank.currentScore}점]",
                               color: MColor.kLabel.normal,
                             ),
                           ],
@@ -68,7 +73,7 @@ class MaHomeWeekRank extends StatelessWidget {
                             vertical: 4,
                           ),
                           child: MText.buttonSS(
-                            "${rank["diff"]}↑",
+                            "${rank.delta}↑",
                             color: MColor.kButton.active,
                           ),
                         ),
