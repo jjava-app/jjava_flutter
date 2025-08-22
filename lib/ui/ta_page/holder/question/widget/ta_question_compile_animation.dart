@@ -14,7 +14,7 @@ class TaQuestionCompileAnimation extends StatelessWidget {
       right: 0,
       child: Container(
         child: Align(
-          alignment: Alignment(0, -0.3),
+          alignment: Alignment.center,
           child: Container(
             width: 166,
             height: 58,

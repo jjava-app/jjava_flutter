@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/workspace/ma_workspace_page.dart';
 
 class MaWorkspaceListButton extends StatelessWidget {
   const MaWorkspaceListButton({
@@ -13,7 +14,10 @@ class MaWorkspaceListButton extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () {
-        debugPrint("블록코딩 만들기 버튼");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => MaWorkspacePage()),
+        );
       },
       child: Ink(
         height: 120,

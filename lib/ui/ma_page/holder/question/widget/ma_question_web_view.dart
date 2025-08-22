@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
-import 'package:jjava_flutter/data/repository/question_repository.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_block_list.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_block_type_list.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_block_dashboard.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_correct_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_incorrect_dialog.dart';
 
@@ -15,10 +13,10 @@ class MaQuestionWebView extends StatefulWidget {
   });
 
   @override
-  State<MaQuestionWebView> createState() => _QuestionWebViewState();
+  State<MaQuestionWebView> createState() => _MaQuestionWebViewState();
 }
 
-class _QuestionWebViewState extends State<MaQuestionWebView> {
+class _MaQuestionWebViewState extends State<MaQuestionWebView> {
   // 1. 컴파일 로딩 로직
 
   Future<void> _onRunPressed() async {
@@ -67,62 +65,20 @@ class _QuestionWebViewState extends State<MaQuestionWebView> {
     ).pushNamedAndRemoveUntil('/main-holder', (route) => false);
   }
 
-  // 3. 블록 로직
-  final repo = QuestionRepository();
-
-  String? selectedType;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedType = repo.types.isNotEmpty ? repo.types.first : null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // 블럭 쌓기 영역
-            Expanded(
-              child: Center(
-                child: Text(
-                  '블럭 쌓기 영역',
-                  style: TextStyle(fontSize: 26, color: Colors.red),
-                ),
-              ),
-            ),
-            //블럭 UI
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              spacing: 8,
-              children: [
-                // 블럭 타입
-                MaQuestionBlockTypeList(
-                  labels: repo.types,
-                  selectedLabel: selectedType,
-                  onSelected: (type) {
-                    setState(() {
-                      selectedType = type;
-                    });
-                  },
-                ),
-                // 블럭 리스트
-                if (selectedType != null)
-                  MaQuestionBlockList(
-                    labels: repo.blocksByType[selectedType] ?? [],
-                  ),
-                SizedBox(height: 0),
-              ],
-            ),
+            Expanded(child: MaQuestionBlockDashboard()),
           ],
         ),
         // 실행 버튼
         Positioned(
-          bottom: 104,
-          right: 16,
+          top: 8,
+          left: 16,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
