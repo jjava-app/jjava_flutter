@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/workspace/list/widgets/ma_workspace_list_button.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/workspace/ma_workspace_page.dart';
 import 'package:jjava_flutter/ui/vm/workspace_list_vm.dart';
 
 class MaWorkspaceListBody extends ConsumerWidget {
@@ -39,11 +38,11 @@ class MaWorkspaceListBody extends ConsumerWidget {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   onTap: () {
-                    debugPrint("open workspace ${e.id}");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => MaWorkspacePage()),
-                    );
+                    // debugPrint("open workspace ${e.id}");
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (_) => MaWorkspacePage()),
+                    // );
                   },
                   child: Ink(
                     padding: EdgeInsets.symmetric(

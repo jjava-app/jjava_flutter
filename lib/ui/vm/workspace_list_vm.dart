@@ -6,6 +6,7 @@ import 'package:jjava_flutter/data/repository/workspace_repository.dart';
 import 'package:jjava_flutter/main.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/workspace/ma_workspace_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/ta_workspace_page.dart';
+import 'package:logger/logger.dart';
 
 /// 1. 창고 관리자
 final workspaceListProvider = NotifierProvider<WorkspaceListVM, WorkspaceListModel?>(() {
@@ -34,13 +35,16 @@ class WorkspaceListVM extends Notifier<WorkspaceListModel?> {
 
   // 워크 스페이스 생성
   Future<void> create() async {
+    Logger().d("create 호출됨");
     Map<String, dynamic> body = await WorkspaceRepository().createWorkspace();
+    Logger().d("통신해서 받아오기 완료");
     Workspace workspace = Workspace.fromMap(body['body']);
+    Logger().d("===============================");
+    Logger().d(workspace.id);
+    List<Workspace> newWorkspaceList = [workspace, ...?state?.workspaces];
+    state = WorkspaceListModel(newWorkspaceList);
 
-    List<Workspace> newWorkspaceList = [workspace, ...state!.workspaces];
-    state = state!.copyWith(workspaces: newWorkspaceList);
-
-    final isTablet = MediaQuery.of(mContext).size.shortestSide >= 600;
+    final isTablet = MediaQuery.of(navigatorKey.currentContext!).size.shortestSide >= 600;
 
     Navigator.push(
       mContext,

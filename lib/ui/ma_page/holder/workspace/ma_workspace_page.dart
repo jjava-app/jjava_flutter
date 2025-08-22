@@ -59,10 +59,10 @@ class _MaWorkspacePageState extends State<MaWorkspacePage> {
     );
     if (confirmed != true || !mounted) return;
     // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => MaWorkspacePage()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (_) => MaWorkspacePage()),
+    // );
   }
 
   // 저장 다이얼로그
@@ -80,10 +80,10 @@ class _MaWorkspacePageState extends State<MaWorkspacePage> {
     );
     if (confirmed != true || !mounted) return;
     // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => MaWorkspacePage()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (_) => MaWorkspacePage()),
+    // );
   }
 
   @override

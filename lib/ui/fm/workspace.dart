@@ -14,7 +14,7 @@ class WorkspaceFM extends Notifier<WorkspaceModel> {
 
   void id(String id) {
     state = state.copyWith(
-      id: id,
+      // id: id,
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:jjava_flutter/_core/util/m_http.dart';
+import 'package:logger/logger.dart';
 
 class WorkspaceRepository {
   // 워크 스페이스 상세보기 : id, userId, title, serializedJson, libraryJson, createdAt으로 구성된 workspace
@@ -11,8 +12,17 @@ class WorkspaceRepository {
 
   // 워크 스페이스 생성 : 생성 이후 새 제목, serializedJson, libraryJson 반환
   Future<Map<String, dynamic>> createWorkspace() async {
-    Response response = await dio.post("/workspace");
-    final responseBody = response.data;
+    Logger().d("워크스페이스 레포지토리 호출됨");
+    // Response response = await dio.post("/workspace");
+    Logger().d("워크스페이스 레포지토리 호출됨");
+    // final responseBody = response.data;
+    final responseBody = {
+      "status": 200,
+      "msg": "성공",
+      "body": {"id": 1, "userId": 1, "title": "새 워크스페이스", "createdAt": "2025-08-22 14:10:29.2117694"},
+    };
+
+    Logger().d("응답되기전~~");
     return responseBody;
   }
 
