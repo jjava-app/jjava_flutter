@@ -48,9 +48,7 @@ class _MaSolvedQuestionBodyState extends State<MaSolvedQuestionBody> {
       decoration: BoxDecoration(
         color: opened ? Color(0xFFF0F8F4) : MColor.kLabel.white, // 전체 배경
         borderRadius: BorderRadius.circular(12),
-        border: opened
-            ? Border.all(color: MColor.kPrimary.normal, width: 1)
-            : null,
+        border: opened ? Border.all(color: MColor.kPrimary.normal, width: 1) : null,
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -68,9 +66,7 @@ class _MaSolvedQuestionBodyState extends State<MaSolvedQuestionBody> {
                   Expanded(
                     child: MText.h5(
                       e.title,
-                      color: opened
-                          ? MColor.kPrimary.normal
-                          : MColor.kLabel.alternative,
+                      color: opened ? MColor.kPrimary.normal : MColor.kLabel.alternative,
                     ),
                   ),
                 ],

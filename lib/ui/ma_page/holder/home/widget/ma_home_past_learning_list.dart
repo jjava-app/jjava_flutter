@@ -41,7 +41,7 @@ class _HomePastLearningItem extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () {
-        // TODO: 문제 상세 페이지 이동
+        // TODO 지난 문제 리스트 통신 작업하고 연결
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
