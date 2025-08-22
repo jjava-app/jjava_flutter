@@ -1,3 +1,5 @@
+import 'package:jjava_flutter/_core/util/m_date_format.dart';
+
 class SolvedQuestion {
   final int? id; // PK
   final String? qusetionType; // 타입
