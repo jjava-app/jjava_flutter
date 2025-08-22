@@ -373,7 +373,7 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
                     ),
                     child: SafeArea(
                       child: ListView.builder(
-                        reverse: true,
+                        reverse: false,
                         itemCount: _log.length,
                         itemBuilder: (_, i) => Text(
                           _log[_log.length - 1 - i],
