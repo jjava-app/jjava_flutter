@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_leave_dialog.dart';
@@ -6,19 +7,18 @@ import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_restart_dialog.
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_save_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/workspace/widget/ma_workspace_body.dart';
 
-class MaWorkspacePage extends StatefulWidget {
+import '../../../vm/workspace_vm.dart';
+
+class MaWorkspacePage extends ConsumerStatefulWidget {
   final int workspaceId;
 
-  const MaWorkspacePage({
-    super.key,
-    required this.workspaceId,
-  });
+  const MaWorkspacePage({super.key, required this.workspaceId});
 
   @override
-  State<MaWorkspacePage> createState() => _MaWorkspacePageState();
+  ConsumerState<MaWorkspacePage> createState() => _MaWorkspacePageState();
 }
 
-class _MaWorkspacePageState extends State<MaWorkspacePage> {
+class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
   // TODO: 통신 시 실행 로직들 분리하여 vm에 옮기기
 
   // 만들기 종료 다이얼로그 로직
@@ -88,9 +88,15 @@ class _MaWorkspacePageState extends State<MaWorkspacePage> {
 
   @override
   Widget build(BuildContext context) {
+    final workspace = ref.watch(workspaceProvider(widget.workspaceId));
+
+    if (workspace == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Scaffold(
       appBar: _appbar(),
-      body: MaWorkspaceBody(),
+      body: MaWorkspaceBody(workspaceId: workspace.id),
     );
   }
 
@@ -172,7 +178,10 @@ class _MaWorkspacePageState extends State<MaWorkspacePage> {
               child: Center(
                 child: Text(
                   '만들기 종료',
-                  style: TextStyle(fontSize: 14, color: MColor.kStatus.destructive),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: MColor.kStatus.destructive,
+                  ),
                 ),
               ),
             ),

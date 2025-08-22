@@ -1,34 +1,51 @@
 import 'package:dio/dio.dart';
 import 'package:jjava_flutter/_core/util/m_http.dart';
-import 'package:logger/logger.dart';
 
 class WorkspaceRepository {
   // 워크 스페이스 상세보기 : id, userId, title, serializedJson, libraryJson, createdAt으로 구성된 workspace
   Future<Map<String, dynamic>> getWorkspaceDetail(int workspaceId) async {
-    Response response = await dio.get("/workspace/{$workspaceId}");
-    final responseBody = response.data;
+    // Response response = await dio.get("/workspace/{$workspaceId}");
+    // final responseBody = response.data;
+    final responseBody = {
+      "status": 200,
+      "msg": "성공",
+      "body": {
+        "id": 1,
+        "userId": 1,
+        "title": "워크스페이스1",
+        "serializedJson": "{\"blocks\":[]}",
+        "libraryJson": "{\"extensions\":[]}",
+      },
+    };
     return responseBody;
   }
 
   // 워크 스페이스 생성 : 생성 이후 새 제목, serializedJson, libraryJson 반환
   Future<Map<String, dynamic>> createWorkspace() async {
-    Logger().d("워크스페이스 레포지토리 호출됨");
     // Response response = await dio.post("/workspace");
-    Logger().d("워크스페이스 레포지토리 호출됨");
     // final responseBody = response.data;
     final responseBody = {
       "status": 200,
       "msg": "성공",
-      "body": {"id": 1, "userId": 1, "title": "새 워크스페이스", "createdAt": "2025-08-22 14:10:29.2117694"},
+      "body": {
+        "id": 4,
+        "userId": 1,
+        "title": "새 워크스페이스",
+        "createdAt": "2025-08-22 14:10:29.2117694",
+      },
     };
-
-    Logger().d("응답되기전~~");
     return responseBody;
   }
 
   // 워크 스페이스 저장 : 저장된 제목, serializedJson, libraryJson 반환
-  Future<Map<String, dynamic>> updateWorkspace(int workspaceId, Map<String, dynamic> reqBody) async {
-    Response response = await dio.put("/workspace/{$workspaceId}", data: reqBody);
+  Future<Map<String, dynamic>> updateWorkspace(
+    int workspaceId,
+    Map<String, dynamic> reqBody,
+  ) async {
+    Response response = await dio.put(
+      "/workspace/{$workspaceId}",
+      data: reqBody,
+    );
     final responseBody = response.data;
     return responseBody;
   }

@@ -8,11 +8,8 @@ import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_save_dialog.dar
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/widget/ta_workspace_body.dart';
 
 class TaWorkspacePage extends StatefulWidget {
-  final int workspaceId;
-
   const TaWorkspacePage({
     super.key,
-    required this.workspaceId,
   });
 
   @override
@@ -172,7 +169,10 @@ class _WorkspacePageState extends State<TaWorkspacePage> {
               child: Center(
                 child: Text(
                   '만들기 종료',
-                  style: TextStyle(fontSize: 16, color: MColor.kStatus.destructive),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: MColor.kStatus.destructive,
+                  ),
                 ),
               ),
             ),

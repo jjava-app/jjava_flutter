@@ -4,7 +4,6 @@ import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/ui/vm/workspace_list_vm.dart';
-import 'package:logger/logger.dart';
 
 class MaWorkspaceListButton extends ConsumerWidget {
   const MaWorkspaceListButton({
@@ -16,7 +15,6 @@ class MaWorkspaceListButton extends ConsumerWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () async {
-        Logger().d("생성된다~~");
         await ref.read(workspaceListProvider.notifier).create();
       },
       child: Ink(

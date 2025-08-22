@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/data/repository/workspace_repository.dart';
 import 'package:jjava_flutter/main.dart';
+import 'package:logger/logger.dart';
 
 /// 1. 창고 관리자
-final workspaceProvider = NotifierProvider.family<WorkspaceVM, WorkspaceModel?, int>(() {
-  return WorkspaceVM();
-});
+final workspaceProvider =
+    NotifierProvider.family<WorkspaceVM, WorkspaceModel?, int>(() {
+      return WorkspaceVM();
+    });
 
 /// 2. 창고
 class WorkspaceVM extends FamilyNotifier<WorkspaceModel?, int> {
@@ -19,21 +21,40 @@ class WorkspaceVM extends FamilyNotifier<WorkspaceModel?, int> {
 
   // 워크 스페이스 상세보기 (초기화)
   Future<void> init(int workspaceId) async {
-    Map<String, dynamic> body = await WorkspaceRepository().getWorkspaceDetail(workspaceId);
-    state = WorkspaceModel.fromMap(body["response"]);
+    Logger().d("workspace init 실행돰");
+
+    Map<String, dynamic> body = await WorkspaceRepository().getWorkspaceDetail(
+      workspaceId,
+    );
+    Logger().d(body.toString());
+    state = WorkspaceModel.fromMap(body["body"]);
   }
 
   // 워크 스페이스 저장
-  Future<void> update(int workspaceId, String title, String serializedJson, String libraryJson) async {
-    Map<String, dynamic> reqBody = {"title": title, "serializedJson": serializedJson, "libraryJson": libraryJson};
+  Future<void> update(
+    int workspaceId,
+    String title,
+    String serializedJson,
+    String libraryJson,
+  ) async {
+    Map<String, dynamic> reqBody = {
+      "title": title,
+      "serializedJson": serializedJson,
+      "libraryJson": libraryJson,
+    };
 
-    Map<String, dynamic> body = await WorkspaceRepository().updateWorkspace(workspaceId, reqBody);
+    Map<String, dynamic> body = await WorkspaceRepository().updateWorkspace(
+      workspaceId,
+      reqBody,
+    );
     state = WorkspaceModel.fromMap(body['response']);
   }
 
   // 워크 스페이스 삭제
   Future<void> delete(int workspaceId) async {
-    Map<String, dynamic> body = await WorkspaceRepository().deleteWorkspace(workspaceId);
+    Map<String, dynamic> body = await WorkspaceRepository().deleteWorkspace(
+      workspaceId,
+    );
 
     // ok status 확인 후 init()
   }
@@ -47,14 +68,20 @@ class WorkspaceModel {
   final String serializedJson;
   final String libraryJson;
 
-  WorkspaceModel(this.id, this.userId, this.title, this.serializedJson, this.libraryJson);
+  WorkspaceModel(
+    this.id,
+    this.userId,
+    this.title,
+    this.serializedJson,
+    this.libraryJson,
+  );
 
   WorkspaceModel.fromMap(Map<String, dynamic> data)
-    : id = data['response']['id'],
-      userId = data['response']['userId'],
-      title = data['response']['title'],
-      serializedJson = data['response']['serializedJson'],
-      libraryJson = data['response']['libraryJson'];
+    : id = data['id'],
+      userId = data['userId'],
+      title = data['title'],
+      serializedJson = data['serializedJson'] ?? '',
+      libraryJson = data['libraryJson'] ?? '';
 
   WorkspaceModel copyWith({
     int? id,
