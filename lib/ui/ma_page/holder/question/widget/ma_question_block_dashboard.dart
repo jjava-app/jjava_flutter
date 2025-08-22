@@ -137,7 +137,7 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
   Future<void> _initEditor() async {
     try {
       // 1) 애드온 로드
-      final skinJs = await rootBundle.loadString('assets/blockly/toolbox_skin.js');
+      final skinJs = await rootBundle.loadString('assets/blockly/ta_toolbox_skin.js');
       final javaGenJs = await rootBundle.loadString('assets/blockly/java_generator.js');
       _log.add('[BOOT] addons loaded: skin=${skinJs.length}, javaGen=${javaGenJs.length}');
 
