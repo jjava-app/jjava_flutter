@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/ta_main_holder.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_leave_dialog.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_restart_dialog.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_save_dialog.dart';
@@ -35,7 +35,7 @@ class _WorkspacePageState extends State<TaWorkspacePage> {
     // TODO: 종료 클릭 시 서버에 저장하고 이동
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => MaMainHolder()),
+      MaterialPageRoute(builder: (_) => TaMainHolder()),
     );
   }
 
@@ -136,6 +136,8 @@ class _WorkspacePageState extends State<TaWorkspacePage> {
               await _onRestartTap();
             } else if (value == 'finish') {
               await _onFinishTap();
+            } else if (value == 'save') {
+              await _onSaveTap();
             }
           },
           itemBuilder: (context) => [

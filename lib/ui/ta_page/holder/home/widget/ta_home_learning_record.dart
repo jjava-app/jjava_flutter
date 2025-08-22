@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/data/model/solved_question.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/home/widget/ta_home_past_learning_list.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/ta_main_holder.dart';
 
 class TaHomeLeaningRecord extends StatelessWidget {
+  final List<SolvedQuestion> solvedQuestions;
+
   const TaHomeLeaningRecord({
     super.key,
+    required this.solvedQuestions,
   });
 
   @override
@@ -35,7 +39,9 @@ class TaHomeLeaningRecord extends StatelessWidget {
             ),
           ),
           SizedBox(height: 14),
-          TaHomePastLearningList(),
+          TaHomePastLearningList(
+            solvedQuestions: solvedQuestions,
+          ),
         ],
       ),
     );
