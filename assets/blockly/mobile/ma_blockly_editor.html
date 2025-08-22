@@ -103,29 +103,5 @@
                 ></category>
             </xml>
         </div>
-
-        <script>
-            const workspace = Blockly.inject(document.getElementById("blocklyDiv"), {
-              toolbox: document.getElementById("toolbox"),
-              toolboxPosition: "end",
-              horizontalLayout: true,
-              sounds: false,
-              scrollbars: false,
-              move: { drag: true, wheel: false },
-              zoom:
-                 {controls: false,
-                  wheel: false,
-                  startScale: 1.0,
-                  maxScale: 3,
-                  minScale: 0.3,
-                  scaleSpeed: 1.2,
-                  pinch: true},
-             trashcan: false,
-            });
-
-            var category = workspace.getToolbox().getToolboxItems()[0];
-            category.AlwaysOpenCategory;
-
-        </script>
     </body>
 </html>
