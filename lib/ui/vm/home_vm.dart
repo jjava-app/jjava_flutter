@@ -34,23 +34,14 @@ class HomeVM extends AutoDisposeNotifier<HomeModel?> {
     Map<String, dynamic> data = await HomeRepository().getHome();
     Logger().d("getHome 반환값: $data");
 
+    // 상태코드 200이 아니면 return
     if (data["status"] != 200) {
       ScaffoldMessenger.of(mContext!).showSnackBar(
         SnackBar(content: Text(" : ${data["msg"]}")),
       );
       return;
     }
-
-    try {
-      state = HomeModel.fromMap(data["body"]);
-      Logger().d("state 세팅 완료: $state");
-    } catch (e, s) {
-      Logger().e(
-        "HomeModel.fromMap 실패",
-        error: e,
-        stackTrace: s,
-      );
-    }
+    state = HomeModel.fromMap(data["body"]);
   }
 }
 

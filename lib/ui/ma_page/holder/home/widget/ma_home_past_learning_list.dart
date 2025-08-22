@@ -1,34 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/data/model/solved_question.dart';
 
 class MaHomePastLearningList extends StatelessWidget {
+  final List<SolvedQuestion> solvedQuestions;
+
   const MaHomePastLearningList({
     super.key,
+    required this.solvedQuestions,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (solvedQuestions.isEmpty) {
+      return MText.s14Bold("아직 학습 기록이 없어요 🥲", color: MColor.kLabel.alternative);
+    }
+
+    // 최근 3개만 보여주기
+    final latest = solvedQuestions.take(3).toList();
+
     return Column(
       children: [
-        _HomePastLearningItem(),
-        SizedBox(height: 8),
-        _HomePastLearningItem(),
-        SizedBox(height: 8),
-        _HomePastLearningItem(),
+        for (var q in latest) ...[
+          _HomePastLearningItem(question: q),
+          const SizedBox(height: 8),
+        ],
       ],
     );
   }
 }
 
 class _HomePastLearningItem extends StatelessWidget {
-  const _HomePastLearningItem({super.key});
+  final SolvedQuestion question;
+
+  const _HomePastLearningItem({super.key, required this.question});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
-      onTap: () {},
+      onTap: () {
+        // TODO: 문제 상세 페이지 이동
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
@@ -40,10 +54,13 @@ class _HomePastLearningItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: MText.h5('조건에 맞게 수열 변환하기 1'),
+              child: MText.h5(
+                question.title ?? '',
+                color: MColor.kLabel.normal,
+              ),
             ),
             MText.bodyTiny(
-              '2025-08-07',
+              question.createdAt ?? '',
               color: MColor.kLabel.alternative,
             ),
           ],

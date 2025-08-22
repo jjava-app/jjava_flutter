@@ -1,14 +1,14 @@
 class WeekRank {
   final int userId;
   final String username;
-  final int score;
+  final int currentScore;
   final int rank;
   final int delta;
 
   WeekRank({
     required this.userId,
     required this.username,
-    required this.score,
+    required this.currentScore,
     required this.rank,
     required this.delta,
   });
@@ -17,7 +17,7 @@ class WeekRank {
     return WeekRank(
       userId: data['userId'],
       username: data['username'],
-      score: data['score'],
+      currentScore: (data['currentScore'] as num).toInt(),
       rank: data['rank'],
       delta: data['delta'],
     );
@@ -27,7 +27,7 @@ class WeekRank {
     return {
       'userId': userId,
       'username': username,
-      'score': score,
+      'currentScore': currentScore,
       'rank': rank,
       'delta': delta,
     };
@@ -35,6 +35,6 @@ class WeekRank {
 
   @override
   String toString() {
-    return 'WeekRank(userId: $userId, username: $username, score: $score, rank: $rank, delta: $delta)';
+    return 'WeekRank(userId: $userId, username: $username, currentScore: $currentScore, rank: $rank, delta: $delta)';
   }
 }

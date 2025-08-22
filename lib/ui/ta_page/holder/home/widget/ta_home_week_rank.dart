@@ -60,7 +60,7 @@ class TaHomeWeekRank extends ConsumerWidget {
                               MText.h5(rank.username, color: MColor.kLabel.normal),
                               const SizedBox(width: 4),
                               MText.buttonS(
-                                "[${rank.score}점]",
+                                "[${rank.currentScore}점]",
                                 color: MColor.kLabel.normal,
                               ),
                             ],
