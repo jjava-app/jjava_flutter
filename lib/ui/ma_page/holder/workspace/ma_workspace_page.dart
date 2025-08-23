@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
+import 'package:jjava_flutter/ui/fm/workspace_fm.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_leave_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_restart_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_save_dialog.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/workspace/list/ma_workspace_list_page.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/workspace/widget/ma_workspace_block_dashboard.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/workspace/widget/ma_workspace_body.dart';
+import 'package:logger/logger.dart';
 
 import '../../../vm/workspace_vm.dart';
 
@@ -19,6 +23,7 @@ class MaWorkspacePage extends ConsumerStatefulWidget {
 }
 
 class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
+  final dashboardKey = GlobalKey<MaWorkspaceBlockDashboardState>();
   // TODO: 통신 시 실행 로직들 분리하여 vm에 옮기기
 
   // 만들기 종료 다이얼로그 로직
@@ -35,12 +40,31 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
       ),
     );
     if (confirmed != true || !mounted) return;
-    // TODO: 종료 클릭 시 서버에 저장하고 이동
-    Navigator.push(
+    // ✅ 1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
+    await dashboardKey.currentState?.exportWorkspaceJson();
+
+    // ✅ 2. provider에 모인 값 읽기
+    final updateModel = ref.read(workspaceUpdateProvider);
+
+    // ✅ 3. 서버 저장 요청
+    try {
+      await ref
+          .read(workspaceProvider(widget.workspaceId).notifier)
+          .update(
+            widget.workspaceId,
+            updateModel.title,
+            updateModel.serializedJson,
+            updateModel.libraryJson,
+          );
+    } catch (e, s) {
+      Logger().e("저장 실패", error: e, stackTrace: s);
+    }
+
+    // ✅ 4. 저장 끝났으면 이ㅁㄴㅇ
+    Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (_) => MaWorkspacePage(workspaceId: widget.workspaceId),
-      ),
+      MaterialPageRoute(builder: (_) => MaWorkspaceListPage()), // <- 이동할 화면
+      (route) => false, // 스택 다 지우고 새 화면만 남김
     );
   }
 
@@ -84,6 +108,29 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
     //   context,
     //   MaterialPageRoute(builder: (_) => MaWorkspacePage()),
     // );
+    //1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
+    await dashboardKey.currentState?.exportWorkspaceJson();
+
+    //2. provider에 모인 값 읽기
+    final updateModel = ref.read(workspaceUpdateProvider);
+
+    // 값 확인 로그
+    Logger().d("REQ BODY => ${updateModel.toMap()}");
+
+    //3. 서버에 저장 요청
+    await ref
+        .read(workspaceProvider(widget.workspaceId).notifier)
+        .update(
+          widget.workspaceId,
+          updateModel.title,
+          updateModel.serializedJson,
+          updateModel.libraryJson,
+        );
+    //4. 저장 완료 메시지
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("저장 완료")),
+    );
   }
 
   @override
@@ -96,7 +143,10 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
 
     return Scaffold(
       appBar: _appbar(),
-      body: MaWorkspaceBody(workspaceId: workspace.id),
+      body: MaWorkspaceBody(
+        workspaceId: workspace.id,
+        dashboardKey: dashboardKey,
+      ),
     );
   }
 
@@ -129,6 +179,9 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
               borderSide: BorderSide.none,
             ),
           ),
+          onChanged: (value) {
+            ref.read(workspaceUpdateProvider.notifier).title(value);
+          },
         ),
       ),
       leadingWidth: 90,
