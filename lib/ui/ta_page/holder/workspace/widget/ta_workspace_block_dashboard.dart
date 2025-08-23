@@ -14,10 +14,11 @@ class TaWorkspaceBlockDashboard extends StatefulWidget {
   });
 
   @override
-  State<TaWorkspaceBlockDashboard> createState() => _TaWorkspaceBlockDashboardState();
+  State<TaWorkspaceBlockDashboard> createState() =>
+      TaWorkspaceBlockDashboardState();
 }
 
-class _TaWorkspaceBlockDashboardState extends State<TaWorkspaceBlockDashboard> {
+class TaWorkspaceBlockDashboardState extends State<TaWorkspaceBlockDashboard> {
   // 컴파일 로딩 임시
   bool _isLoading = false;
   void _setLoading(bool v) => setState(() => _isLoading = v);
@@ -128,8 +129,19 @@ class _TaWorkspaceBlockDashboardState extends State<TaWorkspaceBlockDashboard> {
       "wheel": false,
       "scrollbars": {"horizontal": true, "vertical": true},
     },
-    "zoom": {"controls": false, "wheel": false, "startScale": 1.0, "maxScale": 2.5, "minScale": 0.3},
-    "grid": {"spacing": 20, "length": 3, "colour": "transparent", "snap": false},
+    "zoom": {
+      "controls": false,
+      "wheel": false,
+      "startScale": 1.0,
+      "maxScale": 2.5,
+      "minScale": 0.3,
+    },
+    "grid": {
+      "spacing": 20,
+      "length": 3,
+      "colour": "transparent",
+      "snap": false,
+    },
     "trashcan": false,
   });
 
@@ -142,9 +154,15 @@ class _TaWorkspaceBlockDashboardState extends State<TaWorkspaceBlockDashboard> {
   Future<void> _initEditor() async {
     try {
       // 1) 애드온 로드
-      final skinJs = await rootBundle.loadString('assets/blockly/ta_toolbox_skin.js');
-      final javaGenJs = await rootBundle.loadString('assets/blockly/java_generator.js');
-      _log.add('[BOOT] addons loaded: skin=${skinJs.length}, javaGen=${javaGenJs.length}');
+      final skinJs = await rootBundle.loadString(
+        'assets/blockly/ta_toolbox_skin.js',
+      );
+      final javaGenJs = await rootBundle.loadString(
+        'assets/blockly/java_generator.js',
+      );
+      _log.add(
+        '[BOOT] addons loaded: skin=${skinJs.length}, javaGen=${javaGenJs.length}',
+      );
 
       // 2) 에디터 생성
       editor = BlocklyEditor(
@@ -211,8 +229,13 @@ class _TaWorkspaceBlockDashboardState extends State<TaWorkspaceBlockDashboard> {
 
   Future<String> _ret(String js) async {
     try {
-      final raw = await editor!.blocklyController.runJavaScriptReturningResult(js);
-      if (raw is String && raw.length >= 2 && raw.startsWith('"') && raw.endsWith('"')) {
+      final raw = await editor!.blocklyController.runJavaScriptReturningResult(
+        js,
+      );
+      if (raw is String &&
+          raw.length >= 2 &&
+          raw.startsWith('"') &&
+          raw.endsWith('"')) {
         return raw.substring(1, raw.length - 1);
       }
       return raw?.toString() ?? 'null';
@@ -305,7 +328,8 @@ class _TaWorkspaceBlockDashboardState extends State<TaWorkspaceBlockDashboard> {
         FutureBuilder<void>(
           future: _editorReady,
           builder: (context, snap) {
-            if (snap.connectionState != ConnectionState.done || editor == null) {
+            if (snap.connectionState != ConnectionState.done ||
+                editor == null) {
               return const Center(child: CircularProgressIndicator());
             }
             return WebViewWidget(controller: editor!.blocklyController);

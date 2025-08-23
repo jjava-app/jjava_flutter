@@ -1,35 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/data/repository/workspace_list_repository.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/workspace/ma_workspace_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/list/widgets/ta_workspace_list_button.dart';
+import 'package:jjava_flutter/ui/vm/workspace_list_vm.dart';
 
-class TaWorkspaceListBody extends StatelessWidget {
+class TaWorkspaceListBody extends ConsumerWidget {
   const TaWorkspaceListBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final items = WorkspaceListRepository.items;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final model = ref.watch(workspaceListProvider);
 
+    if (model == null) {
+      return const SafeArea(
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final items = model.sortedByCreatedDesc();
     return SafeArea(
       child: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         children: [
-          SizedBox(height: 8),
-          TaWorkspaceListButton(),
-          SizedBox(height: 24),
+          const SizedBox(height: 8),
+          const TaWorkspaceListButton(),
+          const SizedBox(height: 24),
           MText.buttonM('내 기록', color: MColor.kLabel.neutral),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           ...items.map((e) {
             return Padding(
-              padding: EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.only(bottom: 12),
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
-                  onTap: () => debugPrint("open workspace ${e.id}"),
+                  onTap: () {
+                    debugPrint("open workspace ${e.id}");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MaWorkspacePage(workspaceId: e.id),
+                      ),
+                    );
+                  },
                   child: Ink(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 14,
                       vertical: 14,
                     ),
@@ -45,8 +62,11 @@ class TaWorkspaceListBody extends StatelessWidget {
                             color: MColor.kLabel.alternative,
                           ),
                         ),
-                        SizedBox(width: 12),
-                        MText.bodyTiny(e.date, color: MColor.kLabel.assistive),
+                        const SizedBox(width: 12),
+                        MText.bodyTiny(
+                          e.createdAt,
+                          color: MColor.kLabel.assistive,
+                        ),
                       ],
                     ),
                   ),

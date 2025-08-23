@@ -40,13 +40,13 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
       ),
     );
     if (confirmed != true || !mounted) return;
-    // ✅ 1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
+    // 1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
     await dashboardKey.currentState?.exportWorkspaceJson();
 
-    // ✅ 2. provider에 모인 값 읽기
+    // 2. provider에 모인 값 읽기
     final updateModel = ref.read(workspaceUpdateProvider);
 
-    // ✅ 3. 서버 저장 요청
+    // 3. 서버 저장 요청
     try {
       await ref
           .read(workspaceProvider(widget.workspaceId).notifier)
@@ -60,7 +60,7 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
       Logger().e("저장 실패", error: e, stackTrace: s);
     }
 
-    // ✅ 4. 저장 끝났으면 이ㅁㄴㅇ
+    // 4. 저장 끝났으면 이ㅗㅇ
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => MaWorkspaceListPage()), // <- 이동할 화면
@@ -73,7 +73,7 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      barrierColor: Color(0x99000000),
+      barrierColor: const Color(0x99000000),
       builder: (_) => MaRestartDialog(
         title: '다시 시작',
         message: '문제를 다시 시작하시겠습니까?',
@@ -81,12 +81,18 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
         confirmText: '다시 시작',
       ),
     );
+
     if (confirmed != true || !mounted) return;
-    // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (_) => MaWorkspacePage()),
-    // );
+
+    // ✅ 블록만 초기화 (서버 저장 X)
+    await dashboardKey.currentState?.resetWorkspace();
+
+    // ✅ 알림 메시지
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("워크스페이스가 초기화되었습니다")),
+      );
+    }
   }
 
   // 저장 다이얼로그

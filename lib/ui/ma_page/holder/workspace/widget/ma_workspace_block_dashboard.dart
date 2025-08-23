@@ -318,6 +318,31 @@ class MaWorkspaceBlockDashboardState
     }
   }
 
+  Future<void> resetWorkspace() async {
+    final ctrl = editor?.blocklyController;
+    if (ctrl == null) return;
+
+    try {
+      // 블록 완전 초기화 (빈 워크스페이스 적용)
+      const emptyJson = '{"blocks": []}';
+      await ctrl.runJavaScriptReturningResult(
+        'Blockly.serialization.workspaces.load($emptyJson, Blockly.getMainWorkspace())',
+      );
+
+      // Provider에도 반영 (빈 JSON으로 갱신)
+      ref.read(workspaceUpdateProvider.notifier).serializedJson(emptyJson);
+      ref
+          .read(workspaceUpdateProvider.notifier)
+          .libraryJson(jsonEncode(toolboxJson));
+
+      _log.add('[RESET] 워크스페이스 초기화 완료');
+      setState(() {});
+    } catch (e) {
+      _log.add('[RESET-ERR] $e');
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final workspaceState = ref.watch(workspaceProvider(widget.workspaceId));
