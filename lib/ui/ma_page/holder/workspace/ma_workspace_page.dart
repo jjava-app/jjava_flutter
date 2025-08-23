@@ -133,6 +133,50 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
     );
   }
 
+  Future<void> _onDeleteTap() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: const Color(0x99000000),
+      builder: (_) => AlertDialog(
+        title: const Text("삭제"),
+        content: const Text("이 워크스페이스를 삭제하시겠습니까?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("취소"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              "삭제",
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await ref
+          .read(workspaceProvider(widget.workspaceId).notifier)
+          .delete(widget.workspaceId);
+
+      if (!mounted) return;
+      // 삭제 후 리스트 페이지로 이동
+      Navigator.pop(context);
+    } catch (e, s) {
+      Logger().e("삭제 실패", error: e, stackTrace: s);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("삭제 실패")),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final workspace = ref.watch(workspaceProvider(widget.workspaceId));
@@ -202,6 +246,8 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
               await _onFinishTap();
             } else if (value == 'save') {
               await _onSaveTap();
+            } else if (value == 'delete') {
+              await _onDeleteTap();
             }
           },
           itemBuilder: (context) => [
@@ -231,6 +277,19 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
               child: Center(
                 child: Text(
                   '만들기 종료',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: MColor.kStatus.destructive,
+                  ),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'delete',
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(
+                child: Text(
+                  '삭제',
                   style: TextStyle(
                     fontSize: 14,
                     color: MColor.kStatus.destructive,

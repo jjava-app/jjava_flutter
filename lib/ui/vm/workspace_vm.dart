@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/util/m_blockly_id.dart';
 import 'package:jjava_flutter/data/repository/workspace_repository.dart';
 import 'package:jjava_flutter/main.dart';
+import 'package:jjava_flutter/ui/vm/workspace_list_vm.dart';
 import 'package:logger/logger.dart';
 
 /// 1. 창고 관리자
@@ -70,11 +71,13 @@ class WorkspaceVM extends FamilyNotifier<WorkspaceModel?, int> {
 
   // 워크 스페이스 삭제
   Future<void> delete(int workspaceId) async {
-    Map<String, dynamic> body = await WorkspaceRepository().deleteWorkspace(
-      workspaceId,
-    );
-
-    // ok status 확인 후 init()
+    final body = await WorkspaceRepository().deleteWorkspace(workspaceId);
+    if (body['status'] == 200) {
+      await ref.read(workspaceListProvider.notifier).init();
+      state = null;
+    } else {
+      throw Exception("워크스페이스 삭제 실패: ${body['msg']}");
+    }
   }
 }
 

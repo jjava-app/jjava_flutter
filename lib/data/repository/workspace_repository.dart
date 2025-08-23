@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:jjava_flutter/_core/util/m_http.dart';
 import 'package:jjava_flutter/ui/fm/compile_fm.dart';
 
 class WorkspaceRepository {
@@ -66,8 +64,9 @@ class WorkspaceRepository {
 
   // 워크 스페이스 삭제 : body = null, status만 반환
   Future<Map<String, dynamic>> deleteWorkspace(int workspaceId) async {
-    Response response = await dio.delete("/workspace/{$workspaceId}");
-    final responseBody = response.data;
+    // Response response = await dio.delete("/workspace/{$workspaceId}");
+    // final responseBody = response.data;
+    final responseBody = {"status": 200, "msg": "성공", "body": null};
     return responseBody;
   }
 
