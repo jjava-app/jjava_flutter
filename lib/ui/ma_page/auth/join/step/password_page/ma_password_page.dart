@@ -23,8 +23,14 @@ class MaPasswordPage extends StatelessWidget {
                 color: MColor.kLabel.normal,
               ),
             ),
-            MaJoinFormField(labelText: '비밀번호를 입력해 주세요'),
-            MaJoinFormField(labelText: '비밀번호를 재입력해 주세요'),
+            MaJoinFormField(
+              labelText: '비밀번호를 입력해 주세요',
+              isPassword: true,
+            ),
+            MaJoinFormField(
+              labelText: '비밀번호를 재입력해 주세요',
+              isPassword: true,
+            ),
           ],
         ),
       ),
