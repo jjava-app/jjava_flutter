@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjava_flutter/ui/ma_page/onboarding/ma_onboarding_page.dart';
 
 class MaSplashPage extends StatelessWidget {
   @override
@@ -31,16 +32,16 @@ class MaSplashPage extends StatelessWidget {
             },
           ),
           SizedBox(height: 10),
-          // FloatingActionButton(
-          //   heroTag: 'btn3',
-          //   child: Text('온보딩'),
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (_) => MaOnboardingPage()),
-          //     );
-          //   },
-          // ),
+          FloatingActionButton(
+            heroTag: 'btn3',
+            child: Text('온보딩'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => MaOnboardingPage()),
+              );
+            },
+          ),
         ],
       ),
     );

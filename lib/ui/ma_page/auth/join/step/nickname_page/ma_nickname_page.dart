@@ -8,23 +8,28 @@ class MaNicknamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          spacing: 12,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 22),
-            Text(
-              '닉네임',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: MColor.kLabel.normal,
-              ),
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              spacing: 12,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 22),
+                Text(
+                  '닉네임',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: MColor.kLabel.normal,
+                  ),
+                ),
+                MaJoinFormField(labelText: '닉네임을 입력해 주세요'),
+              ],
             ),
-            MaJoinFormField(labelText: '닉네임을 입력해 주세요'),
-          ],
+          ),
         ),
       ),
     );

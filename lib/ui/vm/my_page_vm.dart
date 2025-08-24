@@ -46,7 +46,7 @@ class MyPageVM extends AutoDisposeNotifier<User?> {
       }
 
       final body = Map<String, dynamic>.from(data['body'] ?? {});
-      state = User.fromMyPage(body); // ✅ User로 파싱 (MyPageProfile 사용 X)
+      state = User.fromMap(body); // ✅ User로 파싱 (MyPageProfile 사용 X)
     } catch (e, st) {
       _log.e('MyPageVM init 실패', error: e, stackTrace: st);
       if (mContext != null) {
@@ -71,7 +71,7 @@ class MyPageVM extends AutoDisposeNotifier<User?> {
       }
 
       final body = Map<String, dynamic>.from(res['body'] ?? {});
-      state = User.fromMyPage(body); // 화면 상태 최신화
+      state = User.fromMap(body); // 화면 상태 최신화
 
       final ctx = mContext;
       if (ctx != null) {

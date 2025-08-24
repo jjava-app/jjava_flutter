@@ -34,7 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  #  flutter_blockly_plus: ^2.0.2
+  flutter_blockly_plus: ^2.0.2
   webview_flutter: ^4.13.0
   dio: ^5.8.0+1
   flutter_riverpod: ^2.6.1
@@ -45,9 +45,8 @@ dependencies:
   flutter_dotenv: ^5.2.1
   carousel_slider: ^5.0.0
   flutter_screenutil: ^5.9.3
-  flutter_secure_storage: ^9.2.4
   pull_to_refresh: ^2.0.0
-
+  flutter_secure_storage: ^9.2.4 #기기 로컬에 민감 데이터(토큰, 비밀번호 등)를 안전하게 저장할 수 있게 해주는 패키지
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +77,13 @@ flutter:
     - assets/icons/
     - assets/animation/
     - assets/fonts/
+    - assets/blockly/ta_blockly_style.css
+    - assets/blockly/ma_blockly_style.css
+    - assets/blockly/media/
+    - assets/blockly/dialog_override.js
+    - assets/blockly/java_generator.js
+    - assets/blockly/ma_toolbox_skin.js
+    - assets/blockly/ta_toolbox_skin.js
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

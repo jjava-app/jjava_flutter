@@ -7,6 +7,7 @@ class TaLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: TaLoginBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -9,26 +9,39 @@ class User {
   final int? rank; // 순위
   final String? accessToken;
   final List<UserAccountProviderModel> linked;
-  // final bool? isNewUser;
+  final bool? isNewUser;
 
-  User({this.id, this.email, this.username, this.level, this.rank, this.score = 0, this.accessToken,
-    this.linked = const []
-    // this.isNewUser
+  User({this.id, this.email, this.username, this.level, this.rank, this.score = 0, this.accessToken, this.linked = const [],
+    this.isNewUser
   });
 
   /// 마이페이지 응답용 (body{ id,email,username,level,score,rank, linked[...] })
-  factory User.fromMyPage(Map<String, dynamic> body) {
-    final linkedList = UserAccountProviderModel.listFrom(body['linked']);
+  factory User.fromMap(Map<String, dynamic> data) {
+    final Map<String, dynamic> src =
+    data['userInfo'] is Map
+        ? Map<String, dynamic>.from(data['userInfo'])
+        : data['user'] is Map
+        ? Map<String, dynamic>.from(data['user'])
+        : Map<String, dynamic>.from(data);
+
+    final String? token =
+    (data['accessToken'] ?? src['accessToken']) as String?;
+
+    final List<UserAccountProviderModel> linkedList =
+    data.containsKey('linked')
+        ? UserAccountProviderModel.listFrom(data['linked'])
+        : UserAccountProviderModel.listFrom(src['linked']);
 
     return User(
-      id: body['id'],
-      email: body['email'],
-      username: body['username'],
-      level: body['level'],
-      score: (body['score'] as num?)?.toInt(),
-      rank: (body['rank'] as num?)?.toInt(),
+      id: data['id'],
+      email: data['email'],
+      username: data['username'],
+      level: data['level'],
+      score: (data['score'] as num?)?.toInt(),
+      rank: (data['rank'] as num?)?.toInt(),
+      accessToken: token,
       linked: linkedList,
-      // , isNewUser = data['isNewUser'];
+      isNewUser: data['isNewUser']
     );
   }
 

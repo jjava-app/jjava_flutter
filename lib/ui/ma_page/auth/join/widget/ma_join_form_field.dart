@@ -3,10 +3,12 @@ import 'package:jjava_flutter/_core/style/m_color.dart';
 
 class MaJoinFormField extends StatelessWidget {
   final String labelText;
+  final bool isPassword;
 
   const MaJoinFormField({
     super.key,
     required this.labelText,
+    this.isPassword = false,
   });
 
   @override
@@ -14,6 +16,7 @@ class MaJoinFormField extends StatelessWidget {
     return Container(
       height: 44,
       child: TextFormField(
+        obscureText: isPassword,
         style: TextStyle(
           fontSize: 14,
           color: MColor.kLabel.neutral,

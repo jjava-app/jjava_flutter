@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjava_flutter/ui/ta_page/onboarding/ta_onboarding_page.dart';
 
 class TaSplashPage extends StatelessWidget {
   @override
@@ -28,6 +29,17 @@ class TaSplashPage extends StatelessWidget {
             child: Text('메인\n페이지'),
             onPressed: () {
               Navigator.pushNamed(context, "/main-holder");
+            },
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: 'btn3',
+            child: Text('태블릿\n온보딩'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => TaOnboardingPage()),
+              );
             },
           ),
         ],

@@ -8,24 +8,35 @@ class TaPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          spacing: 12,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 22),
-            Text(
-              '비밀번호',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: MColor.kLabel.normal,
-              ),
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              spacing: 12,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 22),
+                Text(
+                  '비밀번호',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: MColor.kLabel.normal,
+                  ),
+                ),
+                TaJoinFormField(
+                  labelText: '비밀번호를 입력해 주세요',
+                  isPassword: true,
+                ),
+                TaJoinFormField(
+                  labelText: '비밀번호를 재입력해 주세요',
+                  isPassword: true,
+                ),
+              ],
             ),
-            TaJoinFormField(labelText: '비밀번호를 입력해 주세요'),
-            TaJoinFormField(labelText: '비밀번호를 재입력해 주세요'),
-          ],
+          ),
         ),
       ),
     );

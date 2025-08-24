@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/data/repository/worksapce_list_repository.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/workspace/list/widgets/ma_workspace_list_button.dart';
+import 'package:jjava_flutter/data/repository/workspace_list_repository.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/workspace/list/widgets/ta_workspace_list_button.dart';
 
 class TaWorkspaceListBody extends StatelessWidget {
   const TaWorkspaceListBody({super.key});
@@ -16,7 +16,7 @@ class TaWorkspaceListBody extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         children: [
           SizedBox(height: 8),
-          MaWorkspaceListButton(),
+          TaWorkspaceListButton(),
           SizedBox(height: 24),
           MText.buttonM('내 기록', color: MColor.kLabel.neutral),
           SizedBox(height: 12),
