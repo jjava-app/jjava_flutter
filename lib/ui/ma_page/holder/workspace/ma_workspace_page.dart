@@ -16,7 +16,10 @@ import '../../../vm/workspace_vm.dart';
 class MaWorkspacePage extends ConsumerStatefulWidget {
   final int workspaceId;
 
-  const MaWorkspacePage({super.key, required this.workspaceId});
+  const MaWorkspacePage({
+    super.key,
+    required this.workspaceId,
+  });
 
   @override
   ConsumerState<MaWorkspacePage> createState() => _MaWorkspacePageState();

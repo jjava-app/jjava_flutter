@@ -2,31 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
-import 'package:jjava_flutter/ui/ta_page/holder/ta_main_holder.dart';
+import 'package:jjava_flutter/ui/fm/workspace_fm.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_leave_dialog.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_restart_dialog.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_save_dialog.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/workspace/list/ta_workspace_list_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/widget/ta_workspace_block_dashboard.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/widget/ta_workspace_body.dart';
 import 'package:jjava_flutter/ui/vm/workspace_vm.dart';
+import 'package:logger/logger.dart';
 
 class TaWorkspacePage extends ConsumerStatefulWidget {
   final int workspaceId;
-
-  const TaWorkspacePage({super.key, required this.workspaceId});
+  const TaWorkspacePage({
+    super.key,
+    required this.workspaceId,
+  });
 
   @override
-  ConsumerState<TaWorkspacePage> createState() => _TaWorkspacePageState();
+  ConsumerState<TaWorkspacePage> createState() => _WorkspacePageState();
 }
 
-class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
+class _WorkspacePageState extends ConsumerState<TaWorkspacePage> {
   final dashboardKey = GlobalKey<TaWorkspaceBlockDashboardState>();
+  // TODO: 통신 시 실행 로직들 분리하여 vm에 옮기기
+  // TODO: 웹뷰 처리 완료 후 오답 블럭 하이라이트 작업 진행
 
+  // 만들기 종료 다이얼로그 로직
   Future<void> _onFinishTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      barrierColor: const Color(0x99000000),
+      barrierColor: Color(0x99000000),
       builder: (_) => TaLeaveDialog(
         title: '학습 종료',
         message: '학습을 종료하시겠습니까?',
@@ -35,10 +42,13 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
       ),
     );
     if (confirmed != true || !mounted) return;
-
+    // 1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
     await dashboardKey.currentState?.exportWorkspaceJson();
+
+    // 2. provider에 모인 값 읽기
     final updateModel = ref.read(workspaceUpdateProvider);
 
+    // 3. 서버 저장 요청
     try {
       await ref
           .read(workspaceProvider(widget.workspaceId).notifier)
@@ -52,9 +62,15 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
       Logger().e("저장 실패", error: e, stackTrace: s);
     }
 
-    Navigator.pop(context); // 리스트로 이동
+    // 4. 저장 끝났으면 이ㅗㅇ
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => TaWorkspaceListPage()), // <- 이동할 화면
+      (route) => false, // 스택 다 지우고 새 화면만 남김
+    );
   }
 
+  // 다시 시작 다이얼로그
   Future<void> _onRestartTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -70,8 +86,10 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
 
     if (confirmed != true || !mounted) return;
 
+    // ✅ 블록만 초기화 (서버 저장 X)
     await dashboardKey.currentState?.resetWorkspace();
 
+    // ✅ 알림 메시지
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("워크스페이스가 초기화되었습니다")),
@@ -79,11 +97,12 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
     }
   }
 
+  // 저장 다이얼로그
   Future<void> _onSaveTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      barrierColor: const Color(0x99000000),
+      barrierColor: Color(0x99000000),
       builder: (_) => TaSaveDialog(
         title: '만들기 저장',
         message: '만들기를 저장하시겠습니까?',
@@ -92,10 +111,21 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
       ),
     );
     if (confirmed != true || !mounted) return;
-
+    // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
+    // Navigator.push(
+    //   context,
+    //   TaterialPageRoute(builder: (_) => TaWorkspacePage()),
+    // );
+    //1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
     await dashboardKey.currentState?.exportWorkspaceJson();
+
+    //2. provider에 모인 값 읽기
     final updateModel = ref.read(workspaceUpdateProvider);
 
+    // 값 확인 로그
+    Logger().d("REQ BODY => ${updateModel.toMap()}");
+
+    //3. 서버에 저장 요청
     await ref
         .read(workspaceProvider(widget.workspaceId).notifier)
         .update(
@@ -104,12 +134,11 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
           updateModel.serializedJson,
           updateModel.libraryJson,
         );
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("저장 완료")),
-      );
-    }
+    //4. 저장 완료 메시지
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("저장 완료")),
+    );
   }
 
   Future<void> _onDeleteTap() async {
@@ -127,7 +156,10 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("삭제", style: TextStyle(color: Colors.red)),
+            child: const Text(
+              "삭제",
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
@@ -135,10 +167,22 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
 
     if (confirmed != true) return;
 
-    await ref
-        .read(workspaceProvider(widget.workspaceId).notifier)
-        .delete(widget.workspaceId);
-    if (mounted) Navigator.pop(context);
+    try {
+      await ref
+          .read(workspaceProvider(widget.workspaceId).notifier)
+          .delete(widget.workspaceId);
+
+      if (!mounted) return;
+      // 삭제 후 리스트 페이지로 이동
+      Navigator.pop(context);
+    } catch (e, s) {
+      Logger().e("삭제 실패", error: e, stackTrace: s);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("삭제 실패")),
+        );
+      }
+    }
   }
 
   @override
@@ -148,7 +192,6 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
     if (workspace == null) {
       return const Center(child: CircularProgressIndicator());
     }
-
     return Scaffold(
       appBar: _appbar(),
       body: TaWorkspaceBody(
@@ -164,24 +207,42 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
       title: Container(
         height: 49,
         child: TextFormField(
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w700,
             color: MColor.kLabel.neutral,
           ),
           textAlign: TextAlign.start,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: '타이틀 입력',
-            border: OutlineInputBorder(borderSide: BorderSide.none),
+            hintStyle: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: MColor.kLabel.disable,
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+            ),
           ),
-          onChanged: (value) {
-            ref.read(workspaceUpdateProvider.notifier).title(value);
-          },
         ),
       ),
+      centerTitle: false,
       actions: [
         PopupMenuButton<String>(
           icon: MIcon.page.global.more,
+          position: PopupMenuPosition.under,
+          offset: Offset(-16, 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          elevation: 8,
+          color: MColor.kBackground.normal,
           onSelected: (value) async {
             if (value == 'restart') {
               await _onRestartTap();
@@ -194,21 +255,51 @@ class _TaWorkspacePageState extends ConsumerState<TaWorkspacePage> {
             }
           },
           itemBuilder: (context) => [
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'save',
-              child: Center(child: Text('저장')),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(
+                child: Text(
+                  '저장',
+                  style: TextStyle(fontSize: 16, color: MColor.kLabel.normal),
+                ),
+              ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'restart',
-              child: Center(child: Text('다시 시작')),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(
+                child: Text(
+                  '다시 시작',
+                  style: TextStyle(fontSize: 16, color: MColor.kLabel.normal),
+                ),
+              ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'finish',
-              child: Center(child: Text('만들기 종료')),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(
+                child: Text(
+                  '만들기 종료',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: MColor.kStatus.destructive,
+                  ),
+                ),
+              ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'delete',
-              child: Center(child: Text('삭제')),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(
+                child: Text(
+                  '삭제',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: MColor.kStatus.destructive,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

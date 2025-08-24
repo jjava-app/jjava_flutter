@@ -3,8 +3,12 @@ import 'package:jjava_flutter/ui/ta_page/holder/workspace/widget/ta_workspace_bl
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/widget/ta_workspace_compile_animation.dart';
 
 class TaWorkspaceWebView extends StatefulWidget {
+  final int workspaceId;
+  final GlobalKey<TaWorkspaceBlockDashboardState> dashboardKey;
   const TaWorkspaceWebView({
     super.key,
+    required this.workspaceId,
+    required this.dashboardKey,
   });
 
   @override
@@ -21,6 +25,8 @@ class _TaWorkspaceWebViewState extends State<TaWorkspaceWebView> {
       children: [
         TaWorkspaceBlockDashboard(
           onLoading: _setLoading,
+          workspaceId: widget.workspaceId,
+          key: widget.dashboardKey,
         ),
         // 컴파일 애니메이션 UI
         if (_isLoading) TaWorkspaceCompileAnimation(),

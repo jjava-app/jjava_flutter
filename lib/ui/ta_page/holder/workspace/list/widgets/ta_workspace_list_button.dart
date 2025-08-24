@@ -29,7 +29,7 @@ class TaWorkspaceListButton extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               MText.buttonM('블록코딩 만들기', color: MColor.kLabel.alternative),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               MIcon.page.workspace.plusSquare(
                 size: 20,
                 color: MColor.kLabel.alternative,
