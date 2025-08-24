@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/my_page/update/ma_update_my_fm.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/my_page/update/ma_update_my_vm.dart';
+import 'package:jjava_flutter/ui/fm/update_my_page_fm.dart';
+import 'package:jjava_flutter/ui/vm/my_page_vm.dart';
+import 'package:jjava_flutter/ui/vm/update_my_page_vm.dart';
 
 class MaUpdateMyPageBody extends ConsumerStatefulWidget {
   const MaUpdateMyPageBody({super.key});
@@ -21,9 +22,9 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
     super.initState();
     // FM 초기화(서버 값 로드) 후 닉네임 컨트롤러 동기화
     Future.microtask(() async {
-      await ref.read(maUpdateMyProvider.notifier).fetchUserInfo();
-      final s = ref.read(maUpdateMyProvider);
-      _nickCtrl.text = s.nickname;
+      await ref.read(UpdateMyProvider.notifier).fetchUserInfo();
+      final s = ref.read(UpdateMyProvider);
+      _nickCtrl.text = s.username;
     });
 
     // VM은 build에서 watch만 해도 init()이 돌도록 구성되어 있음
@@ -37,10 +38,10 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final fmState = ref.watch(maUpdateMyProvider); // 닉네임/레벨
-    final fm = ref.read(maUpdateMyProvider.notifier);
+    final fmState = ref.watch(UpdateMyProvider); // 닉네임/레벨
+    final fm = ref.read(UpdateMyProvider.notifier);
 
-    final vmState = ref.watch(myPageProvider); // 이메일(표시용)
+    final vmState = ref.watch(MyPageVMProvider); // 이메일(표시용)
     final emailText = vmState?.email ?? ''; // 없으면 빈값
 
     return Container(
@@ -86,7 +87,7 @@ class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
                 SizedBox(height: 4),
                 TextField(
                   controller: _nickCtrl, // FM 로드 후 initState에서 세팅
-                  onChanged: fm.changeNickname, // FM 상태로 반영
+                  onChanged: fm.changeUsername, // FM 상태로 반영
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,

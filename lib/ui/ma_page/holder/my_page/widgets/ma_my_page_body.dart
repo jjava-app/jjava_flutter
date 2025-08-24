@@ -4,23 +4,20 @@ import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/data/gvm/session_gvm.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/my_page/ma_my_page_vm.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/my_page/update/ma_update_my_page.dart';
+import 'package:jjava_flutter/ui/vm/my_page_vm.dart';
 
 class MaPageBody extends ConsumerWidget {
   const MaPageBody({super.key});
 
   Widget build(BuildContext context, WidgetRef ref) {
-    final model = ref.watch(maMyPageVMProvider);
+    final model = ref.watch(MyPageVMProvider);
 
     if (model == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
     final linkedProviders = model.linked?.map((link) => link.provider).toSet() ?? {};
-
-    final email = model.email.isEmpty ? '연동 이메일 없음' : model.email;
-
     return Column(
       children: [
         // 상단 랭킹 영역
@@ -38,7 +35,7 @@ class MaPageBody extends ConsumerWidget {
                 children: [
                   MText.s14Bold("내 랭킹", color: MColor.kLabel.neutral),
                   SizedBox(width: 16),
-                  MText.s14Bold(model.nickname, color: MColor.kPrimary.normal),
+                  MText.s14Bold(model.username ?? '-', color: MColor.kPrimary.normal),
                 ],
               ),
               Row(
@@ -76,7 +73,7 @@ class MaPageBody extends ConsumerWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => MaUpdateMyPage()),
-                        ).then((_) => ref.invalidate(maMyPageVMProvider));
+                        ).then((_) => ref.invalidate(MyPageVMProvider));
                       },
                       child: MText.h5('프로필 수정', color: MColor.kLabel.assistive),
                     ),
@@ -92,12 +89,12 @@ class MaPageBody extends ConsumerWidget {
                     children: [
                       MText.h5('이메일 주소 / SNS 계정 ID', color: MColor.kLabel.alternative),
                       SizedBox(height: 4),
-                      MText.s20Bold(email, color: MColor.kLabel.neutral),
+                      MText.s20Bold(model.email ?? '연동된 이메일이 없음', color: MColor.kLabel.neutral),
 
                       SizedBox(height: 12),
                       MText.h5('닉네임', color: MColor.kLabel.alternative),
                       SizedBox(height: 4),
-                      MText.s20Bold(model.nickname, color: MColor.kLabel.neutral),
+                      MText.s20Bold(model.username ?? '-', color: MColor.kLabel.neutral),
 
                       SizedBox(height: 12),
                       MText.h5('설정 학습 난이도', color: MColor.kLabel.alternative),
