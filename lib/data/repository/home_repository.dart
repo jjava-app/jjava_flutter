@@ -1,5 +1,3 @@
-import 'package:logger/logger.dart';
-
 class HomeRepository {
   // 통신 전에 더미
   Future<Map<String, dynamic>> getHome() async {
@@ -28,8 +26,6 @@ class HomeRepository {
         },
       },
     };
-
-    Logger().d('HomeRepository getHome: ${responseBody}');
     return responseBody;
   }
 }
