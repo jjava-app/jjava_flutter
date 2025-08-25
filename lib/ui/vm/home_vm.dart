@@ -32,7 +32,6 @@ class HomeVM extends AutoDisposeNotifier<HomeModel?> {
 
   Future<void> init() async {
     Map<String, dynamic> data = await HomeRepository().getHome();
-    Logger().d("getHome 반환값: $data");
 
     // 상태코드 200이 아니면 return
     if (data["status"] != 200) {
