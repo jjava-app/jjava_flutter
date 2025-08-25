@@ -3,17 +3,20 @@ import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/data/model/question.dart';
 import 'package:jjava_flutter/data/model/section.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/question/ma_question_page.dart';
 
 class MaQuestionSection extends StatefulWidget {
   final Section section;
   final bool initiallyExpanded;
   final void Function(Question question)? onProblemTap;
+  final Set<int> solvedIds;
 
   const MaQuestionSection({
     super.key,
     required this.section,
     this.initiallyExpanded = false,
     this.onProblemTap,
+    required this.solvedIds,
   });
 
   @override
@@ -60,7 +63,16 @@ class _SectionTileState extends State<MaQuestionSection> {
               children: [
                 for (var i = 0; i < items.length; i++) ...[
                   InkWell(
-                    onTap: () => widget.onProblemTap?.call(items[i]),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MaQuestionPage(
+                            //question: items[i], // 선택한 문제 전달
+                          ),
+                        ),
+                      );
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -69,7 +81,14 @@ class _SectionTileState extends State<MaQuestionSection> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(items[i].title ?? '제목 없음'),
+                            child: Text(
+                              items[i].title ?? '제목 없음',
+                              style: TextStyle(
+                                color: widget.solvedIds.contains(items[i].id)
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                         ],
                       ),

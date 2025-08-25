@@ -18,24 +18,24 @@ class QuestionListRepository {
         questions: [
           Question(id: 1, title: '더미 문제 1'),
           Question(id: 2, title: '더미 문제 2'),
+          Question(id: 3, title: '더미 문제 2'),
+          Question(id: 4, title: '더미 문제 2'),
         ],
       ),
       Section(
         type: '문자열',
         questions: [
-          Question(id: 3, title: '문자 더미 1'),
+          Question(id: 5, title: '문자 더미 1'),
+          Question(id: 6, title: '문자 더미 1'),
+          Question(id: 7, title: '문자 더미 1'),
+          Question(id: 8, title: '문자 더미 1'),
+          Question(id: 9, title: '문자 더미 1'),
         ],
       ),
     ];
 
     final solvedIds = <int>{2, 3}; // 응답에서 온 푼 문제 ID들
 
-    return QuestionListModel(
-      sections,
-      solvedIds,
-      1,
-      5,
-      3,
-    );
+    return QuestionListModel(sections, solvedIds, 1, 9, 2);
   }
 }
