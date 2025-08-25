@@ -32,7 +32,6 @@ class HomeVM extends AutoDisposeNotifier<HomeModel?> {
 
   Future<void> init() async {
     Map<String, dynamic> data = await HomeRepository().getHome();
-    Logger().d("getHome 반환값: $data");
 
     // 상태코드 200이 아니면 return
     if (data["status"] != 200) {
@@ -51,13 +50,21 @@ class HomeModel {
   final List<WeekRank> weekRank;
   final List<SolvedQuestion> solvedQuestion;
 
-  HomeModel({required this.user, required this.weekRank, required this.solvedQuestion});
+  HomeModel({
+    required this.user,
+    required this.weekRank,
+    required this.solvedQuestion,
+  });
 
   factory HomeModel.fromMap(Map<String, dynamic> data) {
     return HomeModel(
       user: User.fromMap(data['userInfo']),
-      weekRank: (data['leaderboard']['rankingList'] as List<dynamic>).map((e) => WeekRank.fromMap(e)).toList(), // leaderboardDTO → leaderboard
-      solvedQuestion: (data['sqList']['sqList'] as List<dynamic>).map((e) => SolvedQuestion.fromMap(e)).toList(), // sqDTO → sqList
+      weekRank: (data['leaderboard']['rankingList'] as List<dynamic>)
+          .map((e) => WeekRank.fromMap(e))
+          .toList(), // leaderboardDTO → leaderboard
+      solvedQuestion: (data['sqList']['sqList'] as List<dynamic>)
+          .map((e) => SolvedQuestion.fromMap(e))
+          .toList(), // sqDTO → sqList
     );
   }
 

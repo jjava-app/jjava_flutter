@@ -3,8 +3,13 @@ import 'package:jjava_flutter/ui/ma_page/holder/workspace/widget/ma_workspace_bl
 import 'package:jjava_flutter/ui/ma_page/holder/workspace/widget/ma_workspace_compile_animation.dart';
 
 class MaWorkspaceWebView extends StatefulWidget {
+  final int workspaceId;
+  final GlobalKey<MaWorkspaceBlockDashboardState> dashboardKey;
+
   const MaWorkspaceWebView({
     super.key,
+    required this.workspaceId,
+    required this.dashboardKey,
   });
 
   @override
@@ -19,10 +24,14 @@ class _MaWorkspaceWebViewState extends State<MaWorkspaceWebView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Expanded(child: MaWorkspaceBlockDashboard(onLoading: _setLoading)),
-        // 컴파일 애니메이션 UI
+        SizedBox.expand(
+          child: MaWorkspaceBlockDashboard(
+            onLoading: _setLoading,
+            workspaceId: widget.workspaceId,
+            key: widget.dashboardKey,
+          ),
+        ),
         if (_isLoading) MaWorkspaceCompileAnimation(),
-        //
       ],
     );
   }

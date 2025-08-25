@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/workspace/ma_workspace_page.dart';
+import 'package:jjava_flutter/ui/vm/workspace_list_vm.dart';
 
-class MaWorkspaceListButton extends StatelessWidget {
+class MaWorkspaceListButton extends ConsumerWidget {
   const MaWorkspaceListButton({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => MaWorkspacePage()),
-        );
+      onTap: () async {
+        await ref.read(workspaceListProvider.notifier).create();
       },
       child: Ink(
         height: 120,

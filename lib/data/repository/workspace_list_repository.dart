@@ -1,5 +1,3 @@
-
-
 class WorkspaceListRepository {
   // 워크 스페이스 리스트 : id, userId, title 3개로 구성된 리스트가 옴
   Future<Map<String, dynamic>> getWorkspaceList() async {
@@ -10,9 +8,24 @@ class WorkspaceListRepository {
       "msg": "성공",
       "body": {
         "workspaceList": [
-          {"id": 1, "userId": 1, "title": "워크스페이스1", "createdAt": "2025-08-22 13:07:24.8869386"},
-          {"id": 2, "userId": 1, "title": "워크스페이스2", "createdAt": "2025-08-22 13:07:24.8869386"},
-          {"id": 3, "userId": 1, "title": "워크스페이스3", "createdAt": "2025-08-22 13:07:24.8869386"},
+          {
+            "id": 1,
+            "userId": 1,
+            "title": "워크스페이스1",
+            "createdAt": "2025-08-22 13:07:24.8869386",
+          },
+          {
+            "id": 2,
+            "userId": 1,
+            "title": "워크스페이스2",
+            "createdAt": "2025-08-22 13:07:24.8869386",
+          },
+          {
+            "id": 3,
+            "userId": 1,
+            "title": "워크스페이스3",
+            "createdAt": "2025-08-22 13:07:24.8869386",
+          },
         ],
       },
     };

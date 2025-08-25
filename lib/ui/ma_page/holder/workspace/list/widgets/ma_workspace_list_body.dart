@@ -42,7 +42,9 @@ class MaWorkspaceListBody extends ConsumerWidget {
                     debugPrint("open workspace ${e.id}");
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => MaWorkspacePage()),
+                      MaterialPageRoute(
+                        builder: (_) => MaWorkspacePage(workspaceId: e.id),
+                      ),
                     );
                   },
                   child: Ink(
@@ -63,7 +65,10 @@ class MaWorkspaceListBody extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(width: 12),
-                        MText.bodyTiny(e.createdAt, color: MColor.kLabel.assistive),
+                        MText.bodyTiny(
+                          e.createdAt,
+                          color: MColor.kLabel.assistive,
+                        ),
                       ],
                     ),
                   ),
