@@ -17,6 +17,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class TaWorkspaceBlockDashboard extends ConsumerStatefulWidget {
   final ValueChanged<bool> onLoading;
   final int workspaceId;
+
   const TaWorkspaceBlockDashboard({
     super.key,
     required this.onLoading,
@@ -24,12 +25,10 @@ class TaWorkspaceBlockDashboard extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<TaWorkspaceBlockDashboard> createState() =>
-      TaWorkspaceBlockDashboardState();
+  ConsumerState<TaWorkspaceBlockDashboard> createState() => TaWorkspaceBlockDashboardState();
 }
 
-class TaWorkspaceBlockDashboardState
-    extends ConsumerState<TaWorkspaceBlockDashboard> {
+class TaWorkspaceBlockDashboardState extends ConsumerState<TaWorkspaceBlockDashboard> {
   // 컴파일 로딩 임시
   bool _isLoading = false;
 
@@ -135,8 +134,8 @@ class TaWorkspaceBlockDashboardState
 
   late final BlocklyOptions workspaceConfiguration = BlocklyOptions.fromJson({
     "toolbox": toolboxJson,
-    "toolboxPosition": "end",
     "horizontalLayout": false,
+    "toolboxPosition": "end",
     "sounds": false,
     "scrollbars": {"horizontal": false, "vertical": false},
     "move": {
@@ -271,10 +270,7 @@ class TaWorkspaceBlockDashboardState
       final raw = await editor!.blocklyController.runJavaScriptReturningResult(
         js,
       );
-      if (raw is String &&
-          raw.length >= 2 &&
-          raw.startsWith('"') &&
-          raw.endsWith('"')) {
+      if (raw is String && raw.length >= 2 && raw.startsWith('"') && raw.endsWith('"')) {
         return raw.substring(1, raw.length - 1);
       }
       return raw?.toString() ?? 'null';
@@ -378,14 +374,10 @@ class TaWorkspaceBlockDashboardState
 
       final decoded = jsonDecode(jsonStr);
       // Provider에 반영
-      ref
-          .read(workspaceUpdateProvider.notifier)
-          .serializedJson(jsonEncode(decoded));
+      ref.read(workspaceUpdateProvider.notifier).serializedJson(jsonEncode(decoded));
 
       // toolboxJson도 libraryJson으로 반영
-      ref
-          .read(workspaceUpdateProvider.notifier)
-          .libraryJson(jsonEncode(toolboxJson));
+      ref.read(workspaceUpdateProvider.notifier).libraryJson(jsonEncode(toolboxJson));
 
       // _log.add('[WORKSPACE JSON]\n$jsonStr');
       _log.add('저장 완료');
@@ -409,9 +401,7 @@ class TaWorkspaceBlockDashboardState
 
       // Provider에도 반영 (빈 JSON으로 갱신)
       ref.read(workspaceUpdateProvider.notifier).serializedJson(emptyJson);
-      ref
-          .read(workspaceUpdateProvider.notifier)
-          .libraryJson(jsonEncode(toolboxJson));
+      ref.read(workspaceUpdateProvider.notifier).libraryJson(jsonEncode(toolboxJson));
 
       _log.add('[RESET] 워크스페이스 초기화 완료');
       setState(() {});
@@ -461,8 +451,7 @@ class TaWorkspaceBlockDashboardState
           child: FutureBuilder<void>(
             future: _editorReady,
             builder: (context, snap) {
-              if (snap.connectionState != ConnectionState.done ||
-                  editor == null) {
+              if (snap.connectionState != ConnectionState.done || editor == null) {
                 return const Center(child: CircularProgressIndicator());
               }
               return WebViewWidget(controller: editor!.blocklyController);

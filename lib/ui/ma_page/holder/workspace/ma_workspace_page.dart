@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/ui/fm/workspace_fm.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_delete_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_leave_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_restart_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_save_dialog.dart';
@@ -27,6 +28,7 @@ class MaWorkspacePage extends ConsumerStatefulWidget {
 
 class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
   final dashboardKey = GlobalKey<MaWorkspaceBlockDashboardState>();
+
   // TODO: 통신 시 실행 로직들 분리하여 vm에 옮기기
 
   // 만들기 종료 다이얼로그 로직
@@ -147,35 +149,21 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
       context: context,
       barrierDismissible: false,
       barrierColor: const Color(0x99000000),
-      builder: (_) => AlertDialog(
-        title: const Text("삭제"),
-        content: const Text("이 워크스페이스를 삭제하시겠습니까?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text("취소"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text(
-              "삭제",
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
+      builder: (_) => const MaDeleteDialog(
+        title: "삭제",
+        message: "이 워크스페이스를 삭제하시겠습니까?",
+        cancelText: "취소",
+        confirmText: "삭제",
       ),
     );
 
     if (confirmed != true) return;
 
     try {
-      await ref
-          .read(workspaceProvider(widget.workspaceId).notifier)
-          .delete(widget.workspaceId);
+      await ref.read(workspaceProvider(widget.workspaceId).notifier).delete(widget.workspaceId);
 
       if (!mounted) return;
-      // 삭제 후 리스트 페이지로 이동
-      Navigator.pop(context);
+      Navigator.pop(context); // 삭제 후 리스트 페이지 이동
     } catch (e, s) {
       Logger().e("삭제 실패", error: e, stackTrace: s);
       if (mounted) {

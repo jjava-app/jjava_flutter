@@ -14,6 +14,7 @@ import 'package:logger/logger.dart';
 
 class TaWorkspacePage extends ConsumerStatefulWidget {
   final int workspaceId;
+
   const TaWorkspacePage({
     super.key,
     required this.workspaceId,
@@ -25,6 +26,7 @@ class TaWorkspacePage extends ConsumerStatefulWidget {
 
 class _WorkspacePageState extends ConsumerState<TaWorkspacePage> {
   final dashboardKey = GlobalKey<TaWorkspaceBlockDashboardState>();
+
   // TODO: 통신 시 실행 로직들 분리하여 vm에 옮기기
   // TODO: 웹뷰 처리 완료 후 오답 블럭 하이라이트 작업 진행
 
@@ -86,10 +88,10 @@ class _WorkspacePageState extends ConsumerState<TaWorkspacePage> {
 
     if (confirmed != true || !mounted) return;
 
-    // ✅ 블록만 초기화 (서버 저장 X)
+    // 블록만 초기화 (서버 저장 X)
     await dashboardKey.currentState?.resetWorkspace();
 
-    // ✅ 알림 메시지
+    // 알림 메시지
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("워크스페이스가 초기화되었습니다")),
@@ -168,9 +170,7 @@ class _WorkspacePageState extends ConsumerState<TaWorkspacePage> {
     if (confirmed != true) return;
 
     try {
-      await ref
-          .read(workspaceProvider(widget.workspaceId).notifier)
-          .delete(widget.workspaceId);
+      await ref.read(workspaceProvider(widget.workspaceId).notifier).delete(widget.workspaceId);
 
       if (!mounted) return;
       // 삭제 후 리스트 페이지로 이동
