@@ -35,7 +35,10 @@ class TaQuestionListPage extends ConsumerWidget {
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final s = model.sections[index];
-                      return TaQuestionSection(section: s);
+                      return TaQuestionSection(
+                        section: s,
+                        solvedIds: model.solvedIds,
+                      );
                     },
                   ),
                 ),

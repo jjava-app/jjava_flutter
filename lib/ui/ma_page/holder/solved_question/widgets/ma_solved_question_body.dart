@@ -1,52 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
-import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/data/repository/solved_question_repository.dart';
+import 'package:jjava_flutter/_core/util/m_date_format.dart';
+import 'package:jjava_flutter/data/model/solved_question.dart';
+import 'package:jjava_flutter/ui/vm/solved_question_vm.dart';
 
-class MaSolvedQuestionBody extends StatefulWidget {
-  MaSolvedQuestionBody({super.key});
+class MaSolvedQuestionBody extends ConsumerStatefulWidget {
+  const MaSolvedQuestionBody({super.key});
 
   @override
-  State<MaSolvedQuestionBody> createState() => _MaSolvedQuestionBodyState();
+  ConsumerState<MaSolvedQuestionBody> createState() => _MaSolvedQuestionBodyState();
 }
 
-class _MaSolvedQuestionBodyState extends State<MaSolvedQuestionBody> {
+class _MaSolvedQuestionBodyState extends ConsumerState<MaSolvedQuestionBody> {
   int? expandedId;
 
   @override
   Widget build(BuildContext context) {
-    final array = SolvedQuestionRepository.listArray;
-    final string = SolvedQuestionRepository.listString;
+    final state = ref.watch(solvedQuestionListProvider);
+    if (state == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // solvedQuestions = { "OPERATOR": [문제 리스트], "TEXT": [문제 리스트] }
+    final sections = state.solvedQuestions.entries.toList();
 
     return SafeArea(
-      child: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), //
-        children: [
-          MText.h7('리스트(배열)'),
-          SizedBox(height: 12),
-          ...array.map((e) {
-            final opened = expandedId == e.id;
-            return _buildItemCard(e, opened);
-          }),
-          SizedBox(height: 20),
-          MText.h7('문자열'),
-          SizedBox(height: 12),
-          ...string.map((e) {
-            final opened = expandedId == e.id;
-            return _buildItemCard(e, opened);
-          }),
-        ],
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        itemCount: sections.length,
+        itemBuilder: (context, index) {
+          final sectionName = sections[index].key;
+          final problems = sections[index].value;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MText.h7(sectionName), // "OPERATOR", "TEXT"
+              const SizedBox(height: 12),
+              ...problems.map((e) {
+                final opened = expandedId == e.id;
+                return _buildItemCard(e, opened);
+              }),
+              const SizedBox(height: 20),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildItemCard(SolvedQuestionItem e, bool opened) {
+  Widget _buildItemCard(SolvedQuestion e, bool opened) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 180),
-      margin: EdgeInsets.only(bottom: 10),
+      duration: const Duration(milliseconds: 180),
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: opened ? Color(0xFFF0F8F4) : MColor.kLabel.white, // 전체 배경
+        color: opened ? const Color(0xFFF0F8F4) : MColor.kLabel.white,
         borderRadius: BorderRadius.circular(12),
         border: opened ? Border.all(color: MColor.kPrimary.normal, width: 1) : null,
       ),
@@ -56,7 +66,7 @@ class _MaSolvedQuestionBodyState extends State<MaSolvedQuestionBody> {
           expandedId = opened ? null : e.id;
         }),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -75,15 +85,15 @@ class _MaSolvedQuestionBodyState extends State<MaSolvedQuestionBody> {
               // 펼쳤을 때 내용
               ClipRect(
                 child: AnimatedAlign(
-                  duration: Duration(milliseconds: 180),
+                  duration: const Duration(milliseconds: 180),
                   alignment: Alignment.topCenter,
                   heightFactor: opened ? 1.0 : 0.0,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 6),
-                      MText.bodyXXS(e.date, color: MColor.kLabel.neutral),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 6),
+                      MText.bodyXXS(formatCreatedAt(e.createdAt), color: MColor.kLabel.neutral),
+                      const SizedBox(height: 12),
 
                       Row(
                         children: [
@@ -91,20 +101,20 @@ class _MaSolvedQuestionBodyState extends State<MaSolvedQuestionBody> {
                             width: 16,
                             height: 16,
                             decoration: BoxDecoration(
-                              color: Color(0xFFEAEAEA),
+                              color: const Color(0xFFEAEAEA),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           MText.h5('문제'),
                         ],
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       Text(
-                        e.prompt,
-                        style: TextStyle(fontSize: 13, height: 1.4),
+                        e.content ?? "문제 내용 없음",
+                        style: const TextStyle(fontSize: 13, height: 1.4),
                       ),
-                      SizedBox(height: 14),
+                      const SizedBox(height: 14),
 
                       Row(
                         children: [
@@ -112,44 +122,17 @@ class _MaSolvedQuestionBodyState extends State<MaSolvedQuestionBody> {
                             width: 16,
                             height: 16,
                             decoration: BoxDecoration(
-                              color: Color(0xFFEAEAEA),
+                              color: const Color(0xFFEAEAEA),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           MText.s16Bold('AI 첨삭', color: MColor.kButton.active),
                         ],
                       ),
-                      SizedBox(height: 6),
-                      MText.modal3(e.aiReview, color: MColor.kLabel.normal),
-                      SizedBox(height: 16),
-
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF333B4A),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                MText.modal3('java', color: Colors.white),
-                                Spacer(),
-                                MIcon.page.solvedQuestion.copy,
-                              ],
-                            ),
-                            SizedBox(height: 12),
-                            MText.modal3(
-                              e.codeSample,
-                              color: MColor.kLabel.white,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 6),
+                      MText.modal3(e.aiComment ?? "AI 첨삭 없음", color: MColor.kLabel.normal),
+                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
