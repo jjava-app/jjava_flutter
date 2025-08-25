@@ -5,7 +5,6 @@ import 'package:jjava_flutter/data/model/user.dart';
 import 'package:jjava_flutter/data/model/week_rank.dart';
 import 'package:jjava_flutter/data/repository/home_repository.dart';
 import 'package:jjava_flutter/main.dart';
-import 'package:logger/logger.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 // 1. 창고
@@ -24,7 +23,6 @@ class HomeVM extends AutoDisposeNotifier<HomeModel?> {
 
     ref.onDispose(() {
       refreshCtrl.dispose();
-      Logger().d("homeVM 파괴됨");
     });
 
     return null;
@@ -59,12 +57,8 @@ class HomeModel {
   factory HomeModel.fromMap(Map<String, dynamic> data) {
     return HomeModel(
       user: User.fromMap(data['userInfo']),
-      weekRank: (data['leaderboard']['rankingList'] as List<dynamic>)
-          .map((e) => WeekRank.fromMap(e))
-          .toList(), // leaderboardDTO → leaderboard
-      solvedQuestion: (data['sqList']['sqList'] as List<dynamic>)
-          .map((e) => SolvedQuestion.fromMap(e))
-          .toList(), // sqDTO → sqList
+      weekRank: (data['leaderboard']['rankingList'] as List<dynamic>).map((e) => WeekRank.fromMap(e)).toList(), // leaderboardDTO → leaderboard
+      solvedQuestion: (data['sqList']['sqList'] as List<dynamic>).map((e) => SolvedQuestion.fromMap(e)).toList(), // sqDTO → sqList
     );
   }
 

@@ -25,15 +25,14 @@ class MaQuestionListBody extends ConsumerWidget {
         Expanded(
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
-            itemCount: model.sections.length,
+            itemCount: model.questions.length,
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
-              final section = model.sections[index];
+              final section = model.questions[index];
               return MaQuestionSection(
                 section: section,
                 onProblemTap: (q) {
-                  // 문제 클릭되면 id 저장
-                  ref.read(selectedQuestionIdProvider.notifier).state = q.id;
+                  ref.read(selectedQuestionIdProvider.notifier).state = q.questionId;
                 },
                 selectedId: selectedId,
               );

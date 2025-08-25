@@ -43,7 +43,7 @@ class SessionGVM extends Notifier<SessionModel> {
     state = SessionModel.fromMap(data["body"]);
 
     // 5. 헤더 세팅
-    dio.options.headers["Authorization"] = "Bearer ${user.accessToken}";
+    dio.options.headers["Authorization"] = "${user.accessToken}";
 
     Logger().d('emailLogin : ${dio.options.headers["Authorization"]}');
 

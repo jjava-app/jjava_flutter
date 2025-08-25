@@ -25,7 +25,7 @@ class _SectionTileState extends State<TaQuestionSection> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.section.type ?? '제목 없음';
+    final title = widget.section.questionType ?? '제목 없음';
     final items = widget.section.questions;
 
     return Container(
@@ -46,14 +46,11 @@ class _SectionTileState extends State<TaQuestionSection> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: MText.h5(
                 title,
-                color: expanded
-                    ? MColor.kPrimary.normal
-                    : MColor.kLabel.assistive,
+                color: expanded ? MColor.kPrimary.normal : MColor.kLabel.assistive,
               ),
             ),
           ),
-          if (expanded)
-            Divider(height: 1, thickness: 1, color: MColor.kPrimary.normal),
+          if (expanded) Divider(height: 1, thickness: 1, color: MColor.kPrimary.normal),
 
           if (expanded)
             Column(

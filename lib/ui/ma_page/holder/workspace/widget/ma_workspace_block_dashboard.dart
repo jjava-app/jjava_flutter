@@ -24,12 +24,10 @@ class MaWorkspaceBlockDashboard extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<MaWorkspaceBlockDashboard> createState() =>
-      MaWorkspaceBlockDashboardState();
+  ConsumerState<MaWorkspaceBlockDashboard> createState() => MaWorkspaceBlockDashboardState();
 }
 
-class MaWorkspaceBlockDashboardState
-    extends ConsumerState<MaWorkspaceBlockDashboard> {
+class MaWorkspaceBlockDashboardState extends ConsumerState<MaWorkspaceBlockDashboard> {
   final _log = <String>[];
 
   BlocklyEditor? editor;
@@ -249,10 +247,7 @@ class MaWorkspaceBlockDashboardState
       final raw = await editor!.blocklyController.runJavaScriptReturningResult(
         js,
       );
-      if (raw is String &&
-          raw.length >= 2 &&
-          raw.startsWith('"') &&
-          raw.endsWith('"')) {
+      if (raw is String && raw.length >= 2 && raw.startsWith('"') && raw.endsWith('"')) {
         return raw.substring(1, raw.length - 1);
       }
       return raw?.toString() ?? 'null';
@@ -300,14 +295,10 @@ class MaWorkspaceBlockDashboardState
 
       final decoded = jsonDecode(jsonStr);
       // Provider에 반영
-      ref
-          .read(workspaceUpdateProvider.notifier)
-          .serializedJson(jsonEncode(decoded));
+      ref.read(workspaceUpdateProvider.notifier).serializedJson(jsonEncode(decoded));
 
       // toolboxJson도 libraryJson으로 반영
-      ref
-          .read(workspaceUpdateProvider.notifier)
-          .libraryJson(jsonEncode(toolboxJson));
+      ref.read(workspaceUpdateProvider.notifier).libraryJson(jsonEncode(toolboxJson));
 
       // _log.add('[WORKSPACE JSON]\n$jsonStr');
       _log.add('저장 완료');
@@ -331,9 +322,7 @@ class MaWorkspaceBlockDashboardState
 
       // Provider에도 반영 (빈 JSON으로 갱신)
       ref.read(workspaceUpdateProvider.notifier).serializedJson(emptyJson);
-      ref
-          .read(workspaceUpdateProvider.notifier)
-          .libraryJson(jsonEncode(toolboxJson));
+      ref.read(workspaceUpdateProvider.notifier).libraryJson(jsonEncode(toolboxJson));
 
       _log.add('[RESET] 워크스페이스 초기화 완료');
       setState(() {});
@@ -353,6 +342,7 @@ class MaWorkspaceBlockDashboardState
 
     if (!isEditorInitialized) {
       Map<String, dynamic> initialJson = {};
+
       if (workspaceState.serializedJson.isNotEmpty) {
         try {
           initialJson = jsonDecode(workspaceState.serializedJson);
@@ -360,7 +350,10 @@ class MaWorkspaceBlockDashboardState
           _log.add('[ERR] Failed to decode serializedJson: $e');
         }
       }
-      _initEditor(initialJson);
+
+      Future.delayed(const Duration(seconds: 2), () {
+        _initEditor(initialJson);
+      });
 
       // 여기서 상태 메시지 UI 반환
       return Center(

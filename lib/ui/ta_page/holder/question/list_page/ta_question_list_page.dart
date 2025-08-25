@@ -31,10 +31,10 @@ class TaQuestionListPage extends ConsumerWidget {
                       horizontal: 16,
                       vertical: 22,
                     ),
-                    itemCount: model.sections.length,
+                    itemCount: model.questions.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
-                      final s = model.sections[index];
+                      final s = model.questions[index];
                       return TaQuestionSection(section: s);
                     },
                   ),

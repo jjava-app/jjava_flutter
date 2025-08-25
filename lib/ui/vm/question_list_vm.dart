@@ -22,7 +22,7 @@ class QuestionVM extends Notifier<QuestionListModel?> {
 
   Future<void> init() async {
     Map<String, dynamic> body = await QuestionListRepository().getList();
-    state = QuestionListModel.fromMap(body["response"]);
+    state = QuestionListModel.fromMap(body["body"]);
     // final model = await QuestionListRepository().getList();
     // state = model;
   }
@@ -30,36 +30,36 @@ class QuestionVM extends Notifier<QuestionListModel?> {
 
 /// 3. 창고 데이터 타입
 class QuestionListModel {
-  final List<Section> sections; // 묶음
-  final Set<int> solvedIds; // 푼 문제 ID
+  final List<Section> questions; // 묶음
+  final Set<int> solvedQuestionIds; // 푼 문제 ID
   final int userId;
   final int totalCount;
   final int solvedCount;
 
   QuestionListModel(
-    this.sections,
-    this.solvedIds,
+    this.questions,
+    this.solvedQuestionIds,
     this.userId,
     this.totalCount,
     this.solvedCount,
   );
 
   QuestionListModel.fromMap(Map<String, dynamic> data)
-    : sections = (data['sections'] as List<dynamic>? ?? const []).map((e) => Section.fromMap(e as Map<String, dynamic>)).toList(),
-      solvedIds = (data['solvedIds'] as List<dynamic>? ?? []).map((e) => e as int).toSet(),
+    : questions = (data['questions'] as List<dynamic>? ?? const []).map((e) => Section.fromMap(e as Map<String, dynamic>)).toList(),
+      solvedQuestionIds = (data['solvedQuestionIds'] as List<dynamic>? ?? []).map((e) => e as int).toSet(),
       userId = data['userId'],
       totalCount = data['totalCount'],
       solvedCount = data['solvedCount'];
 
   QuestionListModel copyWith() {
-    List<Section>? sections; // 타입별 묶음
-    Set<int>? solvedIds; // 푼 문제 ID
+    List<Section>? questions; // 타입별 묶음
+    Set<int>? solvedQuestionIds; // 푼 문제 ID
     int? userId;
     int? totalCount;
     int? solvedCount;
     return QuestionListModel(
-      sections ?? this.sections,
-      solvedIds ?? this.solvedIds,
+      questions ?? this.questions,
+      solvedQuestionIds ?? this.solvedQuestionIds,
       userId ?? this.userId,
       totalCount ?? this.totalCount,
       solvedCount ?? this.solvedCount,
@@ -68,6 +68,6 @@ class QuestionListModel {
 
   @override
   String toString() {
-    return 'QuestionListModel{sections: $sections, solvedIds: $solvedIds, userId: $userId, totalCount: $totalCount, solvedCount: $solvedCount}';
+    return 'QuestionListModel{questions: $questions, solvedQuestionIds: $solvedQuestionIds, userId: $userId, totalCount: $totalCount, solvedCount: $solvedCount}';
   }
 }

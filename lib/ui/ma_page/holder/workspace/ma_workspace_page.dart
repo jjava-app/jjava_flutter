@@ -45,25 +45,6 @@ class _MaWorkspacePageState extends ConsumerState<MaWorkspacePage> {
       ),
     );
     if (confirmed != true || !mounted) return;
-    // 1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
-    await dashboardKey.currentState?.exportWorkspaceJson();
-
-    // 2. provider에 모인 값 읽기
-    final updateModel = ref.read(workspaceUpdateProvider);
-
-    // 3. 서버 저장 요청
-    try {
-      await ref
-          .read(workspaceProvider(widget.workspaceId).notifier)
-          .update(
-            widget.workspaceId,
-            updateModel.title,
-            updateModel.serializedJson,
-            updateModel.libraryJson,
-          );
-    } catch (e, s) {
-      Logger().e("저장 실패", error: e, stackTrace: s);
-    }
 
     // 4. 저장 끝났으면 이ㅗㅇ
     Navigator.pushAndRemoveUntil(

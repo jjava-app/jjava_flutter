@@ -27,7 +27,7 @@ class _SectionTileState extends State<MaQuestionSection> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.section.type ?? '제목 없음';
+    final title = widget.section.questionType ?? '제목 없음';
     final items = widget.section.questions;
 
     return Container(
@@ -61,7 +61,7 @@ class _SectionTileState extends State<MaQuestionSection> {
                   InkWell(
                     onTap: () => widget.onProblemTap?.call(items[i]),
                     child: Container(
-                      color: (widget.selectedId == items[i].id) ? MColor.kPrimary.normal.withValues(alpha: 0.1) : MColor.kBackground.normal,
+                      color: (widget.selectedId == items[i].questionId) ? MColor.kPrimary.normal.withValues(alpha: 0.1) : MColor.kBackground.normal,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 10,
@@ -72,8 +72,8 @@ class _SectionTileState extends State<MaQuestionSection> {
                             child: Text(
                               items[i].title ?? '제목 없음',
                               style: TextStyle(
-                                color: (widget.selectedId == items[i].id) ? MColor.kPrimary.normal : MColor.kLabel.normal,
-                                fontWeight: (widget.selectedId == items[i].id) ? FontWeight.w600 : FontWeight.w400,
+                                color: (widget.selectedId == items[i].questionId) ? MColor.kPrimary.normal : MColor.kLabel.normal,
+                                fontWeight: (widget.selectedId == items[i].questionId) ? FontWeight.w600 : FontWeight.w400,
                               ),
                             ),
                           ),

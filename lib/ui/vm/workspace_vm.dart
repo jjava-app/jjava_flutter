@@ -8,10 +8,9 @@ import 'package:jjava_flutter/ui/vm/workspace_list_vm.dart';
 import 'package:logger/logger.dart';
 
 /// 1. 창고 관리자
-final workspaceProvider =
-    NotifierProvider.family<WorkspaceVM, WorkspaceModel?, int>(() {
-      return WorkspaceVM();
-    });
+final workspaceProvider = NotifierProvider.family<WorkspaceVM, WorkspaceModel?, int>(() {
+  return WorkspaceVM();
+});
 
 /// 2. 창고
 class WorkspaceVM extends FamilyNotifier<WorkspaceModel?, int> {
@@ -60,13 +59,19 @@ class WorkspaceVM extends FamilyNotifier<WorkspaceModel?, int> {
       "serializedJson": cleanedJsonStr,
       "libraryJson": libraryJson,
     };
-    Logger().d("REQ BODY => $reqBody");
 
     Map<String, dynamic> body = await WorkspaceRepository().updateWorkspace(
       workspaceId,
       reqBody,
     );
-    state = WorkspaceModel.fromMap(body['body']);
+    Logger().d("(===============)");
+    state = state!.copyWith(
+      id: body['body']['id'],
+      userId: body['body']['userId'],
+      title: body['body']['title'],
+      serializedJson: body['body']['serializedJson'],
+      libraryJson: body['body']['libraryJson'],
+    );
   }
 
   // 워크 스페이스 삭제
