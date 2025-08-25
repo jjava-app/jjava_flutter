@@ -1,15 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/ui/fm/update_my_page_fm.dart';
+import 'package:jjava_flutter/ui/vm/my_page_vm.dart';
 
-class TaUpdateMyPageBody extends StatelessWidget {
+class TaUpdateMyPageBody extends ConsumerStatefulWidget {
   const TaUpdateMyPageBody({super.key});
 
   @override
+  ConsumerState<TaUpdateMyPageBody> createState() => _TaUpdateMyPageBodyState();
+}
+
+class _TaUpdateMyPageBodyState extends ConsumerState<TaUpdateMyPageBody> {
+  final _nickCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // FM 초기화(서버 값 로드) 후 닉네임 컨트롤러 동기화
+    Future.microtask(() async {
+      await ref.read(UpdateMyProvider.notifier).fetchUserInfo();
+      final s = ref.read(UpdateMyProvider);
+      _nickCtrl.text = s.username;
+    });
+
+    // VM은 build에서 watch만 해도 init()이 돌도록 구성되어 있음
+  }
+
+  @override
+  void dispose() {
+    _nickCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // 로컬 상태 값(기본: LV.2)
-    double levelValue = 1;
+    final fmState = ref.watch(UpdateMyProvider); // 닉네임/레벨
+    final fm = ref.read(UpdateMyProvider.notifier);
+
+    final vmState = ref.watch(MyPageVMProvider); // 이메일(표시용)
+    final emailText = vmState?.email ?? ''; // 없으면 빈값
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 22),
@@ -49,7 +81,7 @@ class TaUpdateMyPageBody extends StatelessWidget {
                     ),
                     SizedBox(width: 6),
                     MText.s20Bold(
-                      'seohoejeong@gmail.com',
+                      emailText.isEmpty ? '-' : emailText,
                       color: MColor.kLabel.disable,
                     ),
                   ],
@@ -59,7 +91,8 @@ class TaUpdateMyPageBody extends StatelessWidget {
                 MText.h5('닉네임', color: MColor.kLabel.alternative),
                 SizedBox(height: 4),
                 TextField(
-                  controller: TextEditingController(text: 'DevSsar'), // 초기값
+                  controller: _nickCtrl,
+                  onChanged: fm.changeUsername,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -93,7 +126,7 @@ class TaUpdateMyPageBody extends StatelessWidget {
 
                 StatefulBuilder(
                   builder: (context, setSB) {
-                    final activeIdx = levelValue.round();
+                    final activeIdx = fmState.levelIndex;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -120,11 +153,15 @@ class TaUpdateMyPageBody extends StatelessWidget {
                             overlayShape: SliderComponentShape.noOverlay,
                           ),
                           child: Slider(
-                            value: levelValue,
+                            value: fmState.levelIndex.toDouble(),
                             min: 0,
                             max: 2,
                             divisions: 2,
-                            onChanged: (v) => setSB(() => levelValue = v),
+                            onChanged: (v) {
+                              // 화면 즉시 반영(라벨 색깔 갱신) + FM 상태 변경
+                              setSB(() {}); // 라벨 재빌드용(값은 fmState가 책임)
+                              fm.changeLevel(v.toInt());
+                            },
                           ),
                         ),
                       ],
@@ -146,9 +183,7 @@ class TaUpdateMyPageBody extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            onPressed: () {
-              // 완료 버튼 로직
-            },
+            onPressed: () => fm.save(context),
             child: MText.s16Bold(
               '완료',
               color: MColor.kLabel.white,

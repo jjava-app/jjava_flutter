@@ -1,3 +1,5 @@
+import 'user_account_provider.dart';
+
 class User {
   final int? id; // PK
   final String? email; // 이메일 (Unique)
@@ -6,23 +8,55 @@ class User {
   final int? score; // 점수
   final int? rank; // 순위
   final String? accessToken;
+  final List<UserAccountProviderModel> linked;
   final bool? isNewUser;
 
-  User({this.id, this.email, this.username, this.level, this.rank, this.score = 0, this.accessToken, this.isNewUser});
+  User({this.id, this.email, this.username, this.level, this.rank, this.score = 0, this.accessToken, this.linked = const [],
+    this.isNewUser
+  });
 
-  // Map → User
-  User.fromMap(Map<String, dynamic> data)
-    : id = data['id'] ?? data['userId'],
-      email = data['email'],
-      username = data['username'],
-      level = data['level'],
-      rank = (data['rank'] as num?)?.toInt(),
-      score = (data['score'] as num?)?.toInt(),
-      accessToken = data['accessToken'],
-      isNewUser = data['isNewUser'];
+  /// 마이페이지 응답용 (body{ id,email,username,level,score,rank, linked[...] })
+  factory User.fromMap(Map<String, dynamic> data) {
+    final Map<String, dynamic> src =
+    data['userInfo'] is Map
+        ? Map<String, dynamic>.from(data['userInfo'])
+        : data['user'] is Map
+        ? Map<String, dynamic>.from(data['user'])
+        : Map<String, dynamic>.from(data);
+
+    final String? token =
+    (data['accessToken'] ?? src['accessToken']) as String?;
+
+    final List<UserAccountProviderModel> linkedList =
+    data.containsKey('linked')
+        ? UserAccountProviderModel.listFrom(data['linked'])
+        : UserAccountProviderModel.listFrom(src['linked']);
+
+    return User(
+      id: data['id'],
+      email: data['email'],
+      username: data['username'],
+      level: data['level'],
+      score: (data['score'] as num?)?.toInt(),
+      rank: (data['rank'] as num?)?.toInt(),
+      accessToken: token,
+      linked: linkedList,
+      isNewUser: data['isNewUser']
+    );
+  }
+
+  String get levelDisplay {
+    const m = {'BEGINNER': 1, 'INTERMEDIATE': 2, 'EXPERT': 3};
+    return 'LV. ${m[level] ?? 1}';
+    // 필요하면 null/빈값 방어 로직 추가
+  }
+
+
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, username: $username, level: $level,rank:$rank, score: $score, accessToken: $accessToken, isNewUser: $isNewUser)';
+    return 'User(id: $id, email: $email, username: $username, level: $level,rank:$rank, score: $score, accessToken: $accessToken,'
+        // ' isNewUser: $isNewUser'
+        ')';
   }
 }

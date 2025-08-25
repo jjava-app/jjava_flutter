@@ -1,15 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
+import 'package:jjava_flutter/ui/fm/update_my_page_fm.dart';
+import 'package:jjava_flutter/ui/vm/my_page_vm.dart';
+import 'package:jjava_flutter/ui/vm/update_my_page_vm.dart';
 
-class MaUpdateMyPageBody extends StatelessWidget {
+class MaUpdateMyPageBody extends ConsumerStatefulWidget {
   const MaUpdateMyPageBody({super.key});
 
   @override
+  ConsumerState<MaUpdateMyPageBody> createState() => _MaUpdateMyPageBodyState();
+}
+
+class _MaUpdateMyPageBodyState extends ConsumerState<MaUpdateMyPageBody> {
+  final _nickCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // FM 초기화(서버 값 로드) 후 닉네임 컨트롤러 동기화
+    Future.microtask(() async {
+      await ref.read(UpdateMyProvider.notifier).fetchUserInfo();
+      final s = ref.read(UpdateMyProvider);
+      _nickCtrl.text = s.username;
+    });
+
+    // VM은 build에서 watch만 해도 init()이 돌도록 구성되어 있음
+  }
+
+  @override
+  void dispose() {
+    _nickCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // 로컬 상태 값(기본: LV.2)
-    double levelValue = 1;
+    final fmState = ref.watch(UpdateMyProvider); // 닉네임/레벨
+    final fm = ref.read(UpdateMyProvider.notifier);
+
+    final vmState = ref.watch(MyPageVMProvider); // 이메일(표시용)
+    final emailText = vmState?.email ?? ''; // 없으면 빈값
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 22),
@@ -25,10 +58,7 @@ class MaUpdateMyPageBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                MText.h5(
-                  '이메일 주소 / SNS 계정 ID',
-                  color: MColor.kLabel.alternative,
-                ),
+                MText.h5('이메일 주소 / SNS 계정 ID', color: MColor.kLabel.alternative),
                 SizedBox(height: 4),
                 Row(
                   children: [
@@ -40,26 +70,24 @@ class MaUpdateMyPageBody extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: SizedBox(
-                          width: 12,
-                          height: 12,
-                          child: MIcon.page.login.kakao,
-                        ),
+                        child: SizedBox(width: 12, height: 12, child: MIcon.page.login.kakao),
                       ),
                     ),
                     SizedBox(width: 6),
                     MText.s20Bold(
-                      'seohoejeong@gmail.com',
+                      emailText.isEmpty ? '-' : emailText, // VM에서 가져온 이메일
                       color: MColor.kLabel.disable,
                     ),
                   ],
                 ),
                 SizedBox(height: 12),
 
+                // 닉네임
                 MText.h5('닉네임', color: MColor.kLabel.alternative),
                 SizedBox(height: 4),
                 TextField(
-                  controller: TextEditingController(text: 'DevSsar'), // 초기값
+                  controller: _nickCtrl, // FM 로드 후 initState에서 세팅
+                  onChanged: fm.changeUsername, // FM 상태로 반영
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -67,10 +95,7 @@ class MaUpdateMyPageBody extends StatelessWidget {
                   ),
                   decoration: InputDecoration(
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 12,
-                    ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: MColor.kFill.normal),
@@ -88,12 +113,14 @@ class MaUpdateMyPageBody extends StatelessWidget {
 
                 SizedBox(height: 12),
 
+                // 레벨
                 MText.h5('설정 학습 난이도', color: MColor.kLabel.alternative),
                 SizedBox(height: 4),
 
+                // StatefulBuilder는 유지하되, 값/변경은 FM과 직접 연결
                 StatefulBuilder(
                   builder: (context, setSB) {
-                    final activeIdx = levelValue.round();
+                    final activeIdx = fmState.levelIndex; // FM 상태로 표시
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -103,9 +130,7 @@ class MaUpdateMyPageBody extends StatelessWidget {
                             final active = activeIdx == i;
                             return MText.s16Bold(
                               'LV. ${i + 1}',
-                              color: active
-                                  ? MColor.kPrimary.normal
-                                  : MColor.kLabel.disable,
+                              color: active ? MColor.kPrimary.normal : MColor.kLabel.disable,
                             );
                           }),
                         ),
@@ -120,11 +145,16 @@ class MaUpdateMyPageBody extends StatelessWidget {
                             overlayShape: SliderComponentShape.noOverlay,
                           ),
                           child: Slider(
-                            value: levelValue,
+                            value: fmState.levelIndex.toDouble(),
+                            // FM 상태값
                             min: 0,
                             max: 2,
                             divisions: 2,
-                            onChanged: (v) => setSB(() => levelValue = v),
+                            onChanged: (v) {
+                              // 화면 즉시 반영(라벨 색깔 갱신) + FM 상태 변경
+                              setSB(() {}); // 라벨 재빌드용(값은 fmState가 책임)
+                              fm.changeLevel(v.toInt());
+                            },
                           ),
                         ),
                       ],
@@ -138,6 +168,7 @@ class MaUpdateMyPageBody extends StatelessWidget {
           SizedBox(height: 36),
           Spacer(),
 
+          // 완료 버튼 -> FM 저장
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               minimumSize: Size(double.infinity, 48),
@@ -146,13 +177,8 @@ class MaUpdateMyPageBody extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            onPressed: () {
-              // 완료 버튼 로직
-            },
-            child: MText.s16Bold(
-              '완료',
-              color: MColor.kLabel.white,
-            ),
+            onPressed: () => fm.save(context),
+            child: MText.s16Bold('완료', color: MColor.kLabel.white),
           ),
         ],
       ),
