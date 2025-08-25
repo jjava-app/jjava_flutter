@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_body.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_leave_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/widget/dialog/ma_restart_dialog.dart';
+import 'package:jjava_flutter/ui/vm/question_vm.dart';
 
-class MaQuestionPage extends StatefulWidget {
-  const MaQuestionPage({super.key});
+class MaQuestionPage extends ConsumerStatefulWidget {
+  final int questionId;
+
+  const MaQuestionPage({
+    super.key,
+    required this.questionId,
+  });
 
   @override
-  State<MaQuestionPage> createState() => _MaQuestionPageState();
+  ConsumerState<MaQuestionPage> createState() => _MaQuestionPageState();
 }
 
-class _MaQuestionPageState extends State<MaQuestionPage> {
-  // TODO: 통신 시 실행 로직들(1 ~ 6번) 분리하여 vm에 옮기기
-  // TODO: 웹뷰 처리 완료 후 오답 블럭 하이라이트 작업 진행
-
-  // 2. 문제 보여주기
+class _MaQuestionPageState extends ConsumerState<MaQuestionPage> {
   bool _showIntro = true;
   bool _showPressPreview = false;
+
   void _startPressPreview([PointerDownEvent? _]) {
     if (!_showPressPreview) setState(() => _showPressPreview = true);
   }
@@ -28,13 +32,13 @@ class _MaQuestionPageState extends State<MaQuestionPage> {
     if (_showPressPreview) setState(() => _showPressPreview = false);
   }
 
-  // 4. 학습종료 다이얼로그 로직
+  // 학습 종료 다이얼로그
   Future<void> _onFinishTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      barrierColor: Color(0x99000000),
-      builder: (_) => MaLeaveDialog(
+      barrierColor: const Color(0x99000000),
+      builder: (_) => const MaLeaveDialog(
         title: '학습 종료',
         message: '학습을 종료하시겠습니까?',
         cancelText: '취소',
@@ -42,20 +46,19 @@ class _MaQuestionPageState extends State<MaQuestionPage> {
       ),
     );
     if (confirmed != true || !mounted) return;
-    // TODO: 종료 클릭 시 서버에 저장하고 이동
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => MaMainHolder()),
+      MaterialPageRoute(builder: (_) => const MaMainHolder()),
     );
   }
 
-  // 5. 다시 시작 다이얼로그
+  // 다시 시작 다이얼로그
   Future<void> _onRestartTap() async {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      barrierColor: Color(0x99000000),
-      builder: (_) => MaRestartDialog(
+      barrierColor: const Color(0x99000000),
+      builder: (_) => const MaRestartDialog(
         title: '다시 시작',
         message: '문제를 다시 시작하시겠습니까?',
         cancelText: '취소',
@@ -63,46 +66,58 @@ class _MaQuestionPageState extends State<MaQuestionPage> {
       ),
     );
     if (confirmed != true || !mounted) return;
-    // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
-    Navigator.push(
+
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => MaQuestionPage()),
+      MaterialPageRoute(builder: (_) => MaQuestionPage(questionId: widget.questionId)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final detail = ref.watch(questionDetailProvider(widget.questionId));
+
+    if (detail == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Stack(
       children: [
         Scaffold(
-          appBar: _appbar(),
-          body: MaQuestionBody(),
+          appBar: _appbar(detail.title),
+          body: MaQuestionBody(questionId: widget.questionId),
         ),
-        // 처음 보이는 문제 스택
         if (_showIntro)
           Positioned.fill(
             child: _ProblemOverlay(
               absorbTouches: true,
               onClose: () => setState(() => _showIntro = false),
+              title: detail.title,
+              content: detail.content,
             ),
           ),
-        // 문제보기 누르고 있는 동안 나오는 스택
         if (_showPressPreview)
           Positioned.fill(
             child: IgnorePointer(
               ignoring: true,
-              child: _ProblemOverlay(absorbTouches: false),
+              child: _ProblemOverlay(
+                absorbTouches: false,
+                title: detail.title,
+                content: detail.content,
+              ),
             ),
           ),
       ],
     );
   }
 
-  AppBar _appbar() {
+  AppBar _appbar(String title) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Text(
-        '리스트(배열)',
+        title,
         style: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w700,
@@ -111,16 +126,16 @@ class _MaQuestionPageState extends State<MaQuestionPage> {
       ),
       leadingWidth: 90,
       leading: Padding(
-        padding: EdgeInsets.only(left: 16, top: 10, bottom: 10),
+        padding: const EdgeInsets.only(left: 16, top: 10, bottom: 10),
         child: Listener(
           behavior: HitTestBehavior.opaque,
           onPointerDown: _startPressPreview,
           onPointerUp: _stopPressPreview,
           onPointerCancel: _stopPressPreview,
           child: Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Color(0x2803C75A),
+              color: const Color(0x2803C75A),
               borderRadius: BorderRadius.circular(5),
             ),
             alignment: Alignment.center,
@@ -139,7 +154,7 @@ class _MaQuestionPageState extends State<MaQuestionPage> {
         PopupMenuButton<String>(
           icon: MIcon.page.global.more,
           position: PopupMenuPosition.under,
-          offset: Offset(-16, 20),
+          offset: const Offset(-16, 20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -153,23 +168,23 @@ class _MaQuestionPageState extends State<MaQuestionPage> {
             }
           },
           itemBuilder: (context) => [
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'restart',
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Center(
                 child: Text(
                   '다시 시작',
-                  style: TextStyle(fontSize: 14, color: MColor.kLabel.normal),
+                  style: TextStyle(fontSize: 14),
                 ),
               ),
             ),
-            PopupMenuItem(
+            const PopupMenuItem(
               value: 'finish',
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Center(
                 child: Text(
                   '학습 종료',
-                  style: TextStyle(fontSize: 14, color: MColor.kLabel.normal),
+                  style: TextStyle(fontSize: 14),
                 ),
               ),
             ),
@@ -180,57 +195,55 @@ class _MaQuestionPageState extends State<MaQuestionPage> {
   }
 }
 
-// 문제 내용 UI 위젯
+// 문제 오버레이 UI
 class _ProblemOverlay extends StatelessWidget {
-  final bool absorbTouches; // true면 배경 터치 막음(인트로용)
-  final VoidCallback? onClose; // 닫기 버튼 노출/동작 (인트로 때만)
+  final bool absorbTouches;
+  final VoidCallback? onClose;
+  final String title;
+  final String content;
+
+  const _ProblemOverlay({
+    super.key,
+    required this.absorbTouches,
+    this.onClose,
+    required this.title,
+    required this.content,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final overlay = Stack(
+    return Stack(
       children: [
-        // 딤
-        Container(color: Color(0x99000000)),
-        // 카드
+        Container(color: const Color(0x99000000)),
         Center(
           child: Material(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
             clipBehavior: Clip.antiAlias,
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 340),
+              constraints: const BoxConstraints(maxWidth: 340),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Lv.3',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: MColor.kPrimary.heavy,
-                          ),
-                        ),
-                        SizedBox(height: 6),
-                        Text(
-                          '조건에 맞게 수열 변환하기 1',
+                          title,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: MColor.kLabel.normal,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
-                          '정수 배열 arr가 주어집니다. arr의 각 원소에 대해 값이 50보다 크거나 같은 짝수라면 2로 나누고, 50보다 작은 홀수라면 2를 곱합니다. 그 결과인 정수 배열을 return 하는 solution 함수를 완성해 주세요.',
+                          content,
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                             color: MColor.kLabel.neutral,
                             height: 1.5,
                           ),
@@ -251,23 +264,11 @@ class _ProblemOverlay extends StatelessWidget {
                       ),
                       child: TextButton(
                         onPressed: onClose,
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(EdgeInsets.zero),
-                          minimumSize: MaterialStateProperty.all(Size.zero),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
                           child: Text(
                             '닫기',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: MColor.kLabel.normal,
-                            ),
+                            style: TextStyle(fontSize: 16),
                           ),
                         ),
                       ),
@@ -279,12 +280,5 @@ class _ProblemOverlay extends StatelessWidget {
         ),
       ],
     );
-    return overlay;
   }
-
-  const _ProblemOverlay({
-    super.key,
-    required this.absorbTouches,
-    this.onClose,
-  });
 }

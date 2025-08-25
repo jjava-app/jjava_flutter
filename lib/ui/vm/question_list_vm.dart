@@ -21,16 +21,16 @@ class QuestionVM extends Notifier<QuestionListModel?> {
   }
 
   Future<void> init() async {
-    // Map<String, dynamic> body = await QuestionListRepository().getList();
-    // state = QuestionListModel.fromMap(body["response"]);
-    final model = await QuestionListRepository().getList();
-    state = model;
+    Map<String, dynamic> body = await QuestionListRepository().getList();
+    state = QuestionListModel.fromMap(body["response"]);
+    // final model = await QuestionListRepository().getList();
+    // state = model;
   }
 }
 
-/// 3. 창고 데이터 타입 (불변 아님)
+/// 3. 창고 데이터 타입
 class QuestionListModel {
-  final List<Section> sections; // 타입별 묶음
+  final List<Section> sections; // 묶음
   final Set<int> solvedIds; // 푼 문제 ID
   final int userId;
   final int totalCount;
@@ -45,10 +45,8 @@ class QuestionListModel {
   );
 
   QuestionListModel.fromMap(Map<String, dynamic> data)
-    : sections = (data['sections'] as List<dynamic>? ?? const [])
-          .map((e) => Section.fromMap(e as Map<String, dynamic>))
-          .toList(),
-      solvedIds = data['solvedIds'],
+    : sections = (data['sections'] as List<dynamic>? ?? const []).map((e) => Section.fromMap(e as Map<String, dynamic>)).toList(),
+      solvedIds = (data['solvedIds'] as List<dynamic>? ?? []).map((e) => e as int).toSet(),
       userId = data['userId'],
       totalCount = data['totalCount'],
       solvedCount = data['solvedCount'];

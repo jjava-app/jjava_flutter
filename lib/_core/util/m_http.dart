@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final baseUrl = dotenv.env['BASE_URL']!;
+const baseUrl = String.fromEnvironment('BASE_URL', defaultValue: 'http://default-url');
 
 final dio = Dio(
   BaseOptions(

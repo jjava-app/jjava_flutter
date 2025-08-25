@@ -3,23 +3,29 @@ import 'package:jjava_flutter/_core/util/m_http.dart';
 import 'package:logger/logger.dart';
 
 class UserRepository {
-  Future<Map<String, dynamic>> emailLogin(String accessToken) async {
-    Response response = await dio.post("/login", data: {"accessToken": accessToken});
-    // final responseBody = response.data;
-    final responseBody = {
-      "status": 200,
-      "msg": "성공",
-      "body": {
-        "accessToken":
-            "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzc2FyIiwiZXhwIjoxNzU2MTg1NzMzLCJpZCI6Miwicm9sZXMiOiJVU0VSIn0.EzrvrRwE8KjxbNUrLqyusHSZU2yW4DaBCPyXRB4ribHSjwoBSPwkR66T4plAhwpZzwSnpiW8r5anZhRsFIlxRg",
-        "id": 2,
-        "email": "ssar1234@nate.com",
-        "nickname": "ssar",
-        "level": "BEGINNER",
-        "role": "USER",
-        "score": 120,
+  Future<Map<String, dynamic>> emailLogin(String email, String password) async {
+    Response response = await dio.post(
+      "/login",
+      data: {
+        "email": email,
+        "password": password,
       },
-    };
+    );
+    final responseBody = response.data;
+    // final responseBody = {
+    //   "status": 200,
+    //   "msg": "성공",
+    //   "body": {
+    //     "accessToken":
+    //         "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzc2FyIiwiZXhwIjoxNzU2MTg1NzMzLCJpZCI6Miwicm9sZXMiOiJVU0VSIn0.EzrvrRwE8KjxbNUrLqyusHSZU2yW4DaBCPyXRB4ribHSjwoBSPwkR66T4plAhwpZzwSnpiW8r5anZhRsFIlxRg",
+    //     "id": 2,
+    //     "email": "ssar1234@nate.com",
+    //     "nickname": "ssar",
+    //     "level": "BEGINNER",
+    //     "role": "USER",
+    //     "score": 120,
+    //   },
+    // };
     // Logger().d('UserRepository의 oauthLogin: ${responseBody}');
     return responseBody;
   }

@@ -1,4 +1,5 @@
 // lib/data/model/repository/my_page_repository.dart
+import 'package:jjava_flutter/_core/util/m_http.dart';
 import 'package:logger/logger.dart';
 
 class MyPageRepository {
@@ -6,9 +7,11 @@ class MyPageRepository {
 
   /// 마이페이지 조회 (더미 응답)
   /// 실제 통신 시:
-  ///   final resp = await dio.get("/users/mypage");
-  ///   return resp.data;
+  //   final resp = await dio.get("/users/mypage");
+  //   return resp.data;
   Future<Map<String, dynamic>> getMyPage() async {
+    final resp = await dio.get("/users/mypage");
+    return resp.data;
     final responseBody = {
       "status": 200,
       "msg": "성공",
@@ -37,6 +40,14 @@ class MyPageRepository {
     required String username,
     required String level,
   }) async {
+    final resp = await dio.put(
+      '/users/update',
+      data: {
+        'username': username,
+        'level': level,
+      },
+    );
+    return resp.data;
     final responseBody = {
       "status": 200,
       "msg": "성공",
@@ -47,15 +58,14 @@ class MyPageRepository {
         "level": level,
       },
     };
-    _log.d(
-        'MyPageRepository updateMyPage req={username:$username, level:$level} resp=$responseBody');
+    _log.d('MyPageRepository updateMyPage req={username:$username, level:$level} resp=$responseBody');
     return responseBody;
   }
 
-// 실제 통신:
-// final resp = await auth!.put('/users/update', data: {
-//   'username': username,
-//   'level': level,
-// });
-// return resp.data;
+  // 실제 통신:
+  // final resp = await auth!.put('/users/update', data: {
+  //   'username': username,
+  //   'level': level,
+  // });
+  // return resp.data;
 }

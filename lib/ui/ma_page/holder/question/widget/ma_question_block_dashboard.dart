@@ -1,25 +1,40 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_blockly_plus/flutter_blockly_plus.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
+import 'package:jjava_flutter/data/repository/question_repository.dart';
+import 'package:jjava_flutter/ui/fm/compile_fm.dart';
+import 'package:jjava_flutter/ui/fm/question_fm.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_correct_dialog.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/widget/ma_question_incorrect_dialog.dart';
+import 'package:logger/logger.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class MaQuestionBlockDashboard extends StatefulWidget {
+class MaQuestionBlockDashboard extends ConsumerStatefulWidget {
   final ValueChanged<bool> onLoading;
-  const MaQuestionBlockDashboard({super.key, required this.onLoading});
+  final int questionId;
+
+  const MaQuestionBlockDashboard({
+    super.key,
+    required this.onLoading,
+    required this.questionId,
+  });
 
   @override
-  State<MaQuestionBlockDashboard> createState() => _MaQuestionBlockDashboardState();
+  ConsumerState<MaQuestionBlockDashboard> createState() => _MaQuestionBlockDashboardState();
 }
 
-class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
+class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashboard> {
   final _log = <String>[];
 
   BlocklyEditor? editor;
   late final Future<void> _editorReady;
+  bool isEditorInitialized = false;
+  bool isBlocklyReady = false;
 
   // 툴박스
   static const toolboxJson = {
@@ -135,6 +150,8 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
   }
 
   Future<void> _initEditor() async {
+    if (isEditorInitialized) return;
+
     try {
       // 1) 애드온 로드
       final skinJs = await rootBundle.loadString('assets/blockly/ta_toolbox_skin.js');
@@ -181,7 +198,9 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
             _log.add(
               '[WEB] ready=${await _ret('document.readyState')}, Blockly=${await _ret('typeof window.Blockly')}, workspace=${await _ret('(window.Blockly&&Blockly.getMainWorkspace)? "ok":"no"')}, JavaGen=${await _ret('(window.__JAVA_GEN_OK__===true)?"ok":"no"')}',
             );
-            setState(() {});
+            setState(() {
+              isBlocklyReady = true;
+            });
           },
           onWebResourceError: (err) {
             _log.add('[WEB-ERR] $err');
@@ -273,22 +292,82 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
   //   setState(() {});
   // }
 
-  // 실행 로직 임시
+  // 실행 로직
   Future<void> _onRunPressed() async {
     widget.onLoading(true);
-    await Future.delayed(const Duration(milliseconds: 1500));
-    final isCorrect = await _checkAnswerFromServer();
+    if (editor == null) {
+      _log.add("[RUN-ERR] editor=null (아직 init 안됨)");
+      return;
+    }
+    if (!isBlocklyReady) {
+      // ← 준비 완료 flag 체크
+      _log.add("[RUN-ERR] editor는 있지만 아직 Blockly 준비 안됨");
+      return;
+    }
+    final ctrl = editor!.blocklyController;
+
+    String note = "NO_NOTE";
+    String code = "NO_CODE";
+    bool isCorrect = false;
+
+    try {
+      // 1. 워크스페이스 JSON export
+      final raw = await ctrl.runJavaScriptReturningResult(
+        'JSON.stringify(Blockly.serialization.workspaces.save(Blockly.getMainWorkspace()))',
+      );
+      String jsonStr = raw.toString();
+      if (jsonStr.startsWith('"') && jsonStr.endsWith('"')) {
+        jsonStr = jsonStr.substring(1, jsonStr.length - 1);
+        jsonStr = jsonStr.replaceAll(r'\"', '"');
+      }
+      final decoded = jsonDecode(jsonStr);
+
+      // 2. JavaScript 코드 추출 후 compileProvider에 payload 저장
+      final jsCode = await ctrl.runJavaScriptReturningResult(
+        'Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace())',
+      );
+      ref.read(compileProvider.notifier).payload(jsCode.toString());
+
+      // 3. Provider에 값 세팅
+      ref.read(questionProvider.notifier).questionId(widget.questionId);
+      ref.read(questionProvider.notifier).serializedJson(jsonEncode(decoded));
+      ref.read(questionProvider.notifier).blockExtensionJson(jsonEncode(toolboxJson));
+
+      // 4. Repository 호출
+      final model = ref.read(questionProvider);
+      await QuestionRepository().saveQuestion(model.toMap(), widget.questionId);
+
+      // 5. Compile API 호출
+      final res = await QuestionRepository().compileQuestion(
+        CompileModel(jsCode.toString()),
+      );
+
+      final body = res["body"] ?? {};
+      note = (body["refactorNote"] as String?)?.trim().isNotEmpty == true ? body["refactorNote"] : "NO_NOTE";
+      code = (body["refactoredCode"] as String?)?.trim().isNotEmpty == true ? body["refactoredCode"] : "NO_CODE";
+
+      _log.add("실행 요청 완료: ${model.toMap()}");
+      _log.add("JS 코드: $jsCode");
+
+      // 6. 기존 정답 검증 로직을 try-catch 블록 안으로 이동
+      isCorrect = body["passed"] == true;
+    } catch (e) {
+      _log.add("[RUN-ERR] $e");
+      Logger().d("Error caught: $e");
+      widget.onLoading(false);
+      if (!mounted) return;
+      await _onIncorrectTap();
+      return;
+    }
+
     widget.onLoading(false);
     if (!mounted) return;
-
     if (isCorrect) {
-      await _onCorrectTap();
+      await _onCorrectTap(note, code);
     } else {
       await _onIncorrectTap();
     }
   }
-
-  // 실행 로직 테스트
 
   // Future<void> _runAndPushViaChannel() async {
   //   final ctrl = editor?.blocklyController;
@@ -310,6 +389,7 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
   // }
 
   bool _mockIsCorrect = false;
+
   // UI 테스트용 임시 값
   Future<bool> _checkAnswerFromServer() async {
     // TODO: 실제 API 호출로 변경
@@ -318,12 +398,15 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
   }
 
   // 정답일 때 다이얼로그창
-  Future<void> _onCorrectTap() async {
+  Future<void> _onCorrectTap(String refactorNote, String refactoredCode) async {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      barrierColor: Color(0x99000000),
-      builder: (_) => MaQuestionCorrectDialog(),
+      barrierColor: const Color(0x99000000),
+      builder: (_) => MaQuestionCorrectDialog(
+        refactorNote: refactorNote,
+        refactoredCode: refactoredCode,
+      ),
     );
     if (confirmed != true || !mounted) return;
   }
@@ -343,6 +426,41 @@ class _MaQuestionBlockDashboardState extends State<MaQuestionBlockDashboard> {
     ).pushNamedAndRemoveUntil('/main-holder', (route) => false);
   }
 
+  // Future<void> exportWorkspaceJson() async {
+  //   final ctrl = editor?.blocklyController;
+  //   if (ctrl == null) return;
+  //
+  //   try {
+  //     final raw = await ctrl.runJavaScriptReturningResult(
+  //       'JSON.stringify(Blockly.serialization.workspaces.save(Blockly.getMainWorkspace()))',
+  //     );
+  //     Logger().d(raw.toString());
+  //
+  //     String jsonStr = raw.toString();
+  //     if (jsonStr.startsWith('"') && jsonStr.endsWith('"')) {
+  //       jsonStr = jsonStr.substring(1, jsonStr.length - 1);
+  //       jsonStr = jsonStr.replaceAll(r'\"', '"');
+  //     }
+  //
+  //     final decoded = jsonDecode(jsonStr);
+  //     // Provider에 반영
+  //     ref
+  //         .read(workspaceUpdateProvider.notifier)
+  //         .serializedJson(jsonEncode(decoded));
+  //
+  //     // toolboxJson도 libraryJson으로 반영
+  //     ref
+  //         .read(workspaceUpdateProvider.notifier)
+  //         .libraryJson(jsonEncode(toolboxJson));
+  //
+  //     // _log.add('[WORKSPACE JSON]\n$jsonStr');
+  //     _log.add('저장 완료');
+  //     setState(() {});
+  //   } catch (e) {
+  //     _log.add('[EXPORT-ERR] $e');
+  //     setState(() {});
+  //   }
+  // }
   @override
   Widget build(BuildContext context) {
     return Stack(

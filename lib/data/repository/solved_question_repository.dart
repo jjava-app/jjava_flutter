@@ -1,11 +1,56 @@
+import 'package:dio/dio.dart';
+import 'package:jjava_flutter/_core/util/m_http.dart';
+
 class SolvedQuestionRepository {
+  Future<Map<String, dynamic>> solvedQuestionList(String accessToken) async {
+    Response response = await dio.get("/solved-questions/list");
+    final responseBody = response.data;
+    // final responseBody = {
+    //   "status": 200,
+    //   "msg": "성공",
+    //   "body": {
+    //     "groupedSolvedQuestions": {
+    //       "OPERATOR": [
+    //         {"solvedQuestionId": 102, "questionId": 2, "title": "문제 2", "questionType": "OPERATOR"},
+    //         {"solvedQuestionId": 104, "questionId": 2, "title": "문제 2", "questionType": "OPERATOR"},
+    //       ],
+    //       "TEXT": [
+    //         {"solvedQuestionId": 101, "questionId": 1, "title": "문제 1", "questionType": "TEXT"},
+    //         {"solvedQuestionId": 103, "questionId": 1, "title": "문제 1", "questionType": "TEXT"},
+    //       ],
+    //     },
+    //   },
+    // };
+    // Logger().d('UserRepository의 oauthLogin: ${responseBody}');
+    return responseBody;
+  }
+
+  Future<Map<String, dynamic>> solvedQuestionDetail(int solvedquestionId) async {
+    Response response = await dio.get("/solved-questions/");
+    final responseBody = response.data;
+    // final responseBody = {
+    //   "status": 200,
+    //   "msg": "성공",
+    //   "body": {
+    //     "questionId": 1,
+    //     "title": "문제 제목",
+    //     "content": "문제 내용",
+    //     "serializedJson": "json~~~",
+    //     "blockExtensionJson": "json~~~",
+    //     "createdAt": "2025-08-22 14:10:27.325",
+    //     "aiComment": "AI 코멘트",
+    //   },
+    // };
+    // Logger().d('UserRepository의 oauthLogin: ${responseBody}');
+    return responseBody;
+  }
+
   static List<SolvedQuestionItem> listArray = [
     SolvedQuestionItem(
       id: 1,
       title: '조건에 맞게 수열 변환하기 1',
       date: '2025.08.01',
-      prompt:
-          '정수 배열 arr가 주어집니다.\narr의 원소에 대해 값이 50보다 크거나 같은 짝수면 2로 나누고, 50보다 작은 홀수면 2를 곱합니다.\n그 결과 정수 배열을 return 하는 solution 함수를 완성해 주세요.',
+      prompt: '정수 배열 arr가 주어집니다.\narr의 원소에 대해 값이 50보다 크거나 같은 짝수면 2로 나누고, 50보다 작은 홀수면 2를 곱합니다.\n그 결과 정수 배열을 return 하는 solution 함수를 완성해 주세요.',
       aiReview: '입력 검증 로직이 빠져있습니다. 경계값 테스트를 포함하세요.',
       language: 'java',
       codeSample:

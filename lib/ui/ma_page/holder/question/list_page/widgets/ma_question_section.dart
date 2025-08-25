@@ -8,12 +8,14 @@ class MaQuestionSection extends StatefulWidget {
   final Section section;
   final bool initiallyExpanded;
   final void Function(Question question)? onProblemTap;
+  final int? selectedId; // 선택된 문제 id
 
   const MaQuestionSection({
     super.key,
     required this.section,
     this.initiallyExpanded = false,
     this.onProblemTap,
+    this.selectedId,
   });
 
   @override
@@ -46,14 +48,11 @@ class _SectionTileState extends State<MaQuestionSection> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: MText.h5(
                 title,
-                color: expanded
-                    ? MColor.kPrimary.normal
-                    : MColor.kLabel.assistive,
+                color: expanded ? MColor.kPrimary.normal : MColor.kLabel.assistive,
               ),
             ),
           ),
-          if (expanded)
-            Divider(height: 1, thickness: 1, color: MColor.kPrimary.normal),
+          if (expanded) Divider(height: 1, thickness: 1, color: MColor.kPrimary.normal),
 
           if (expanded)
             Column(
@@ -61,7 +60,8 @@ class _SectionTileState extends State<MaQuestionSection> {
                 for (var i = 0; i < items.length; i++) ...[
                   InkWell(
                     onTap: () => widget.onProblemTap?.call(items[i]),
-                    child: Padding(
+                    child: Container(
+                      color: (widget.selectedId == items[i].id) ? MColor.kPrimary.normal.withValues(alpha: 0.1) : MColor.kBackground.normal,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 10,
@@ -69,7 +69,13 @@ class _SectionTileState extends State<MaQuestionSection> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(items[i].title ?? '제목 없음'),
+                            child: Text(
+                              items[i].title ?? '제목 없음',
+                              style: TextStyle(
+                                color: (widget.selectedId == items[i].id) ? MColor.kPrimary.normal : MColor.kLabel.normal,
+                                fontWeight: (widget.selectedId == items[i].id) ? FontWeight.w600 : FontWeight.w400,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -79,7 +85,7 @@ class _SectionTileState extends State<MaQuestionSection> {
                     Divider(
                       height: 1,
                       thickness: 1,
-                      color: MColor.kPrimary.normal,
+                      color: MColor.kLine.normal,
                     ),
                 ],
               ],
