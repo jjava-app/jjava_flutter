@@ -175,25 +175,38 @@ class MaWorkspaceBlockDashboardState extends ConsumerState<MaWorkspaceBlockDashb
         'JavaOut',
         onMessageReceived: (JavaScriptMessage msg) async {
           final code = msg.message;
-          _log.add('[JAVA]\n$code');
+          _log.add('[JAVA CODE]\n$code');
           debugPrint('[JAVA from channel]\n$code');
+
+          // 👉 API 호출은 여기서 하지 않고, run 버튼에서 처리
+          ref.read(compileProvider.notifier).payload(code);
           setState(() {});
-
-          try {
-            // 1. FM에 넣기
-            final fm = CompileModel(code);
-
-            // 2. Repository 호출
-            final res = await WorkspaceRepository().compileWorkspace(fm);
-
-            _log.add('[실행 코드] $res');
-            setState(() {});
-          } catch (e) {
-            _log.add('[COMPILE-ERR] $e');
-            setState(() {});
-          }
         },
       );
+
+      // 2. 실행 버튼에서 처리
+      Future<void> _runAndPushViaChannel() async {
+        final ctrl = editor?.blocklyController;
+        if (ctrl == null) {
+          _log.add('[RUN-ERR] controller=null');
+          setState(() {});
+          return;
+        }
+        try {
+          // Blockly에서 JS 코드 추출
+          final jsCode = await ctrl.runJavaScriptReturningResult(
+            'Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace())',
+          );
+
+          final fm = CompileModel(jsCode.toString());
+          final res = await WorkspaceRepository().compileWorkspace(fm);
+
+          _log.add('[실행 결과] $res');
+        } catch (e) {
+          _log.add('[RUN-ERR] $e');
+        }
+        setState(() {});
+      }
 
       //Blockly, 워크스페이스, Java Generator 다 준비됐는지를 체크하는 코드 주석해도 됨 영상 촬영 시에는
       await ctrl.setNavigationDelegate(

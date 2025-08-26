@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:jjava_flutter/_core/util/m_http.dart';
 
 class SolvedQuestionRepository {
-  Future<Map<String, dynamic>> solvedQuestionList(String accessToken) async {
+  Future<Map<String, dynamic>> solvedQuestionList() async {
     Response response = await dio.get("/solved-questions/list");
     final responseBody = response.data;
     // final responseBody = {

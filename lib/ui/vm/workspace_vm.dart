@@ -55,7 +55,7 @@ class WorkspaceVM extends FamilyNotifier<WorkspaceModel?, int> {
     final cleanedJsonStr = jsonEncode(cleaned);
 
     Map<String, dynamic> reqBody = {
-      "title": title ?? '새 워크스페이스',
+      "title": title ?? 'if', //새 워크스페이스
       "serializedJson": cleanedJsonStr,
       "libraryJson": libraryJson,
     };

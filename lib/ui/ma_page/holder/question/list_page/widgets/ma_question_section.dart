@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/data/model/question.dart';
-import 'package:jjava_flutter/data/model/section.dart';
 
 class MaQuestionSection extends StatefulWidget {
-  final Section section;
+  final Question section; // ✅ 이제 Section 대신 Question 직접 받음
   final bool initiallyExpanded;
   final void Function(Question question)? onProblemTap;
   final int? selectedId; // 선택된 문제 id
@@ -27,8 +26,7 @@ class _SectionTileState extends State<MaQuestionSection> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.section.questionType ?? '제목 없음';
-    final items = widget.section.questions;
+    final title = widget.section.title ?? '제목 없음';
 
     return Container(
       decoration: BoxDecoration(
@@ -40,7 +38,7 @@ class _SectionTileState extends State<MaQuestionSection> {
       ),
       child: Column(
         children: [
-          // 섹션 헤더
+          // 섹션 헤더 (문제 제목)
           InkWell(
             onTap: () => setState(() => expanded = !expanded),
             child: Container(
@@ -55,40 +53,25 @@ class _SectionTileState extends State<MaQuestionSection> {
           if (expanded) Divider(height: 1, thickness: 1, color: MColor.kPrimary.normal),
 
           if (expanded)
-            Column(
-              children: [
-                for (var i = 0; i < items.length; i++) ...[
-                  InkWell(
-                    onTap: () => widget.onProblemTap?.call(items[i]),
-                    child: Container(
-                      color: (widget.selectedId == items[i].questionId) ? MColor.kPrimary.normal.withValues(alpha: 0.1) : MColor.kBackground.normal,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              items[i].title ?? '제목 없음',
-                              style: TextStyle(
-                                color: (widget.selectedId == items[i].questionId) ? MColor.kPrimary.normal : MColor.kLabel.normal,
-                                fontWeight: (widget.selectedId == items[i].questionId) ? FontWeight.w600 : FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ],
+            InkWell(
+              onTap: () => widget.onProblemTap?.call(widget.section),
+              child: Container(
+                color: (widget.selectedId == widget.section.questionId) ? MColor.kPrimary.normal.withValues(alpha: 0.1) : MColor.kBackground.normal,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.section.title ?? '제목 없음',
+                        style: TextStyle(
+                          color: (widget.selectedId == widget.section.questionId) ? MColor.kPrimary.normal : MColor.kLabel.normal,
+                          fontWeight: (widget.selectedId == widget.section.questionId) ? FontWeight.w600 : FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  if (i != items.length - 1)
-                    Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: MColor.kLine.normal,
-                    ),
-                ],
-              ],
+                  ],
+                ),
+              ),
             ),
         ],
       ),

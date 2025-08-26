@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 // Provider
 final compileProvider = NotifierProvider<CompileFM, CompileModel>(() {
@@ -16,6 +17,8 @@ class CompileFM extends Notifier<CompileModel> {
     state = state.copyWith(
       payload: payload,
     );
+
+    Logger().d(payload);
   }
 }
 

@@ -28,9 +28,9 @@ class MaQuestionListBody extends ConsumerWidget {
             itemCount: model.questions.length,
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
-              final section = model.questions[index];
+              final question = model.questions[index]; // ✅ Question 모델
               return MaQuestionSection(
-                section: section,
+                section: question, // ✅ Question 전달
                 onProblemTap: (q) {
                   ref.read(selectedQuestionIdProvider.notifier).state = q.questionId;
                 },

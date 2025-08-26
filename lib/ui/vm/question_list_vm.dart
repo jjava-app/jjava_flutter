@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jjava_flutter/data/model/section.dart';
+import 'package:jjava_flutter/data/model/question.dart';
 import 'package:jjava_flutter/data/repository/question_list_repository.dart';
 import 'package:jjava_flutter/main.dart';
 
@@ -23,14 +23,11 @@ class QuestionVM extends Notifier<QuestionListModel?> {
   Future<void> init() async {
     Map<String, dynamic> body = await QuestionListRepository().getList();
     state = QuestionListModel.fromMap(body["body"]);
-    // final model = await QuestionListRepository().getList();
-    // state = model;
   }
 }
 
-/// 3. 창고 데이터 타입
 class QuestionListModel {
-  final List<Section> questions; // 묶음
+  final List<Question> questions; // ✅ 이제 Section 대신 Question 리스트
   final Set<int> solvedQuestionIds; // 푼 문제 ID
   final int userId;
   final int totalCount;
@@ -44,25 +41,13 @@ class QuestionListModel {
     this.solvedCount,
   );
 
-  QuestionListModel.fromMap(Map<String, dynamic> data)
-    : questions = (data['questions'] as List<dynamic>? ?? const []).map((e) => Section.fromMap(e as Map<String, dynamic>)).toList(),
-      solvedQuestionIds = (data['solvedQuestionIds'] as List<dynamic>? ?? []).map((e) => e as int).toSet(),
-      userId = data['userId'],
-      totalCount = data['totalCount'],
-      solvedCount = data['solvedCount'];
-
-  QuestionListModel copyWith() {
-    List<Section>? questions; // 타입별 묶음
-    Set<int>? solvedQuestionIds; // 푼 문제 ID
-    int? userId;
-    int? totalCount;
-    int? solvedCount;
+  factory QuestionListModel.fromMap(Map<String, dynamic> data) {
     return QuestionListModel(
-      questions ?? this.questions,
-      solvedQuestionIds ?? this.solvedQuestionIds,
-      userId ?? this.userId,
-      totalCount ?? this.totalCount,
-      solvedCount ?? this.solvedCount,
+      (data['questions'] as List<dynamic>? ?? const []).map((e) => Question.fromMap(e as Map<String, dynamic>)).toList(),
+      (data['solvedQuestionIds'] as List<dynamic>? ?? []).map((e) => e as int).toSet(),
+      data['userId'] ?? 0,
+      data['totalCount'] ?? 0,
+      data['solvedCount'] ?? 0,
     );
   }
 

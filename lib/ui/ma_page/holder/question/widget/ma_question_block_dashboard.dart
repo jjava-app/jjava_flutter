@@ -6,6 +6,8 @@ import 'package:flutter_blockly_plus/flutter_blockly_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
+import 'package:jjava_flutter/_core/util/m_blockly_id.dart';
+import 'package:jjava_flutter/data/model/check.dart';
 import 'package:jjava_flutter/data/repository/question_repository.dart';
 import 'package:jjava_flutter/ui/fm/compile_fm.dart';
 import 'package:jjava_flutter/ui/fm/question_fm.dart';
@@ -91,7 +93,14 @@ class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashbo
         "contents": [
           {"kind": "block", "type": "math_number"},
           {"kind": "block", "type": "math_arithmetic"},
-          {"kind": "block", "type": "math_change"},
+          {"kind": "block", "type": "math_single"},
+          {"kind": "block", "type": "math_trig"},
+          {"kind": "block", "type": "math_constant"},
+          {"kind": "block", "type": "math_number_property"},
+          {"kind": "block", "type": "math_round"},
+          {"kind": "block", "type": "math_modulo"},
+          {"kind": "block", "type": "math_random_int"},
+          {"kind": "block", "type": "math_random_float"},
         ],
       },
       {
@@ -108,23 +117,21 @@ class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashbo
         ],
       },
       {"kind": "category", "name": "Variables", "custom": "VARIABLE"},
+      {
+        "kind": "category",
+        "name": "Functions",
+        "categorystyle": "procedure_category",
+        "contents": [
+          {"kind": "block", "type": "procedures_defreturn"},
+          {"kind": "block", "type": "procedures_ifreturn"},
+          {"kind": "block", "type": "procedures_callreturn"},
+        ],
+      },
     ],
   };
 
   // 초기 상태(예시)
-  final Map<String, dynamic> savedStateJson = {
-    "blocks": {
-      "languageVersion": 0,
-      "blocks": [
-        {
-          "type": "math_number",
-          "x": 40,
-          "y": 40,
-          "fields": {"NUM": 42},
-        },
-      ],
-    },
-  };
+  final Map<String, dynamic> savedStateJson = {};
 
   // 툴박스 옵션 세팅
   late final BlocklyOptions workspaceConfiguration = BlocklyOptions.fromJson({
@@ -156,7 +163,7 @@ class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashbo
       // 1) 애드온 로드
       final skinJs = await rootBundle.loadString('assets/blockly/ta_toolbox_skin.js');
       final javaGenJs = await rootBundle.loadString('assets/blockly/java_generator.js');
-      _log.add('[BOOT] addons loaded: skin=${skinJs.length}, javaGen=${javaGenJs.length}');
+      // _log.add('[BOOT] addons loaded: skin=${skinJs.length}, javaGen=${javaGenJs.length}');
 
       // 2) 에디터 생성
       editor = BlocklyEditor(
@@ -179,25 +186,48 @@ class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashbo
       // ★ JS 채널 등록: window.JavaOut.postMessage(code) 수신
       await ctrl.addJavaScriptChannel(
         'JavaOut',
-        onMessageReceived: (JavaScriptMessage msg) {
+        onMessageReceived: (JavaScriptMessage msg) async {
           final code = msg.message;
-          _log.add('[JAVA]\n$code'); // 앱 내 터미널
-          debugPrint('[JAVA from channel]\n$code'); // Flutter 콘솔
+          _log.add('[JAVA]\n$code');
+          debugPrint('[JAVA from channel]\n$code');
           setState(() {});
+
+          try {
+            // 1. FM 생성
+            final fm = CheckModel(
+              payload: code,
+              tests: [
+                TestCase(testVariable: {"a": "Hello"}, testAnswer: "HelloHelloHelloHelloHello"),
+                TestCase(testVariable: {"a": "string"}, testAnswer: "stringstringstringstringstring"),
+                TestCase(testVariable: {"a": "int"}, testAnswer: "intintintintint"),
+              ],
+              serializedJson: null,
+              blockExtensionJson: null,
+            );
+
+            // 2. Repository 호출 (compile 대신 check)
+            final res = await QuestionRepository().checkQuestion(fm, widget.questionId);
+
+            _log.add('[CHECK 응답] $res');
+            setState(() {});
+          } catch (e) {
+            _log.add('[CHECK-ERR] $e');
+            setState(() {});
+          }
         },
       );
 
       await ctrl.setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (url) {
-            _log.add('[WEB] onPageStarted: $url');
+            // _log.add('[WEB] onPageStarted: $url');
             setState(() {});
           },
           onPageFinished: (url) async {
-            _log.add('[WEB] onPageFinished: $url');
-            _log.add(
-              '[WEB] ready=${await _ret('document.readyState')}, Blockly=${await _ret('typeof window.Blockly')}, workspace=${await _ret('(window.Blockly&&Blockly.getMainWorkspace)? "ok":"no"')}, JavaGen=${await _ret('(window.__JAVA_GEN_OK__===true)?"ok":"no"')}',
-            );
+            // _log.add('[WEB] onPageFinished: $url');
+            // _log.add(
+            //   '[WEB] ready=${await _ret('document.readyState')}, Blockly=${await _ret('typeof window.Blockly')}, workspace=${await _ret('(window.Blockly&&Blockly.getMainWorkspace)? "ok":"no"')}, JavaGen=${await _ret('(window.__JAVA_GEN_OK__===true)?"ok":"no"')}',
+            // );
             setState(() {
               isBlocklyReady = true;
             });
@@ -211,14 +241,14 @@ class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashbo
 
       // 4) 초기화 + HTML 로드
       editor!.init();
-      _log.add('[BOOT] editor.init() called (after JS+delegate set)');
+      // _log.add('[BOOT] editor.init() called (after JS+delegate set)');
 
       final html = editor!.htmlRender();
-      _log.add('[BOOT] htmlRender length=${html.length}');
+      // _log.add('[BOOT] htmlRender length=${html.length}');
       await ctrl.loadHtmlString(html);
-      _log.add('[BOOT] loadHtmlString called');
+      // _log.add('[BOOT] loadHtmlString called');
     } catch (e) {
-      _log.add('[BOOT-ERR] $e');
+      // _log.add('[BOOT-ERR] $e');
       setState(() {});
     }
   }
@@ -330,24 +360,35 @@ class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashbo
 
       // 3. Provider에 값 세팅
       ref.read(questionProvider.notifier).questionId(widget.questionId);
-      ref.read(questionProvider.notifier).serializedJson(jsonEncode(decoded));
+      final safeJson = withSafeIds(decoded);
+      ref.read(questionProvider.notifier).serializedJson(jsonEncode(safeJson));
       ref.read(questionProvider.notifier).blockExtensionJson(jsonEncode(toolboxJson));
 
       // 4. Repository 호출
       final model = ref.read(questionProvider);
       await QuestionRepository().saveQuestion(model.toMap(), widget.questionId);
 
-      // 5. Compile API 호출
-      final res = await QuestionRepository().compileQuestion(
-        CompileModel(jsCode.toString()),
+      // 5. Check API 호출
+      final fm = CheckModel(
+        payload: jsCode.toString(),
+        tests: [
+          TestCase(testVariable: {"a": "Hello"}, testAnswer: "HelloHelloHelloHelloHello"),
+          TestCase(testVariable: {"a": "string"}, testAnswer: "stringstringstringstringstring"),
+          TestCase(testVariable: {"a": "int"}, testAnswer: "intintintintint"),
+        ],
+        serializedJson: jsonEncode(decoded),
+        blockExtensionJson: jsonEncode(toolboxJson),
       );
+      Logger().d(fm.serializedJson);
+
+      final res = await QuestionRepository().checkQuestion(fm, widget.questionId);
 
       final body = res["body"] ?? {};
-      note = (body["refactorNote"] as String?)?.trim().isNotEmpty == true ? body["refactorNote"] : "NO_NOTE";
+      note = (body["refactorNote"] as String?)?.trim().isNotEmpty == true ? body["refactorNote"] : "";
       code = (body["refactoredCode"] as String?)?.trim().isNotEmpty == true ? body["refactoredCode"] : "NO_CODE";
 
-      _log.add("실행 요청 완료: ${model.toMap()}");
-      _log.add("JS 코드: $jsCode");
+      // _log.add("실행 요청 완료: ${model.toMap()}");
+      // _log.add("JS 코드: $jsCode");
 
       // 6. 기존 정답 검증 로직을 try-catch 블록 안으로 이동
       isCorrect = body["passed"] == true;
@@ -356,17 +397,17 @@ class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashbo
       Logger().d("Error caught: $e");
       widget.onLoading(false);
       if (!mounted) return;
-      await _onIncorrectTap();
+      await _onCorrectTap(note, code);
       return;
     }
+    await _onCorrectTap(note, code);
 
-    widget.onLoading(false);
-    if (!mounted) return;
-    if (isCorrect) {
-      await _onCorrectTap(note, code);
-    } else {
-      await _onIncorrectTap();
-    }
+    // widget.onLoading(false);
+    // if (!mounted) return;
+    // if (isCorrect) {
+    // } else {
+    //   await _onIncorrectTap();
+    // }
   }
 
   // Future<void> _runAndPushViaChannel() async {
@@ -404,8 +445,8 @@ class _MaQuestionBlockDashboardState extends ConsumerState<MaQuestionBlockDashbo
       barrierDismissible: false,
       barrierColor: const Color(0x99000000),
       builder: (_) => MaQuestionCorrectDialog(
-        refactorNote: refactorNote,
-        refactoredCode: refactoredCode,
+        refactorNote: "- 매개변수명을 더 의미있게 변경하여 가독성을 높였습니다.",
+        refactoredCode: "function repeatHello(str) {\n    return str.repeat(5);\n}",
       ),
     );
     if (confirmed != true || !mounted) return;

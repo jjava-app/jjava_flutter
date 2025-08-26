@@ -57,8 +57,8 @@ class HomeModel {
   factory HomeModel.fromMap(Map<String, dynamic> data) {
     return HomeModel(
       user: User.fromMap(data['userInfo']),
-      weekRank: (data['leaderboard']['rankingList'] as List<dynamic>).map((e) => WeekRank.fromMap(e)).toList(), // leaderboardDTO → leaderboard
-      solvedQuestion: (data['sqList']['sqList'] as List<dynamic>).map((e) => SolvedQuestion.fromMap(e)).toList(), // sqDTO → sqList
+      weekRank: (data['leaderboard']?['rankingList'] as List<dynamic>? ?? []).map((e) => WeekRank.fromMap(e)).toList(),
+      solvedQuestion: (data['sqList']?['sqList'] as List<dynamic>? ?? []).map((e) => SolvedQuestion.fromMap(e)).toList(),
     );
   }
 

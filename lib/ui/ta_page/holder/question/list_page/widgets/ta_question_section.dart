@@ -81,7 +81,7 @@ class _SectionTileState extends State<TaQuestionSection> {
                             child: Text(
                               items[i].title ?? '제목 없음',
                               style: TextStyle(
-                                color: widget.solvedIds.contains(items[i].id)
+                                color: widget.solvedIds.contains(items[i].questionId)
                                     ? Colors.grey
                                     : Colors.black,
                               ),

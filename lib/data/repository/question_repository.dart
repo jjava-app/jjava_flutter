@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:jjava_flutter/_core/util/m_http.dart';
+import 'package:jjava_flutter/data/model/check.dart';
 import 'package:jjava_flutter/ui/fm/compile_fm.dart';
+import 'package:logger/logger.dart';
 
 class QuestionRepository {
   Future<Map<String, dynamic>> getQuestionDetail(int questionId) async {
@@ -40,6 +42,7 @@ class QuestionRepository {
       ),
     );
     final responseBody = response.data;
+    Logger().d(responseBody.toString());
 
     // Mock Response
     // await Future.delayed(Duration(milliseconds: 500));
@@ -57,6 +60,32 @@ class QuestionRepository {
     //   },
     // };
 
+    return responseBody;
+  }
+
+  Future<Map<String, dynamic>> checkQuestion(CheckModel fm, int questionId) async {
+    // final response = await dio.post(
+    //   "/check?questionId=$questionId",
+    //   data: fm.toMap(),
+    //   options: Options(
+    //     headers: {"Content-Type": "application/json"},
+    //   ),
+    // );
+    await Future.delayed(const Duration(seconds: 1));
+
+    final responseBody = {
+      "status": 200,
+      "msg": "성공",
+      "body": {
+        "userId": 1,
+        "questionId": 1,
+        "passed": true,
+        "code": "asdfasdfasdf",
+        "refactoredCode": "// refactored code sample",
+        "refactorNote": "변수 이름을 단순화하고 불필요한 로직 제거",
+        "tests": null, // ← 여기서 오류 터짐 (List 기대했는데 null)
+      },
+    };
     return responseBody;
   }
 
