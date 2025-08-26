@@ -43,60 +43,10 @@
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Language**         | ![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)                                                                                                             |
 | **Framework**        | ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)                                                                                                    |
-| **State Management** | ![Riverpod](https://img.shields.io/badge/Riverpod-7B61FF?style=for-the-badge&logo=flutter&logoColor=white)                                                                                                  |
-| **Networking**       | ![Dio](https://img.shields.io/badge/Dio-FF69B4?style=for-the-badge&logo=axios&logoColor=white)                                                                                                              |
-| **Authentication**   | ![Kakao](https://img.shields.io/badge/Kakao-FFCD00?style=for-the-badge&logo=kakao&logoColor=black) / ![Naver](https://img.shields.io/badge/Naver-03C75A?style=for-the-badge&logo=naver&logoColor=white) / ![Google](https://img.shields.io/badge/Google-4285F4?style=for-the-badge&logo=google&logoColor=white) |
-| **Routing**          | ![Navigator](https://img.shields.io/badge/Flutter%20Navigator-4CAF50?style=for-the-badge&logo=flutter&logoColor=white)                                                                                      |
-| **UI Framework**     | ![Material Design](https://img.shields.io/badge/Material%20Design-757575?style=for-the-badge&logo=material-design&logoColor=white)                                                                          |
-| **Tooling**          | ![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white)                                                                             |
-| **Team Tools**       | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white) |
-| **Web Integration**  | ![WebView](https://img.shields.io/badge/WebView-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white) ![Blockly](https://img.shields.io/badge/Blockly-FFAB19?style=for-the-badge&logo=google&logoColor=white) |
-
-
-<br>
-
-
-# 역할분담
----
-
-### 김정원
-
- <img width="100" alt="image" src="https://github.com/user-attachments/assets/4a561614-5101-4082-a159-b8b27f6e7744" alt="김정원"/>
-
-- 전체 프로젝트 총괄
-- 팀 리딩 및 커뮤니케이션
-- 홈 UI 구현
-- 홈 API 연동 및 상태관리
-- 마이페이지 UI 구현
-- 지난 학습 페이지 UI 구현
-- 지난 학습 CRUD API 연동 및 상태관리
-- 워크스페이스 페이지 UI 구현
-- 워크스페이스 CRUD API 연동 및 상태관리
-- Sentry.io 로그 관리
-
----
-
-### 이연호
-
-<img src="https://github.com/user-attachments/assets/dc250b8d-8da0-466b-826e-a295fe5632f3" alt="이연호" width="100">
-
-- 로그인 페이지 통신 구현
-- OAuth 로그인/회원가입 개발
-- 유저 추가 정보 등록 및 수정 API 연동 및 상태관리
-
----
-
-### 서회정
-
-<img src="https://github.com/human-mjj/recruit-wwy/blob/master/README/image.png?raw=true" alt="서회정" width="100">
-
-- UXUI 디자인 및 레이아웃 구성
-- 워크스페이스 블록코딩 페이지 UI 구현
-- 로그인 페이지 UI 구현
-- 학습 블록코딩 페이지 UI 구현
+| **State Management습 블록 코딩 화면 구현
 - 온보딩 페이지 UI 구현
 - 학습 CRUD API 연동 및 상태관리
-- 관리자 페이지 UI 구현
+- 관리자 웹 화면 구현
 - 관리자 유저 통신 구현
 - 관리자 문제 통신 구현
 
