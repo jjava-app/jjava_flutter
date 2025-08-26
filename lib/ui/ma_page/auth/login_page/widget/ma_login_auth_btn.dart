@@ -7,6 +7,7 @@ class MaLoginAuthBtn extends StatelessWidget {
   final String socialName;
   final Color textColor;
   final List<BoxShadow>? boxShadow;
+  final Future<void> Function(BuildContext)? onOauthcheck;
 
   const MaLoginAuthBtn({
     super.key,
@@ -15,6 +16,7 @@ class MaLoginAuthBtn extends StatelessWidget {
     required this.socialName,
     required this.textColor,
     this.boxShadow,
+    this.onOauthcheck,
   });
 
   @override
@@ -28,8 +30,24 @@ class MaLoginAuthBtn extends StatelessWidget {
       width: double.infinity,
       height: 44,
       child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, '/join', arguments: JoinType.social);
+        onTap: () async {
+          bool success = false;
+
+          if (onOauthcheck != null) {
+            await onOauthcheck!(context)
+                .then((_) {
+                  success = true; // 로그인 성공 시 true
+                })
+                .catchError((e) {
+                  success = false; // 실패 시 false
+                  print('OAuth login failed: $e');
+                });
+          }
+
+          if (success) {
+            // OAuth 성공 시만 /join 페이지로 이동
+            Navigator.pushNamed(context, '/join', arguments: JoinType.social);
+          }
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
