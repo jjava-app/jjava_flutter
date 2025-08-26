@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
+import 'package:jjava_flutter/ui/fm/join_fm.dart';
 import 'package:jjava_flutter/ui/ma_page/auth/join/widget/ma_join_form_field.dart';
 
-class MaEmailInputPage extends StatelessWidget {
+class MaEmailInputPage extends ConsumerWidget {
   const MaEmailInputPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final joinState = ref.watch(joinProvider); // 현재 상태 조회
+    final joinNotifier = ref.read(joinProvider.notifier); // 상태 변경용
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -14,10 +19,9 @@ class MaEmailInputPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              spacing: 12,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 22),
+                const SizedBox(height: 22),
                 Text(
                   '이메일',
                   style: TextStyle(
@@ -26,7 +30,13 @@ class MaEmailInputPage extends StatelessWidget {
                     color: MColor.kLabel.normal,
                   ),
                 ),
-                MaJoinFormField(labelText: '이메일을 입력해주세요.'),
+                MaJoinFormField(
+                  labelText: '이메일을 입력해주세요.',
+                  initialValue: joinState.email, // 상태값 반영
+                  onChanged: (value) {
+                    joinNotifier.email(value); // 입력값 상태 업데이트
+                  },
+                ),
               ],
             ),
           ),

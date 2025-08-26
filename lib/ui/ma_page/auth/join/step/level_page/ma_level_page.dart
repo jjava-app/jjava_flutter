@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
+import 'package:jjava_flutter/ui/fm/join_fm.dart';
 
-class MaLevelPage extends StatefulWidget {
+class MaLevelPage extends ConsumerStatefulWidget {
   const MaLevelPage({super.key});
 
   @override
-  State<MaLevelPage> createState() => _LevelPageState();
+  ConsumerState<MaLevelPage> createState() => _LevelPageState();
 }
 
-class _LevelPageState extends State<MaLevelPage> {
+class _LevelPageState extends ConsumerState<MaLevelPage> {
   double _currentValue = 0.0;
-  final List<String> levels = ['LV.1', 'LV.2', 'LV.3'];
 
+  final List<String> levels = ['LV.1', 'LV.2', 'LV.3'];
   final List<String> messages = ['처음 배워요!', '배워본 적 있어요!', '능숙해요!'];
+  final List<String> serverLevels = ['BEGINNER', 'INTERMEDIATE', 'EXPERT'];
+
   int get _idx => _currentValue.round();
 
   @override
@@ -24,7 +28,7 @@ class _LevelPageState extends State<MaLevelPage> {
           spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 22),
+            const SizedBox(height: 22),
             Text(
               '학습 난이도 선택',
               style: TextStyle(
@@ -33,7 +37,7 @@ class _LevelPageState extends State<MaLevelPage> {
                 color: MColor.kLabel.normal,
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(levels.length, (index) {
@@ -42,9 +46,7 @@ class _LevelPageState extends State<MaLevelPage> {
                   child: Text(
                     levels[index],
                     style: TextStyle(
-                      color: _currentValue.round() == index
-                          ? MColor.kPrimary.normal
-                          : MColor.kLabel.disable,
+                      color: _idx == index ? MColor.kPrimary.normal : MColor.kLabel.disable,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -71,14 +73,15 @@ class _LevelPageState extends State<MaLevelPage> {
                     setState(() {
                       _currentValue = value;
                     });
+                    ref.read(joinProvider.notifier).level(serverLevels[_idx]);
                   },
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             Center(
               child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 child: Text(
                   messages[_idx],
                   key: ValueKey(_idx),

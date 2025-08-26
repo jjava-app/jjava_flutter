@@ -25,7 +25,7 @@ android {
         applicationId = "com.example.jjava_flutter"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 23     // 직접 숫자로 지정
+        minSdk = flutter.minSdkVersion     // 직접 숫자로 지정
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"

@@ -24,40 +24,36 @@ class UserRepository {
     return responseBody;
   }
 
-  // TODO
-  Future<Map<String, dynamic>> emailJoin(String accessToken) async {
-    Response response = await dio.post("/login", data: {"accessToken": accessToken});
-    // final responseBody = response.data;
-    final responseBody = {
-      "status": 200,
-      "msg": "성공",
-      "body": {
-        "accessToken":
-            "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzc2FyIiwiZXhwIjoxNzU2MTg1NzMzLCJpZCI6Miwicm9sZXMiOiJVU0VSIn0.EzrvrRwE8KjxbNUrLqyusHSZU2yW4DaBCPyXRB4ribHSjwoBSPwkR66T4plAhwpZzwSnpiW8r5anZhRsFIlxRg",
-        "id": 2,
-        "email": "ssar1234@nate.com",
-        "nickname": "ssar",
-        "level": "BEGINNER",
-        "role": "USER",
-        "score": 120,
-      },
-    };
-    // Logger().d('UserRepository의 oauthLogin: ${responseBody}');
+  // 회원가입
+  Future<Map<String, dynamic>> join(Map<String, dynamic> body) async {
+    final response = await dio.post("/join", data: body);
+    final responseBody = response.data;
+    Logger().d("UserRepository의 join: $responseBody");
     return responseBody;
   }
 
-  // 닉네임 중복 체크
-  Future<Map<String, dynamic>> isNicknameAvailable(String nickname) async {
+  /// 닉네임 중복 검사
+  Future<Map<String, dynamic>> checkNickname(String nickname) async {
     final response = await dio.get("/auth/nickname/check/$nickname");
-    // final responseBody = response.data;
-    final responseBody = {
-      "status": 200,
-      "msg": "성공",
-      "body": {
-        "available": true,
-      },
-    };
+    final responseBody = response.data;
+    Logger().d("UserRepository의 checkNickname: $responseBody");
+    return responseBody;
+  }
+
+  // 이메일 인증
+  Future<Map<String, dynamic>> verificateEmail(String email) async {
+    final response = await dio.get("/auth/email/check/$email");
+    final responseBody = response.data;
+    // final responseBody = {
+    //   "status": 200,
+    //   "msg": "성공",
+    //   "body": {
+    //     "verified": true,
+    //   },
+    // };
     // Logger().d('UserRepository의 oauthLogin: ${responseBody}');
+    Logger().d("이메일 인증 호출끝");
+    Logger().d(responseBody.toString());
     return responseBody;
   }
 
@@ -84,7 +80,23 @@ class UserRepository {
     //     "userRole": "USER"
     //   }
     // };
+    return responseBody;
+  }
+
+  Future<Map<String, dynamic>> verifyEmailCode(String email, String code) async {
+    Logger().d("이메일 인증 호출됨");
+    Logger().d(email.toString());
+    Logger().d(code.toString());
+    final response = await dio.post(
+      "/auth/email/verify",
+      data: {
+        "email": email,
+        "code": code,
+      },
+    );
+    final responseBody = response.data;
     Logger().d('UserRepository의 update: ${responseBody}');
+
     return responseBody;
   }
 }

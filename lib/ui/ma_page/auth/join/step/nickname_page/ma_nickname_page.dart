@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
+import 'package:jjava_flutter/ui/fm/join_fm.dart';
 import 'package:jjava_flutter/ui/ma_page/auth/join/widget/ma_join_form_field.dart';
 
-class MaNicknamePage extends StatelessWidget {
+class MaNicknamePage extends ConsumerWidget {
   const MaNicknamePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final joinState = ref.watch(joinProvider);
+    final joinNotifier = ref.read(joinProvider.notifier);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -14,10 +19,9 @@ class MaNicknamePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              spacing: 12,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 22),
+                const SizedBox(height: 22),
                 Text(
                   '닉네임',
                   style: TextStyle(
@@ -26,7 +30,14 @@ class MaNicknamePage extends StatelessWidget {
                     color: MColor.kLabel.normal,
                   ),
                 ),
-                MaJoinFormField(labelText: '닉네임을 입력해 주세요'),
+                const SizedBox(height: 12),
+                MaJoinFormField(
+                  labelText: '닉네임을 입력해 주세요',
+                  initialValue: joinState.nickname,
+                  onChanged: (value) {
+                    joinNotifier.nickname(value);
+                  },
+                ),
               ],
             ),
           ),

@@ -1,85 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:jjava_flutter/_core/style/m_color.dart';
-import 'package:jjava_flutter/ui/ma_page/auth/join/widget/ma_join_form_field.dart';
 
-class MaEmailVerifyPage extends StatelessWidget {
-  const MaEmailVerifyPage({super.key});
+class MaEmailVerifyPage extends StatefulWidget {
+  final ValueChanged<String> onCodeChanged; // 입력된 코드 전달
+
+  const MaEmailVerifyPage({super.key, required this.onCodeChanged});
+
+  @override
+  State<MaEmailVerifyPage> createState() => _MaEmailVerifyPageState();
+}
+
+class _MaEmailVerifyPageState extends State<MaEmailVerifyPage> {
+  final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
+
+  void _updateCode() {
+    final code = _controllers.map((c) => c.text).join();
+    widget.onCodeChanged(code);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              spacing: 12,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 22),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'ssar****@naver.com로 인증 코드가 전송되었습니다',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: MColor.kLabel.normal,
-                      ),
+        child: Column(
+          children: [
+            const SizedBox(height: 22),
+            Row(
+              children: List.generate(6, (i) {
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: TextField(
+                      controller: _controllers[i],
+                      maxLength: 1,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        if (value.isNotEmpty && i < 5) {
+                          FocusScope.of(context).nextFocus();
+                        }
+                        if (value.isEmpty && i > 0) {
+                          FocusScope.of(context).previousFocus();
+                        }
+                        _updateCode();
+                      },
+                      decoration: const InputDecoration(counterText: ""),
                     ),
-                    Text(
-                      '인증코드를 입력해 주세요.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: MColor.kLabel.alternative,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        '재전송',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: MColor.kLabel.assistive,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 32),
-                    // TODO: 페이지 넘어온 뒤 대략 3분 정도 시간 주고 초과하면 다시 인증번호 받도록 처리
-                    Text(
-                      '57s',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: MColor.kPrimary.normal,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  // TODO: 한 글자씩 입력하면 넘어가게 처리해야함
-                  spacing: 14,
-                  children: [
-                    Expanded(child: MaJoinFormField(labelText: '')),
-                    Expanded(child: MaJoinFormField(labelText: '')),
-                    Expanded(child: MaJoinFormField(labelText: '')),
-                    Expanded(child: MaJoinFormField(labelText: '')),
-                    Expanded(child: MaJoinFormField(labelText: '')),
-                    Expanded(child: MaJoinFormField(labelText: '')),
-                    Container(width: 18),
-                  ],
-                ),
-              ],
+                  ),
+                );
+              }),
             ),
-          ),
+          ],
         ),
       ),
     );

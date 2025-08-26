@@ -10,46 +10,30 @@ class JoinFM extends Notifier<JoinModel> {
     return JoinModel("", "", "", "");
   }
 
-  void email(String email) {
-    state = state.copyWith(
-      email: email,
-    );
-  }
+  void email(String email) => state = state.copyWith(email: email);
 
-  void password(String password) {
-    state = state.copyWith(
-      password: password,
-    );
-  }
+  void password(String password) => state = state.copyWith(password: password);
 
-  void nickname(String nickname) {
-    state = state.copyWith(
-      nickname: nickname,
-    );
-  }
+  void nickname(String nickname) => state = state.copyWith(nickname: nickname);
 
-  void level(String level) {
-    state = state.copyWith(
-      level: level,
-    );
-  }
+  void level(String level) => state = state.copyWith(level: level);
 }
 
 class JoinModel {
   String? email;
   String? password;
   String? nickname;
-  String? level;
+  String? level; // BEGINNER / INTERMEDIATE / EXPERT
 
-  JoinModel(
-    this.email,
-    this.password,
-    this.nickname,
-    this.level,
-  );
+  JoinModel(this.email, this.password, this.nickname, this.level);
 
   Map<String, dynamic> toMap() {
-    return {"email": email, "password": password, "nickname": nickname, "level": level};
+    return {
+      "email": email,
+      "password": password,
+      "nickname": nickname,
+      "level": level,
+    };
   }
 
   JoinModel copyWith({
