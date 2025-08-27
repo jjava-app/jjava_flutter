@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "728672987397",
+    "project_id": "jjava-1adcb",
+    "storage_bucket": "jjava-1adcb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728672987397:android:1bf1df4f23797b45e5af6c",
+        "android_client_info": {
+          "package_name": "com.example.jjava_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMOmncgNa_BFujQh5wJJxjNWgp9AH9YQc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
