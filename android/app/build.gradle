@@ -1,0 +1,43 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'dev.flutter.flutter-gradle-plugin'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace "com.example.jjava_flutter"
+    compileSdkVersion 36
+
+    defaultConfig {
+        applicationId "com.example.jjava_flutter"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    // Firebase BOM (버전 정리)
+    implementation platform('com.google.firebase:firebase-bom:34.1.0')
+
+    // Firebase SDK들
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-auth'
+}
