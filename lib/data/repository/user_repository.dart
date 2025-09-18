@@ -26,6 +26,7 @@ class UserRepository {
 
   // 회원가입
   Future<Map<String, dynamic>> join(Map<String, dynamic> body) async {
+    Logger().d(body.toString());
     final response = await dio.post("/join", data: body);
     final responseBody = response.data;
     Logger().d("UserRepository의 join: $responseBody");
@@ -58,28 +59,9 @@ class UserRepository {
   }
 
   Future<Map<String, dynamic>> update(Map<String, dynamic> data) async {
-    Response response = await dio.put("/s/api/users", data: data);
+    Response response = await dio.put("/users/update", data: data);
     Logger().d("update data : $data");
     final responseBody = response.data;
-    // final responseBody = {
-    //   "status": 200,
-    //   "msg": "성공",
-    //   "body": {
-    //     "username": "NAVER_j6Ccsr_gsenBwfXBf1wHK5pS9NtEgwBnPXdnEakhEV0",
-    //     "name": "김주희",
-    //     "nickname": "jh6",
-    //     "teamId": 6,
-    //     "teamName": "삼성 라이온즈",
-    //     "phoneNumber": "010-3268-9720",
-    //     "email": "wngml9720@naver.com",
-    //     "birthDate": "2000-08-26",
-    //     "gender": "FEMALE",
-    //     "profileUrl":
-    //         "https://ssl.pstatic.net/static/pwe/address/img_profile_6.png",
-    //     "providerType": "NAVER",
-    //     "userRole": "USER"
-    //   }
-    // };
     return responseBody;
   }
 
@@ -97,6 +79,19 @@ class UserRepository {
     final responseBody = response.data;
     Logger().d('UserRepository의 update: ${responseBody}');
 
+    return responseBody;
+  }
+
+  Future<Map<String, dynamic>> googleLogin(String accessToken) async {
+    Logger().d('${accessToken}');
+    final response = await dio.post(
+      "/login/google",
+      data: {
+        "accessToken": accessToken,
+      },
+    );
+    final responseBody = response.data;
+    Logger().d('UserRepository의 update: ${responseBody}');
     return responseBody;
   }
 }

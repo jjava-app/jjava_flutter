@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jjava_flutter/_core/util/m_device.dart';
 import 'package:jjava_flutter/_core/util/m_http.dart';
 import 'package:jjava_flutter/data/model/user.dart';
@@ -7,6 +8,7 @@ import 'package:jjava_flutter/data/repository/user_repository.dart';
 import 'package:jjava_flutter/main.dart';
 import 'package:jjava_flutter/ui/fm/join_fm.dart';
 import 'package:jjava_flutter/ui/fm/user_update_fm.dart';
+import 'package:jjava_flutter/ui/ma_page/onboarding/ma_onboarding_page.dart';
 import 'package:logger/logger.dart';
 
 final sessionProvider = NotifierProvider<SessionGVM, SessionModel>(() {
@@ -112,6 +114,66 @@ class SessionGVM extends Notifier<SessionModel> {
     Navigator.pop(mContext);
     Navigator.pop(mContext);
     Navigator.pushNamed(mContext, "/main-holder");
+  }
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'profile'],
+  );
+
+  Future<void> googleLogin() async {
+    Logger().d('구글 로그인 호출됨');
+    try {
+      // 1) 구글 로그인
+      final account = await _googleSignIn.signIn();
+      Logger().d('구글 로그인 완료');
+
+      if (account == null) return Logger().d('구글 로그인 취소'); // 로그인 취소
+
+      final auth = await account.authentication;
+      final accessToken = auth.accessToken;
+      Logger().d('진행 중');
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw Exception("구글 AccessToken 없음");
+      }
+
+      // 2) 서버 로그인 요청
+      final res = await UserRepository().googleLogin(accessToken);
+      Logger().d('${accessToken}');
+
+      if (res["status"] == 200) {
+        // 3) 서버 JWT 토큰 세팅
+        final appToken = res["body"]["accessToken"];
+        dio.options.headers["Authorization"] = "Bearer $appToken";
+
+        // 4) 세션 모델 갱신
+        state = SessionModel.fromMap(res["body"]);
+        Logger().d('${state.user}');
+        Logger().d('${state.isLogin}');
+
+        // 5) 신규 유저 여부 분기
+        final user = state.user;
+        if (user != null && user.isNewUser == true) {
+          Logger().d('신규 유저 호출');
+          Navigator.pushReplacement(
+            mContext,
+            MaterialPageRoute(builder: (_) => MaOnboardingPage()),
+          );
+        } else {
+          Logger().d('기존 유저 호출');
+          Navigator.pushReplacementNamed(mContext, "/main-holder");
+        }
+      } else {
+        ScaffoldMessenger.of(mContext).showSnackBar(
+          SnackBar(content: Text("구글 로그인 실패: ${res["msg"]}")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(mContext).showSnackBar(
+        SnackBar(content: Text("구글 로그인 오류: $e")),
+      );
+      Logger().d('$e');
+    }
   }
 }
 
