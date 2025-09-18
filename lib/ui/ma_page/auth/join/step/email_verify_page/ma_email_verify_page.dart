@@ -1,55 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jjava_flutter/_core/style/m_color.dart';
+import 'package:jjava_flutter/ui/fm/join_fm.dart';
+import 'package:jjava_flutter/ui/ma_page/auth/join/widget/ma_join_form_field.dart';
 
-class MaEmailVerifyPage extends StatefulWidget {
-  final ValueChanged<String> onCodeChanged; // 입력된 코드 전달
-
-  const MaEmailVerifyPage({super.key, required this.onCodeChanged});
-
-  @override
-  State<MaEmailVerifyPage> createState() => _MaEmailVerifyPageState();
-}
-
-class _MaEmailVerifyPageState extends State<MaEmailVerifyPage> {
-  final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
-
-  void _updateCode() {
-    final code = _controllers.map((c) => c.text).join();
-    widget.onCodeChanged(code);
-  }
+class MaEmailVerifyPage extends ConsumerWidget {
+  const MaEmailVerifyPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final joinNotifier = ref.read(joinProvider.notifier);
+
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 22),
-            Row(
-              children: List.generate(6, (i) {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: TextField(
-                      controller: _controllers[i],
-                      maxLength: 1,
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        if (value.isNotEmpty && i < 5) {
-                          FocusScope.of(context).nextFocus();
-                        }
-                        if (value.isEmpty && i > 0) {
-                          FocusScope.of(context).previousFocus();
-                        }
-                        _updateCode();
-                      },
-                      decoration: const InputDecoration(counterText: ""),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              spacing: 12,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 22),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'fdej*******@naver.com로 인증 코드가 전송되었습니다',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: MColor.kLabel.normal,
+                      ),
                     ),
-                  ),
-                );
-              }),
+                    Text(
+                      '인증코드를 입력해 주세요.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: MColor.kLabel.alternative,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        // TODO: 재전송 API 붙이기
+                      },
+                      child: Text(
+                        '재전송',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: MColor.kLabel.assistive,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 32),
+                    // TODO: 타이머 구현
+                    Text(
+                      '57s',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: MColor.kPrimary.normal,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  spacing: 14,
+                  children: [
+                    Expanded(
+                      child: MaJoinFormField(
+                        labelText: '',
+                        onChanged: (v) => joinNotifier.updateVerifyCode(v), // ✅ 상태에 저장
+                      ),
+                    ),
+                    Expanded(child: MaJoinFormField(labelText: '')),
+                    Expanded(child: MaJoinFormField(labelText: '')),
+                    Expanded(child: MaJoinFormField(labelText: '')),
+                    Expanded(child: MaJoinFormField(labelText: '')),
+                    Expanded(child: MaJoinFormField(labelText: '')),
+                    Container(width: 18),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -9,6 +9,7 @@ import 'package:jjava_flutter/ui/ma_page/auth/join/step/level_page/ma_level_page
 import 'package:jjava_flutter/ui/ma_page/auth/join/step/nickname_page/ma_nickname_page.dart';
 import 'package:jjava_flutter/ui/ma_page/auth/join/step/password_page/ma_password_page.dart';
 import 'package:jjava_flutter/ui/ma_page/auth/join/widget/ma_join_step_bar.dart';
+import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart'; // ✅ 메인화면 import
 import 'package:jjava_flutter/ui/vm/join_vm.dart'; // VM import
 
 class MaJoinFlow extends ConsumerStatefulWidget {
@@ -25,7 +26,6 @@ class _SignUpFlowState extends ConsumerState<MaJoinFlow> {
   late final List<Widget> _steps;
   int _idx = 0;
   bool _loading = false;
-  String _verifyCode = "";
 
   @override
   void initState() {
@@ -34,11 +34,7 @@ class _SignUpFlowState extends ConsumerState<MaJoinFlow> {
     _steps = widget.type == JoinType.email
         ? [
             const MaEmailInputPage(),
-            MaEmailVerifyPage(
-              onCodeChanged: (code) {
-                setState(() => _verifyCode = code);
-              },
-            ),
+            const MaEmailVerifyPage(),
             const MaPasswordPage(),
             const MaNicknamePage(),
             const MaLevelPage(),
@@ -54,7 +50,12 @@ class _SignUpFlowState extends ConsumerState<MaJoinFlow> {
 
   void _next() {
     if (_idx == _steps.length - 1) {
-      Navigator.pop(context, true);
+      // ✅ 회원가입 완료 시 메인화면으로 이동
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const MaMainHolder()),
+        (route) => false,
+      );
       return;
     }
     setState(() => _idx++);
@@ -95,18 +96,13 @@ class _SignUpFlowState extends ConsumerState<MaJoinFlow> {
           height: 48,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: (_idx == 1 && _verifyCode.length < 6)
-                ? MColor
-                      .kLine
-                      .normal // 인증코드 미완성 → 회색
-                : MColor.kPrimary.normal, // 나머지는 기본 색
+            color: MColor.kPrimary.normal,
           ),
           child: InkWell(
             onTap: _loading
                 ? null
                 : () async {
                     if (_idx == 0) {
-                      // 이메일 가져오기 (FM)
                       final email = ref.read(joinProvider).email ?? "";
                       if (email.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -115,7 +111,6 @@ class _SignUpFlowState extends ConsumerState<MaJoinFlow> {
                         return;
                       }
 
-                      // 통신은 VM
                       setState(() => _loading = true);
                       final ok = await ref.read(joinVMProvider.notifier).checkEmail(email);
                       setState(() => _loading = false);
@@ -131,23 +126,29 @@ class _SignUpFlowState extends ConsumerState<MaJoinFlow> {
                         );
                       }
                     } else if (_idx == 1) {
-                      if (_verifyCode.length == 6) {
-                        // 이메일 + 코드 검증
-                        final email = ref.read(joinProvider).email ?? "";
-                        setState(() => _loading = true);
-                        final ok = await ref.read(joinVMProvider.notifier).verifyEmailCode(email, _verifyCode);
-                        setState(() => _loading = false);
+                      final code = ref.read(joinProvider).verifyCode ?? "";
+                      final email = ref.read(joinProvider).email ?? "";
 
-                        if (ok) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("이메일 인증 성공")),
-                          );
-                          _next();
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("잘못된 인증번호입니다.")),
-                          );
-                        }
+                      if (code.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("인증코드를 입력해주세요.")),
+                        );
+                        return;
+                      }
+
+                      setState(() => _loading = true);
+                      final ok = await ref.read(joinVMProvider.notifier).verifyEmailCode(email, code);
+                      setState(() => _loading = false);
+
+                      if (ok) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("이메일 인증 성공")),
+                        );
+                        _next();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("잘못된 인증번호입니다.")),
+                        );
                       }
                     } else {
                       _next();

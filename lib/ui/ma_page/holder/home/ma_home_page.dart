@@ -23,7 +23,7 @@ class MaHomePage extends StatelessWidget {
       ),
       leadingWidth: 56,
       actions: [
-        const Text("DevSsar"),
+        const Text("fdejong"),
         const SizedBox(width: 4),
         MIcon.nav.top.profile,
         const SizedBox(width: 16),

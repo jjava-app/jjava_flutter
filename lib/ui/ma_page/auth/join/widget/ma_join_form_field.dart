@@ -17,37 +17,38 @@ class MaJoinFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 44,
-      child: TextFormField(
-        initialValue: initialValue,
-        obscureText: isPassword,
-        onChanged: onChanged,
-        style: TextStyle(
+    return TextFormField(
+      initialValue: initialValue,
+      obscureText: isPassword,
+      onChanged: onChanged,
+      style: TextStyle(
+        fontSize: 18, // 숫자 크게 보이게
+        color: MColor.kLabel.neutral,
+      ),
+      textAlign: TextAlign.center,
+      // ✅ 숫자 가운데 정렬
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 12),
+        // 세로 패딩 조정
+        hintText: labelText,
+        hintStyle: TextStyle(
           fontSize: 14,
-          color: MColor.kLabel.neutral,
+          color: MColor.kLabel.assistive,
         ),
-        decoration: InputDecoration(
-          hintText: labelText,
-          hintStyle: TextStyle(
-            fontSize: 14,
-            color: MColor.kLabel.assistive,
+        filled: true,
+        fillColor: MColor.kBackground.normal,
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: MColor.kLine.normal),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: MColor.kPrimary.normal,
+            width: 2,
           ),
-          filled: true,
-          fillColor: MColor.kBackground.normal,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: MColor.kLine.normal),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: MColor.kPrimary.normal,
-              width: 2,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: MColor.kLine.normal),
-          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: MColor.kLine.normal),
         ),
       ),
     );

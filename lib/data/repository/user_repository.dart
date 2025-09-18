@@ -47,20 +47,18 @@ class UserRepository {
     return responseBody;
   }
 
-  // 이메일 인증
+  // 이메일 인증 요청 (메일 발송)
   Future<Map<String, dynamic>> verificateEmail(String email) async {
     final response = await dio.get("/auth/email/check/$email");
-    final responseBody = response.data;
-    // final responseBody = {
-    //   "status": 200,
-    //   "msg": "성공",
-    //   "body": {
-    //     "verified": true,
-    //   },
-    // };
-    // Logger().d('UserRepository의 oauthLogin: ${responseBody}');
-    Logger().d("이메일 인증 호출끝");
-    Logger().d(responseBody.toString());
+    // 서버 응답 예시 (mock)
+    final responseBody = {
+      "status": 200,
+      "msg": "성공",
+      "body": {
+        "verified": true, // ✅ 여기 key 맞춰줘야 함
+      },
+    };
+    Logger().d('UserRepository의 verificateEmail: ${responseBody}');
     return responseBody;
   }
 
@@ -72,19 +70,18 @@ class UserRepository {
   }
 
   Future<Map<String, dynamic>> verifyEmailCode(String email, String code) async {
-    Logger().d("이메일 인증 호출됨");
-    Logger().d(email.toString());
-    Logger().d(code.toString());
-    final response = await dio.post(
-      "/auth/email/verify",
-      data: {
-        "email": email,
-        "code": code,
-      },
-    );
-    final responseBody = response.data;
-    Logger().d('UserRepository의 update: ${responseBody}');
+    Logger().d("이메일 인증 호출됨 (더미 모드)");
+    Logger().d("email: $email, code: $code");
 
+    // ===== 더미 응답 =====
+    await Future.delayed(const Duration(seconds: 1)); // 네트워크 지연 흉내
+    final responseBody = {
+      "status": 200,
+      "msg": "성공",
+      "body": {"email": email, "success": true, "message": "인증이 완료되었습니다."},
+    };
+
+    Logger().d("UserRepository.verifyEmailCode (더미): $responseBody");
     return responseBody;
   }
 

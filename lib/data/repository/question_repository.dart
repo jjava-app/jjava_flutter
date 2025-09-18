@@ -7,12 +7,17 @@ import 'package:logger/logger.dart';
 class QuestionRepository {
   Future<Map<String, dynamic>> getQuestionDetail(int questionId) async {
     Response response = await dio.get("/questions/$questionId");
-    final responseBody = response.data;
-    // final responseBody = {
-    //   "status": 200,
-    //   "msg": "성공",
-    //   "body": {"questionId": 1, "title": "title", "content": "content"},
-    // };
+    // final responseBody = response.data;
+    final responseBody = {
+      "status": 200,
+      "msg": "성공",
+      "body": {
+        "questionId": 1,
+        "title": "두 수의 합 구하기",
+        "content":
+            "문제 설명: 정수 a, b가 주어질 때, 두 수의 합을 반환하는 함수를 완성하세요.제한사항: a와 b는 -1000 이상 1000 이하의 정수입니다.입력 형식:- int a - int b 출력 형식: - int: a + b 의 결과를 반환합니다.",
+      },
+    };
 
     return responseBody;
   }

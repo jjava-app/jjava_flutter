@@ -9,8 +9,8 @@ class MaEmailInputPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final joinState = ref.watch(joinProvider); // 현재 상태 조회
-    final joinNotifier = ref.read(joinProvider.notifier); // 상태 변경용
+    final joinState = ref.watch(joinProvider);
+    final joinNotifier = ref.read(joinProvider.notifier);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -32,9 +32,9 @@ class MaEmailInputPage extends ConsumerWidget {
                 ),
                 MaJoinFormField(
                   labelText: '이메일을 입력해주세요.',
-                  initialValue: joinState.email, // 상태값 반영
+                  initialValue: joinState.email,
                   onChanged: (value) {
-                    joinNotifier.email(value); // 입력값 상태 업데이트
+                    joinNotifier.email(value);
                   },
                 ),
               ],
