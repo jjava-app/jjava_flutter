@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
-import 'package:jjava_flutter/ui/ta_page/holder/ta_main_holder.dart';
+import 'package:jjava_flutter/ui/fm/workspace_fm.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_leave_dialog.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_restart_dialog.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/widget/dialog/ta_save_dialog.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/workspace/list/ta_workspace_list_page.dart';
+import 'package:jjava_flutter/ui/ta_page/holder/workspace/widget/ta_workspace_block_dashboard.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/workspace/widget/ta_workspace_body.dart';
+import 'package:jjava_flutter/ui/vm/workspace_vm.dart';
+import 'package:logger/logger.dart';
 
-class TaWorkspacePage extends StatefulWidget {
-  const TaWorkspacePage({super.key});
+class TaWorkspacePage extends ConsumerStatefulWidget {
+  final int workspaceId;
+
+  const TaWorkspacePage({
+    super.key,
+    required this.workspaceId,
+  });
 
   @override
-  State<TaWorkspacePage> createState() => _WorkspacePageState();
+  ConsumerState<TaWorkspacePage> createState() => _WorkspacePageState();
 }
 
-class _WorkspacePageState extends State<TaWorkspacePage> {
+class _WorkspacePageState extends ConsumerState<TaWorkspacePage> {
+  final dashboardKey = GlobalKey<TaWorkspaceBlockDashboardState>();
+
   // TODO: 통신 시 실행 로직들 분리하여 vm에 옮기기
   // TODO: 웹뷰 처리 완료 후 오답 블럭 하이라이트 작업 진행
 
@@ -25,17 +37,38 @@ class _WorkspacePageState extends State<TaWorkspacePage> {
       barrierDismissible: false,
       barrierColor: Color(0x99000000),
       builder: (_) => TaLeaveDialog(
-        title: '만들기 종료',
-        message: '만들기를 종료하시겠습니까?',
+        title: '학습 종료',
+        message: '학습을 종료하시겠습니까?',
         cancelText: '취소',
         confirmText: '종료',
       ),
     );
     if (confirmed != true || !mounted) return;
-    // TODO: 종료 클릭 시 서버에 저장하고 이동
-    Navigator.push(
+    // 1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
+    await dashboardKey.currentState?.exportWorkspaceJson();
+
+    // 2. provider에 모인 값 읽기
+    final updateModel = ref.read(workspaceUpdateProvider);
+
+    // 3. 서버 저장 요청
+    try {
+      await ref
+          .read(workspaceProvider(widget.workspaceId).notifier)
+          .update(
+            widget.workspaceId,
+            updateModel.title,
+            updateModel.serializedJson,
+            updateModel.libraryJson,
+          );
+    } catch (e, s) {
+      Logger().e("저장 실패", error: e, stackTrace: s);
+    }
+
+    // 4. 저장 끝났으면 이ㅗㅇ
+    Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (_) => TaMainHolder()),
+      MaterialPageRoute(builder: (_) => TaWorkspaceListPage()), // <- 이동할 화면
+      (route) => false, // 스택 다 지우고 새 화면만 남김
     );
   }
 
@@ -44,20 +77,26 @@ class _WorkspacePageState extends State<TaWorkspacePage> {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      barrierColor: Color(0x99000000),
+      barrierColor: const Color(0x99000000),
       builder: (_) => TaRestartDialog(
         title: '다시 시작',
-        message: '만들기를 다시 시작하시겠습니까?',
+        message: '문제를 다시 시작하시겠습니까?',
         cancelText: '취소',
         confirmText: '다시 시작',
       ),
     );
+
     if (confirmed != true || !mounted) return;
-    // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => TaWorkspacePage()),
-    );
+
+    // 블록만 초기화 (서버 저장 X)
+    await dashboardKey.currentState?.resetWorkspace();
+
+    // 알림 메시지
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("워크스페이스가 초기화되었습니다")),
+      );
+    }
   }
 
   // 저장 다이얼로그
@@ -75,17 +114,90 @@ class _WorkspacePageState extends State<TaWorkspacePage> {
     );
     if (confirmed != true || !mounted) return;
     // TODO: 다시 시작 클릭 시 대시보드 초기화 지금은 임시로 이동
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => TaWorkspacePage()),
+    // Navigator.push(
+    //   context,
+    //   TaterialPageRoute(builder: (_) => TaWorkspacePage()),
+    // );
+    //1. 블록 JSON 추출 → workspaceUpdateProvider에 반영됨
+    await dashboardKey.currentState?.exportWorkspaceJson();
+
+    //2. provider에 모인 값 읽기
+    final updateModel = ref.read(workspaceUpdateProvider);
+
+    // 값 확인 로그
+    Logger().d("REQ BODY => ${updateModel.toMap()}");
+
+    //3. 서버에 저장 요청
+    await ref
+        .read(workspaceProvider(widget.workspaceId).notifier)
+        .update(
+          widget.workspaceId,
+          updateModel.title,
+          updateModel.serializedJson,
+          updateModel.libraryJson,
+        );
+    //4. 저장 완료 메시지
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("저장 완료")),
     );
+  }
+
+  Future<void> _onDeleteTap() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: const Color(0x99000000),
+      builder: (_) => AlertDialog(
+        title: const Text("삭제"),
+        content: const Text("이 워크스페이스를 삭제하시겠습니까?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("취소"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              "삭제",
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await ref.read(workspaceProvider(widget.workspaceId).notifier).delete(widget.workspaceId);
+
+      if (!mounted) return;
+      // 삭제 후 리스트 페이지로 이동
+      Navigator.pop(context);
+    } catch (e, s) {
+      Logger().e("삭제 실패", error: e, stackTrace: s);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("삭제 실패")),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final workspace = ref.watch(workspaceProvider(widget.workspaceId));
+
+    if (workspace == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return Scaffold(
       appBar: _appbar(),
-      body: TaWorkspaceBody(),
+      body: TaWorkspaceBody(
+        workspaceId: workspace.id,
+        dashboardKey: dashboardKey,
+      ),
     );
   }
 
@@ -138,6 +250,8 @@ class _WorkspacePageState extends State<TaWorkspacePage> {
               await _onFinishTap();
             } else if (value == 'save') {
               await _onSaveTap();
+            } else if (value == 'delete') {
+              await _onDeleteTap();
             }
           },
           itemBuilder: (context) => [
@@ -167,7 +281,23 @@ class _WorkspacePageState extends State<TaWorkspacePage> {
               child: Center(
                 child: Text(
                   '만들기 종료',
-                  style: TextStyle(fontSize: 16, color: MColor.kStatus.destructive),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: MColor.kStatus.destructive,
+                  ),
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'delete',
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(
+                child: Text(
+                  '삭제',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: MColor.kStatus.destructive,
+                  ),
                 ),
               ),
             ),

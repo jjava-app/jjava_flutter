@@ -9,11 +9,6 @@ class MaLoginPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: MaLoginBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, "/main-holder");
-        },
-      ),
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/question/list_page/widgets/ma_question_list_body.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/question/ma_question_page.dart';
 
 class MaQuestionListPage extends StatelessWidget {
   const MaQuestionListPage({super.key});
@@ -14,14 +13,6 @@ class MaQuestionListPage extends StatelessWidget {
       appBar: _appBar(context),
       body: SafeArea(
         child: MaQuestionListBody(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => MaQuestionPage()),
-          );
-        },
       ),
       bottomNavigationBar: _bottomNavigationBar(context),
     );

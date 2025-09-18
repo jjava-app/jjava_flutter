@@ -11,37 +11,32 @@ class User {
   final List<UserAccountProviderModel> linked;
   final bool? isNewUser;
 
-  User({this.id, this.email, this.username, this.level, this.rank, this.score = 0, this.accessToken, this.linked = const [],
-    this.isNewUser
-  });
+  User({this.id, this.email, this.username, this.level, this.rank, this.score = 0, this.accessToken, this.linked = const [], this.isNewUser});
 
   /// 마이페이지 응답용 (body{ id,email,username,level,score,rank, linked[...] })
   factory User.fromMap(Map<String, dynamic> data) {
-    final Map<String, dynamic> src =
-    data['userInfo'] is Map
+    final Map<String, dynamic> src = data['userInfo'] is Map
         ? Map<String, dynamic>.from(data['userInfo'])
         : data['user'] is Map
         ? Map<String, dynamic>.from(data['user'])
         : Map<String, dynamic>.from(data);
 
-    final String? token =
-    (data['accessToken'] ?? src['accessToken']) as String?;
+    final String? token = (data['accessToken'] ?? src['accessToken']) as String?;
 
-    final List<UserAccountProviderModel> linkedList =
-    data.containsKey('linked')
+    final List<UserAccountProviderModel> linkedList = data.containsKey('linked')
         ? UserAccountProviderModel.listFrom(data['linked'])
         : UserAccountProviderModel.listFrom(src['linked']);
 
     return User(
-      id: data['id'],
-      email: data['email'],
-      username: data['username'],
-      level: data['level'],
-      score: (data['score'] as num?)?.toInt(),
-      rank: (data['rank'] as num?)?.toInt(),
+      id: src['id'],
+      email: src['email'],
+      username: src['nickname'] ?? src['username'],
+      level: src['level'],
+      score: (src['score'] as num?)?.toInt(),
+      rank: (src['rank'] as num?)?.toInt(),
       accessToken: token,
       linked: linkedList,
-      isNewUser: data['isNewUser']
+      isNewUser: src['isNewUser'],
     );
   }
 
@@ -50,8 +45,6 @@ class User {
     return 'LV. ${m[level] ?? 1}';
     // 필요하면 null/빈값 방어 로직 추가
   }
-
-
 
   @override
   String toString() {

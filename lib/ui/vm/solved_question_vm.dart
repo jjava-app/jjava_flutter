@@ -23,7 +23,7 @@ class SolvedQuestionListVM extends Notifier<SolvedQuestionListModel?> {
 
   /// 서버에서 지난 학습 문제 목록 가져오기
   Future<void> init() async {
-    final res = await _repo.getSolvedQuestionList();
+    final res = await _repo.solvedQuestionList();
     final data = res["body"]["solvedQuestions"] as Map<String, dynamic>;
 
     state = SolvedQuestionListModel.fromMap(data);

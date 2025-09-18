@@ -3,6 +3,15 @@ import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/ui/ma_page/holder/ma_main_holder.dart';
 
 class MaQuestionCorrectDialog extends StatelessWidget {
+  final String refactorNote; // AI 첨삭 설명
+  final String refactoredCode; // AI 리팩터 코드
+
+  const MaQuestionCorrectDialog({
+    super.key,
+    required this.refactorNote,
+    required this.refactoredCode,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -16,64 +25,87 @@ class MaQuestionCorrectDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: Column(
-              spacing: 10,
+              spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Text(
+                  '성공 😇',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: MColor.kLabel.normal,
+                  ),
+                ),
+                Text(
+                  '다음 문제도 풀어볼까요?',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: MColor.kLabel.neutral,
+                  ),
+                ),
+                Divider(color: MColor.kLine.normal),
+
+                // AI 첨삭 섹션
+                Row(
+                  spacing: 6,
                   children: [
-                    Text(
-                      '성공 😇',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: MColor.kLabel.normal,
+                    Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Color(0xFFEAEAEA),
                       ),
                     ),
-                    SizedBox(height: 10),
                     Text(
-                      '다음 문제도 풀어볼까요?',
+                      'AI 첨삭',
                       style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: MColor.kLabel.neutral,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: MColor.kButton.active,
                       ),
                     ),
                   ],
                 ),
-                Column(
-                  spacing: 10,
-                  children: [
-                    Row(
-                      spacing: 6,
-                      children: [
-                        Container(
-                          width: 16,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: Color(0xFFEAEAEA),
-                          ),
-                        ),
-                        Text(
-                          'AI 첨삭',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: MColor.kButton.active,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      'Lorem ipsum dolor sit amet consectetur. Porta sed placerat dignissim facilisis congue viverra suspendisse neque maecenas. Ut venenatis proin mi id id sit lectus ut nam.',
+                Text(
+                  refactorNote,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: MColor.kLabel.normal,
+                  ),
+                ),
+                Divider(color: MColor.kLine.normal),
+
+                // 리팩터 코드 섹션
+                Text(
+                  '리팩터 코드',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: MColor.kButton.active,
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF1E1E1E),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Text(
+                      refactoredCode,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: MColor.kLabel.normal,
+                        color: MColor.kLabel.white,
+                        fontFamily: 'monospace',
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),

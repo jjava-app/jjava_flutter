@@ -24,9 +24,9 @@ class SessionGVM extends Notifier<SessionModel> {
   }
 
   // 1. 로그인
-  Future<void> emailLogin(String accessToken) async {
+  Future<void> emailLogin(String email, String password) async {
     // 1. 통신
-    Map<String, dynamic> data = await UserRepository().emailLogin(accessToken);
+    Map<String, dynamic> data = await UserRepository().emailLogin(email, password);
     if (data["status"] != 200) {
       ScaffoldMessenger.of(mContext).showSnackBar(
         SnackBar(content: Text("${data["msg"]}")),

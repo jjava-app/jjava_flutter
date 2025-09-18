@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
-import 'package:jjava_flutter/ui/ta_page/holder/question/list_page/widgets/ta_question_section.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/question/ta_question_page.dart';
 import 'package:jjava_flutter/ui/ta_page/holder/ta_main_holder.dart';
 import 'package:jjava_flutter/ui/vm/question_list_vm.dart';
@@ -31,14 +30,11 @@ class TaQuestionListPage extends ConsumerWidget {
                       horizontal: 16,
                       vertical: 22,
                     ),
-                    itemCount: model.sections.length,
+                    itemCount: model.questions.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
-                      final s = model.sections[index];
-                      return TaQuestionSection(
-                        section: s,
-                        solvedIds: model.solvedIds,
-                      );
+                      final s = model.questions[index];
+                      return;
                     },
                   ),
                 ),

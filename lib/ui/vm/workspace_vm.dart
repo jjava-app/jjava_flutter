@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jjava_flutter/_core/util/m_blockly_id.dart';
 import 'package:jjava_flutter/data/repository/workspace_repository.dart';
 import 'package:jjava_flutter/main.dart';
+import 'package:jjava_flutter/ui/vm/workspace_list_vm.dart';
+import 'package:logger/logger.dart';
 
 /// 1. 창고 관리자
 final workspaceProvider = NotifierProvider.family<WorkspaceVM, WorkspaceModel?, int>(() {
@@ -19,23 +24,65 @@ class WorkspaceVM extends FamilyNotifier<WorkspaceModel?, int> {
 
   // 워크 스페이스 상세보기 (초기화)
   Future<void> init(int workspaceId) async {
-    Map<String, dynamic> body = await WorkspaceRepository().getWorkspaceDetail(workspaceId);
-    state = WorkspaceModel.fromMap(body["response"]);
+    Map<String, dynamic> body = await WorkspaceRepository().getWorkspaceDetail(
+      workspaceId,
+    );
+    Logger().d(body.toString());
+    state = WorkspaceModel.fromMap(body["body"]);
   }
 
   // 워크 스페이스 저장
-  Future<void> update(int workspaceId, String title, String serializedJson, String libraryJson) async {
-    Map<String, dynamic> reqBody = {"title": title, "serializedJson": serializedJson, "libraryJson": libraryJson};
+  // ui/vm/workspace_vm.dart 파일
 
-    Map<String, dynamic> body = await WorkspaceRepository().updateWorkspace(workspaceId, reqBody);
-    state = WorkspaceModel.fromMap(body['response']);
+  Future<void> update(
+    int workspaceId,
+    String title,
+    String serializedJson, // 이미 JSON 문자열 형태
+    String libraryJson,
+  ) async {
+    String fixed = serializedJson;
+
+    // 이스케이프 제거
+    if (fixed.contains(r'\"')) {
+      fixed = fixed.replaceAll(r'\"', '"');
+    }
+    if (fixed.startsWith('"') && fixed.endsWith('"')) {
+      fixed = fixed.substring(1, fixed.length - 1);
+    }
+
+    final decoded = jsonDecode(fixed); // 이제 정상 Map 됨
+    final cleaned = withSafeIds(decoded);
+    final cleanedJsonStr = jsonEncode(cleaned);
+
+    Map<String, dynamic> reqBody = {
+      "title": title ?? 'if', //새 워크스페이스
+      "serializedJson": cleanedJsonStr,
+      "libraryJson": libraryJson,
+    };
+
+    Map<String, dynamic> body = await WorkspaceRepository().updateWorkspace(
+      workspaceId,
+      reqBody,
+    );
+    Logger().d("(===============)");
+    state = state!.copyWith(
+      id: body['body']['id'],
+      userId: body['body']['userId'],
+      title: body['body']['title'],
+      serializedJson: body['body']['serializedJson'],
+      libraryJson: body['body']['libraryJson'],
+    );
   }
 
   // 워크 스페이스 삭제
   Future<void> delete(int workspaceId) async {
-    Map<String, dynamic> body = await WorkspaceRepository().deleteWorkspace(workspaceId);
-
-    // ok status 확인 후 init()
+    final body = await WorkspaceRepository().deleteWorkspace(workspaceId);
+    if (body['status'] == 200) {
+      await ref.read(workspaceListProvider.notifier).init();
+      state = null;
+    } else {
+      throw Exception("워크스페이스 삭제 실패: ${body['msg']}");
+    }
   }
 }
 
@@ -47,14 +94,20 @@ class WorkspaceModel {
   final String serializedJson;
   final String libraryJson;
 
-  WorkspaceModel(this.id, this.userId, this.title, this.serializedJson, this.libraryJson);
+  WorkspaceModel(
+    this.id,
+    this.userId,
+    this.title,
+    this.serializedJson,
+    this.libraryJson,
+  );
 
   WorkspaceModel.fromMap(Map<String, dynamic> data)
-    : id = data['response']['id'],
-      userId = data['response']['userId'],
-      title = data['response']['title'],
-      serializedJson = data['response']['serializedJson'],
-      libraryJson = data['response']['libraryJson'];
+    : id = data['id'],
+      userId = data['userId'],
+      title = data['title'],
+      serializedJson = data['serializedJson'] ?? '',
+      libraryJson = data['libraryJson'] ?? '';
 
   WorkspaceModel copyWith({
     int? id,

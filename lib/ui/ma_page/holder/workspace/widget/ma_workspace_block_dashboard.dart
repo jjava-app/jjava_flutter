@@ -1,25 +1,40 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blockly_plus/flutter_blockly_plus.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_icon.dart';
+import 'package:jjava_flutter/data/repository/workspace_repository.dart';
+import 'package:jjava_flutter/ui/fm/compile_fm.dart';
+import 'package:jjava_flutter/ui/fm/workspace_fm.dart';
+import 'package:jjava_flutter/ui/vm/workspace_vm.dart';
+import 'package:logger/logger.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class MaWorkspaceBlockDashboard extends StatefulWidget {
+class MaWorkspaceBlockDashboard extends ConsumerStatefulWidget {
   final ValueChanged<bool> onLoading;
-  const MaWorkspaceBlockDashboard({super.key, required this.onLoading});
+  final int workspaceId;
+
+  const MaWorkspaceBlockDashboard({
+    super.key,
+    required this.onLoading,
+    required this.workspaceId,
+  });
 
   @override
-  State<MaWorkspaceBlockDashboard> createState() => _MaWorkspaceBlockDashboardState();
+  ConsumerState<MaWorkspaceBlockDashboard> createState() => MaWorkspaceBlockDashboardState();
 }
 
-class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
+class MaWorkspaceBlockDashboardState extends ConsumerState<MaWorkspaceBlockDashboard> {
   final _log = <String>[];
 
   BlocklyEditor? editor;
-  late final Future<void> _editorReady;
+  bool isEditorInitialized = false;
 
-  // 툴박스
+  bool isLoading = true; // 로딩 여부
+  String statusMessage = "에디터 초기화 중..."; // 상태 메시지
   static const toolboxJson = {
     "kind": "categoryToolbox",
     "contents": [
@@ -94,22 +109,6 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
     ],
   };
 
-  // 초기 상태(예시)
-  final Map<String, dynamic> savedStateJson = {
-    "blocks": {
-      "languageVersion": 0,
-      "blocks": [
-        {
-          "type": "math_number",
-          "x": 40,
-          "y": 40,
-          "fields": {"NUM": 42},
-        },
-      ],
-    },
-  };
-
-  // 툴박스 옵션 세팅
   late final BlocklyOptions workspaceConfiguration = BlocklyOptions.fromJson({
     "toolbox": toolboxJson,
     "toolboxPosition": "end",
@@ -121,28 +120,44 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
       "wheel": false,
       "scrollbars": {"horizontal": true, "vertical": true},
     },
-    "zoom": {"controls": false, "wheel": false, "startScale": 1.0, "maxScale": 2.5, "minScale": 0.3},
-    "grid": {"spacing": 20, "length": 3, "colour": "transparent", "snap": false},
+    "zoom": {
+      "controls": false,
+      "wheel": false,
+      "startScale": 1.0,
+      "maxScale": 2.5,
+      "minScale": 0.3,
+    },
+    "grid": {
+      "spacing": 20,
+      "length": 3,
+      "colour": "transparent",
+      "snap": false,
+    },
     "trashcan": false,
   });
 
   @override
   void initState() {
     super.initState();
-    _editorReady = _initEditor();
   }
 
-  Future<void> _initEditor() async {
-    try {
-      // 1) 애드온 로드
-      final skinJs = await rootBundle.loadString('assets/blockly/ma_toolbox_skin.js');
-      final javaGenJs = await rootBundle.loadString('assets/blockly/java_generator.js');
-      _log.add('[BOOT] addons loaded: skin=${skinJs.length}, javaGen=${javaGenJs.length}');
+  Future<void> _initEditor(Map<String, dynamic> initialJson) async {
+    if (isEditorInitialized) return; // 이미 초기화되었다면 다시 실행하지 않음
 
-      // 2) 에디터 생성
+    try {
+      final skinJs = await rootBundle.loadString(
+        'assets/blockly/ma_toolbox_skin.js',
+      );
+      final javaGenJs = await rootBundle.loadString(
+        'assets/blockly/java_generator.js',
+      );
+      // _log.add(
+      //   '[BOOT] addons loaded: skin=${skinJs.length}, javaGen=${javaGenJs.length}',
+      // );
+
       editor = BlocklyEditor(
         workspaceConfiguration: workspaceConfiguration,
-        initial: savedStateJson,
+        initial: initialJson,
         addons: [skinJs, javaGenJs],
         onError: (e) {
           _log.add('[ERR] $e');
@@ -152,50 +167,88 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
         onInject: (_) => _log.add('[INJECT] called'),
       );
 
-      // 3) init 전에 WebView 컨트롤러 세팅
       final ctrl = editor!.blocklyController;
       await ctrl.setJavaScriptMode(JavaScriptMode.unrestricted);
       await ctrl.setBackgroundColor(const Color(0x00000000));
 
-      // ★ JS 채널 등록: window.JavaOut.postMessage(code) 수신
       await ctrl.addJavaScriptChannel(
         'JavaOut',
-        onMessageReceived: (JavaScriptMessage msg) {
+        onMessageReceived: (JavaScriptMessage msg) async {
           final code = msg.message;
-          _log.add('[JAVA]\n$code'); // 앱 내 터미널
-          debugPrint('[JAVA from channel]\n$code'); // Flutter 콘솔
+          _log.add('[JAVA CODE]\n$code');
+          debugPrint('[JAVA from channel]\n$code');
+
+          // 👉 API 호출은 여기서 하지 않고, run 버튼에서 처리
+          ref.read(compileProvider.notifier).payload(code);
           setState(() {});
         },
       );
 
+      // 2. 실행 버튼에서 처리
+      Future<void> _runAndPushViaChannel() async {
+        final ctrl = editor?.blocklyController;
+        if (ctrl == null) {
+          _log.add('[RUN-ERR] controller=null');
+          setState(() {});
+          return;
+        }
+        try {
+          // Blockly에서 JS 코드 추출
+          final jsCode = await ctrl.runJavaScriptReturningResult(
+            'Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace())',
+          );
+
+          final fm = CompileModel(jsCode.toString());
+          final res = await WorkspaceRepository().compileWorkspace(fm);
+
+          _log.add('[실행 결과] $res');
+        } catch (e) {
+          _log.add('[RUN-ERR] $e');
+        }
+        setState(() {});
+      }
+
+      //Blockly, 워크스페이스, Java Generator 다 준비됐는지를 체크하는 코드 주석해도 됨 영상 촬영 시에는
       await ctrl.setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (url) {
-            _log.add('[WEB] onPageStarted: $url');
-            setState(() {});
+            // _log.add('[WEB] onPageStarted: $url');
+            setState(() {
+              isLoading = true;
+              statusMessage = "블록 에디터 불러오는 중...";
+            });
           },
           onPageFinished: (url) async {
-            _log.add('[WEB] onPageFinished: $url');
-            _log.add(
-              '[WEB] ready=${await _ret('document.readyState')}, Blockly=${await _ret('typeof window.Blockly')}, workspace=${await _ret('(window.Blockly&&Blockly.getMainWorkspace)? "ok":"no"')}, JavaGen=${await _ret('(window.__JAVA_GEN_OK__===true)?"ok":"no"')}',
-            );
-            setState(() {});
+            // _log.add('[WEB] onPageFinished: $url');
+            // _log.add(
+            //   '[WEB] ready=${await _ret('document.readyState')}, Blockly=${await _ret('typeof window.Blockly')}, workspace=${await _ret('(window.Blockly&&Blockly.getMainWorkspace)? "ok":"no"')}, JavaGen=${await _ret('(window.__JAVA_GEN_OK__===true)?"ok":"no"')}',
+            // );
+            setState(() {
+              isLoading = false;
+              statusMessage = "에디터 준비 완료";
+            });
           },
           onWebResourceError: (err) {
-            _log.add('[WEB-ERR] $err');
-            setState(() {});
+            // _log.add('[WEB-ERR] $err');
+            setState(() {
+              isLoading = false;
+              statusMessage = "에디터 로딩 실패: ${err.description}";
+            });
           },
         ),
       );
 
-      // 4) 초기화 + HTML 로드
       editor!.init();
-      _log.add('[BOOT] editor.init() called (after JS+delegate set)');
+      // _log.add('[BOOT] editor.init() called');
 
       final html = editor!.htmlRender();
-      _log.add('[BOOT] htmlRender length=${html.length}');
+      // _log.add('[BOOT] htmlRender length=${html.length}');
       await ctrl.loadHtmlString(html);
-      _log.add('[BOOT] loadHtmlString called');
+      // _log.add('[BOOT] loadHtmlString called');
+
+      setState(() {
+        isEditorInitialized = true;
+      });
     } catch (e) {
       _log.add('[BOOT-ERR] $e');
       setState(() {});
@@ -204,7 +257,9 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
 
   Future<String> _ret(String js) async {
     try {
-      final raw = await editor!.blocklyController.runJavaScriptReturningResult(js);
+      final raw = await editor!.blocklyController.runJavaScriptReturningResult(
+        js,
+      );
       if (raw is String && raw.length >= 2 && raw.startsWith('"') && raw.endsWith('"')) {
         return raw.substring(1, raw.length - 1);
       }
@@ -216,62 +271,6 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
     }
   }
 
-  // 🐞 Ping (요약)
-  // Future<void> _ping() async {
-  //   final ctrl = editor?.blocklyController;
-  //   if (ctrl == null) return;
-  //   try {
-  //     final genState = await ctrl.runJavaScriptReturningResult(
-  //       '(function(){return (window.__JAVA_GEN_OK__===true)?"ok":(window.__installJavaGenerator?(__installJavaGenerator()?"installed":"fail"):"no_fn");})()',
-  //     );
-  //     final snapJs = r'''
-  //       (function(){
-  //         try{
-  //           var ws = (window.Blockly && Blockly.getMainWorkspace) ? Blockly.getMainWorkspace() : null;
-  //           var res = {
-  //             ready: (typeof document!=='undefined')?document.readyState:null,
-  //             hasBlockly: (typeof window.Blockly),
-  //             ver: (window.Blockly && (Blockly.VERSION || Blockly.version || null)) || null,
-  //             ws: !!ws,
-  //             blocks: ws && ws.getAllBlocks ? ws.getAllBlocks(false).length : null,
-  //             javaGenOk: !!window.__JAVA_GEN_OK__,
-  //             hasFinish: !!(window.Blockly && Blockly.Java && Blockly.Java.finish),
-  //             varGet: !!(window.Blockly && Blockly.Java && (typeof Blockly.Java['variables_get']==='function')),
-  //             varSet: !!(window.Blockly && Blockly.Java && (typeof Blockly.Java['variables_set']==='function')),
-  //             mathChange: !!(window.Blockly && Blockly.Java && (typeof Blockly.Java['math_change']==='function'))
-  //           };
-  //           try{
-  //             var keys=[];
-  //             if (window.Blockly && Blockly.Java){
-  //               for (var k in Blockly.Java){
-  //                 if (typeof Blockly.Java[k]==='function' && !/^[A-Z_]+$/.test(k)) keys.push(k);
-  //               }
-  //             }
-  //             res.handlers = keys.sort();
-  //           }catch(e){}
-  //           return JSON.stringify(res);
-  //         }catch(e){return JSON.stringify({fatal:String(e)})}
-  //       })();
-  //     ''';
-  //     final raw = await ctrl.runJavaScriptReturningResult(snapJs);
-  //     final s = raw?.toString() ?? '{}';
-  //     final jsonStr = (s.startsWith('"') && s.endsWith('"')) ? s.substring(1, s.length - 1) : s;
-  //     final Map<String, dynamic> d = jsonDecode(jsonStr);
-  //     _log.add("[DBG] genState=$genState");
-  //     _log.add(
-  //       "[DBG] ready=${d['ready']}, Blockly=${d['hasBlockly']}, ver=${d['ver']}, ws=${d['ws']}, blocks=${d['blocks']}",
-  //     );
-  //     _log.add(
-  //       "[DBG] javaGenOk=${d['javaGenOk']}, hasFinish=${d['hasFinish']}, varGet=${d['varGet']}, varSet=${d['varSet']}, mathChange=${d['mathChange']}",
-  //     );
-  //     _log.add("[DBG] handlers=${d['handlers']}");
-  //   } catch (e) {
-  //     _log.add('[DBG-ERR] $e');
-  //   }
-  //   setState(() {});
-  // }
-
-  // 실행 로직 테스트
   Future<void> _runAndPushViaChannel() async {
     final ctrl = editor?.blocklyController;
     if (ctrl == null) {
@@ -281,9 +280,9 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
     }
     try {
       await ctrl.runJavaScriptReturningResult('window.BlocklyJavaSend()');
-      _log.add(
-        '[RUN] ready=${await _ret('document.readyState')}, Blockly=${await _ret('typeof window.Blockly')}, ws=${await _ret('(window.Blockly&&Blockly.getMainWorkspace)? "ok":"no"')}, JavaGen=${await _ret('(window.__JAVA_GEN_OK__===true)?"ok":"no"')}',
-      );
+      // _log.add(
+      //   '[RUN] ready=${await _ret('document.readyState')}, Blockly=${await _ret('typeof window.Blockly')}, ws=${await _ret('(window.Blockly&&Blockly.getMainWorkspace)? "ok":"no"')}, JavaGen=${await _ret('(window.__JAVA_GEN_OK__===true)?"ok":"no"')}',
+      // ); //제너레이터와 그외 라이브러리 html이 잘 동작하는지 확인하는 코드 -> 주석처리 동작시에 필요 없음
     } catch (e) {
       _log.add('[RUN-ERR] $e');
       setState(() {});
@@ -291,55 +290,140 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
     setState(() {});
   }
 
+  Future<void> exportWorkspaceJson() async {
+    final ctrl = editor?.blocklyController;
+    if (ctrl == null) return;
+
+    try {
+      final raw = await ctrl.runJavaScriptReturningResult(
+        'JSON.stringify(Blockly.serialization.workspaces.save(Blockly.getMainWorkspace()))',
+      );
+      Logger().d(raw.toString());
+
+      String jsonStr = raw.toString();
+      if (jsonStr.startsWith('"') && jsonStr.endsWith('"')) {
+        jsonStr = jsonStr.substring(1, jsonStr.length - 1);
+        jsonStr = jsonStr.replaceAll(r'\"', '"');
+      }
+
+      final decoded = jsonDecode(jsonStr);
+      // Provider에 반영
+      ref.read(workspaceUpdateProvider.notifier).serializedJson(jsonEncode(decoded));
+
+      // toolboxJson도 libraryJson으로 반영
+      ref.read(workspaceUpdateProvider.notifier).libraryJson(jsonEncode(toolboxJson));
+
+      // _log.add('[WORKSPACE JSON]\n$jsonStr');
+      _log.add('저장 완료');
+      setState(() {});
+    } catch (e) {
+      _log.add('[EXPORT-ERR] $e');
+      setState(() {});
+    }
+  }
+
+  Future<void> resetWorkspace() async {
+    final ctrl = editor?.blocklyController;
+    if (ctrl == null) return;
+
+    try {
+      // 블록 완전 초기화 (빈 워크스페이스 적용)
+      const emptyJson = '{"blocks": []}';
+      await ctrl.runJavaScriptReturningResult(
+        'Blockly.serialization.workspaces.load($emptyJson, Blockly.getMainWorkspace())',
+      );
+
+      // Provider에도 반영 (빈 JSON으로 갱신)
+      ref.read(workspaceUpdateProvider.notifier).serializedJson(emptyJson);
+      ref.read(workspaceUpdateProvider.notifier).libraryJson(jsonEncode(toolboxJson));
+
+      _log.add('[RESET] 워크스페이스 초기화 완료');
+      setState(() {});
+    } catch (e) {
+      _log.add('[RESET-ERR] $e');
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final workspaceState = ref.watch(workspaceProvider(widget.workspaceId));
+
+    if (workspaceState == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (!isEditorInitialized) {
+      Map<String, dynamic> initialJson = {};
+
+      if (workspaceState.serializedJson.isNotEmpty) {
+        try {
+          initialJson = jsonDecode(workspaceState.serializedJson);
+        } catch (e) {
+          _log.add('[ERR] Failed to decode serializedJson: $e');
+        }
+      }
+
+      Future.delayed(const Duration(seconds: 2), () {
+        _initEditor(initialJson);
+      });
+
+      // 여기서 상태 메시지 UI 반환
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircularProgressIndicator(),
+            const SizedBox(height: 12),
+            Text(
+              statusMessage, // <- 이거는 State에 멤버변수로 빼놔야 함
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Stack(
       children: [
-        FutureBuilder<void>(
-          future: _editorReady,
-          builder: (context, snap) {
-            if (snap.connectionState != ConnectionState.done || editor == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return Column(
-              children: [
-                // 워크스페이스
-                Expanded(child: WebViewWidget(controller: editor!.blocklyController)),
-                // 터미널
-                Container(
-                  height: 160,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-                    color: Color(0xFF333B4A),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 12,
-                      right: 12,
-                      top: 12,
-                    ),
-                    child: SafeArea(
-                      child: ListView.builder(
-                        reverse: false,
-                        itemCount: _log.length,
-                        itemBuilder: (_, i) => Text(
-                          _log[_log.length - 1 - i],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: MColor.kLabel.white,
-                          ),
-                        ),
+        Column(
+          children: [
+            Expanded(
+              child: WebViewWidget(controller: editor!.blocklyController),
+            ),
+            Container(
+              height: 160,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(8),
+                ),
+                color: Color(0xFF333B4A),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  top: 12,
+                ),
+                child: SafeArea(
+                  child: ListView.builder(
+                    reverse: false,
+                    itemCount: _log.length,
+                    itemBuilder: (_, i) => Text(
+                      _log[_log.length - 1 - i],
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: MColor.kLabel.white,
                       ),
                     ),
                   ),
                 ),
-              ],
-            );
-          },
+              ),
+            ),
+          ],
         ),
-        // 실행 버튼
         Positioned(
           top: 8,
           left: 16,
@@ -349,7 +433,6 @@ class _MaWorkspaceBlockDashboardState extends State<MaWorkspaceBlockDashboard> {
               color: Color(0x29FF6969),
             ),
             child: InkWell(
-              // TODO: 클릭 시 통신
               onTap: _runAndPushViaChannel,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),

@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:jjava_flutter/ui/ma_page/onboarding/ma_onboarding_page.dart';
 
-class MaSplashPage extends StatelessWidget {
+class MaSplashPage extends StatefulWidget {
+  const MaSplashPage({super.key});
+
+  @override
+  State<MaSplashPage> createState() => _MaSplashPageState();
+}
+
+class _MaSplashPageState extends State<MaSplashPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    // ✅ 2초 후 로그인 페이지로 이동
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, "/login");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,37 +29,6 @@ class MaSplashPage extends StatelessWidget {
           height: double.infinity,
           fit: BoxFit.cover,
         ),
-      ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FloatingActionButton(
-            heroTag: 'btn1',
-            child: Text('로그인\n페이지'),
-            onPressed: () {
-              Navigator.pushNamed(context, "/login");
-            },
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: 'btn2',
-            child: Text('메인\n페이지'),
-            onPressed: () {
-              Navigator.pushNamed(context, "/main-holder");
-            },
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: 'btn3',
-            child: Text('온보딩'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => MaOnboardingPage()),
-              );
-            },
-          ),
-        ],
       ),
     );
   }

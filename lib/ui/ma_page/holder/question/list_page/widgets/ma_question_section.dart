@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:jjava_flutter/_core/style/m_color.dart';
 import 'package:jjava_flutter/_core/style/m_text.dart';
 import 'package:jjava_flutter/data/model/question.dart';
-import 'package:jjava_flutter/data/model/section.dart';
-import 'package:jjava_flutter/ui/ma_page/holder/question/ma_question_page.dart';
 
 class MaQuestionSection extends StatefulWidget {
-  final Section section;
+  final Question section; // ✅ 이제 Section 대신 Question 직접 받음
   final bool initiallyExpanded;
   final void Function(Question question)? onProblemTap;
-  final Set<int> solvedIds;
+  final int? selectedId; // 선택된 문제 id
 
   const MaQuestionSection({
     super.key,
     required this.section,
     this.initiallyExpanded = false,
     this.onProblemTap,
-    required this.solvedIds,
+    this.selectedId,
   });
 
   @override
@@ -28,8 +26,7 @@ class _SectionTileState extends State<MaQuestionSection> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.section.type ?? '제목 없음';
-    final items = widget.section.questions;
+    final title = widget.section.title ?? '제목 없음';
 
     return Container(
       decoration: BoxDecoration(
@@ -41,7 +38,7 @@ class _SectionTileState extends State<MaQuestionSection> {
       ),
       child: Column(
         children: [
-          // 섹션 헤더
+          // 섹션 헤더 (문제 제목)
           InkWell(
             onTap: () => setState(() => expanded = !expanded),
             child: Container(
@@ -49,59 +46,32 @@ class _SectionTileState extends State<MaQuestionSection> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: MText.h5(
                 title,
-                color: expanded
-                    ? MColor.kPrimary.normal
-                    : MColor.kLabel.assistive,
+                color: expanded ? MColor.kPrimary.normal : MColor.kLabel.assistive,
               ),
             ),
           ),
-          if (expanded)
-            Divider(height: 1, thickness: 1, color: MColor.kPrimary.normal),
+          if (expanded) Divider(height: 1, thickness: 1, color: MColor.kPrimary.normal),
 
           if (expanded)
-            Column(
-              children: [
-                for (var i = 0; i < items.length; i++) ...[
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MaQuestionPage(
-                            //question: items[i], // 선택한 문제 전달
-                          ),
+            InkWell(
+              onTap: () => widget.onProblemTap?.call(widget.section),
+              child: Container(
+                color: (widget.selectedId == widget.section.questionId) ? MColor.kPrimary.normal.withValues(alpha: 0.1) : MColor.kBackground.normal,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.section.title ?? '제목 없음',
+                        style: TextStyle(
+                          color: (widget.selectedId == widget.section.questionId) ? MColor.kPrimary.normal : MColor.kLabel.normal,
+                          fontWeight: (widget.selectedId == widget.section.questionId) ? FontWeight.w600 : FontWeight.w400,
                         ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              items[i].title ?? '제목 없음',
-                              style: TextStyle(
-                                color: widget.solvedIds.contains(items[i].id)
-                                    ? Colors.grey
-                                    : Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
-                  ),
-                  if (i != items.length - 1)
-                    Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: MColor.kPrimary.normal,
-                    ),
-                ],
-              ],
+                  ],
+                ),
+              ),
             ),
         ],
       ),

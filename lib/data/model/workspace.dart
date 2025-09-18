@@ -20,7 +20,7 @@ class Workspace {
   Workspace.fromMap(Map<String, dynamic> data)
     : id = data['id'],
       userId = data['userId'],
-      title = data['title'],
+      title = data['title'] ?? '제목 없음',
       serializedJson = data['serializedJson'] ?? '',
       libraryJson = data['libraryJson'] ?? '',
       createdAt = formatCreatedAt(data['createdAt']);

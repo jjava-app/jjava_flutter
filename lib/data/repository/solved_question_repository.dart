@@ -1,51 +1,46 @@
+import 'package:dio/dio.dart';
+import 'package:jjava_flutter/_core/util/m_http.dart';
+
 class SolvedQuestionRepository {
-  Future<Map<String, dynamic>> getSolvedQuestionList() async {
-    // Response response = await dio.get("/solved-questions/list");
-    // final responseBody = response.data;
-    final responseBody = {
-      "status": 200,
-      "msg": "성공",
-      "body": {
-        "solvedQuestions": {
-          "OPERATOR": [
-            {
-              "solvedQuestionId": 102,
-              "title": "문제 2",
-              "content": "두 정수를 입력받아 사칙연산을 수행하는 함수를 작성하세요.",
-              "createdAt": "2025-08-22 18:57:26.0929902",
-              "questionType": "OPERATOR",
-              "aiComment": "변수명 가독성이 떨어집니다. 의미 있는 이름을 사용해 보세요.",
-            },
-            {
-              "solvedQuestionId": 104,
-              "title": "문제 2",
-              "content": "세 개의 숫자 중 가장 큰 값을 찾는 프로그램을 작성하세요.",
-              "createdAt": "2025-08-22 18:57:26.0929902",
-              "questionType": "OPERATOR",
-              "aiComment": "if-else 대신 Math.max를 활용하면 코드가 더 간결해집니다.",
-            },
-          ],
-          "TEXT": [
-            {
-              "solvedQuestionId": 101,
-              "title": "문제 1",
-              "content": "문자열에서 모음을 제거한 결과를 반환하는 함수를 작성하세요.",
-              "createdAt": "2025-08-22 18:57:26.0929902",
-              "questionType": "TEXT",
-              "aiComment": "정규식을 활용하면 반복문보다 성능이 향상될 수 있습니다.",
-            },
-            {
-              "solvedQuestionId": 103,
-              "title": "문제 1",
-              "content": "주어진 문장에서 단어의 개수를 세는 프로그램을 작성하세요.",
-              "createdAt": "2025-08-22 18:57:26.0929902",
-              "questionType": "TEXT",
-              "aiComment": "split 사용 시 공백이 여러 개일 경우도 고려하세요.",
-            },
-          ],
-        },
-      },
-    };
+  Future<Map<String, dynamic>> solvedQuestionList() async {
+    Response response = await dio.get("/solved-questions/list");
+    final responseBody = response.data;
+    // final responseBody = {
+    //   "status": 200,
+    //   "msg": "성공",
+    //   "body": {
+    //     "groupedSolvedQuestions": {
+    //       "OPERATOR": [
+    //         {"solvedQuestionId": 102, "questionId": 2, "title": "문제 2", "questionType": "OPERATOR"},
+    //         {"solvedQuestionId": 104, "questionId": 2, "title": "문제 2", "questionType": "OPERATOR"},
+    //       ],
+    //       "TEXT": [
+    //         {"solvedQuestionId": 101, "questionId": 1, "title": "문제 1", "questionType": "TEXT"},
+    //         {"solvedQuestionId": 103, "questionId": 1, "title": "문제 1", "questionType": "TEXT"},
+    //       ],
+    //     },
+    //   },
+    // };
+    // Logger().d('UserRepository의 oauthLogin: ${responseBody}');
+    return responseBody;
+  }
+
+  Future<Map<String, dynamic>> solvedQuestionDetail(int solvedquestionId) async {
+    Response response = await dio.get("/solved-questions/");
+    final responseBody = response.data;
+    // final responseBody = {
+    //   "status": 200,
+    //   "msg": "성공",
+    //   "body": {
+    //     "questionId": 1,
+    //     "title": "문제 제목",
+    //     "content": "문제 내용",
+    //     "serializedJson": "json~~~",
+    //     "blockExtensionJson": "json~~~",
+    //     "createdAt": "2025-08-22 14:10:27.325",
+    //     "aiComment": "AI 코멘트",
+    //   },
+    // };
     // Logger().d('UserRepository의 oauthLogin: ${responseBody}');
     return responseBody;
   }

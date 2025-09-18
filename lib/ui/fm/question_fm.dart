@@ -7,77 +7,60 @@ final questionProvider = NotifierProvider<QuestionFM, QuestionModel>(() {
 class QuestionFM extends Notifier<QuestionModel> {
   @override
   QuestionModel build() {
-    return QuestionModel("", "", "", "", "");
-  }
-
-  void type(String type) {
-    state = state.copyWith(
-      type: type,
+    return QuestionModel(
+      questionId: null,
+      serializedJson: "",
+      blockExtensionJson: "",
     );
   }
 
-  void payload(String payload) {
-    state = state.copyWith(
-      payload: payload,
-    );
-  }
-
-  void tests(String tests) {
-    state = state.copyWith(
-      tests: tests,
-    );
+  void questionId(int id) {
+    state = state.copyWith(questionId: id);
   }
 
   void serializedJson(String serializedJson) {
-    state = state.copyWith(
-      serializedJson: serializedJson,
-    );
+    state = state.copyWith(serializedJson: serializedJson);
   }
 
   void blockExtensionJson(String blockExtensionJson) {
-    state = state.copyWith(
-      blockExtensionJson: blockExtensionJson,
-    );
+    state = state.copyWith(blockExtensionJson: blockExtensionJson);
   }
 }
 
 class QuestionModel {
-  String? type;
-  String? payload;
-  String? tests;
+  int? questionId;
   String? serializedJson;
   String? blockExtensionJson;
 
-  QuestionModel(
-    this.type,
-    this.payload,
-    this.tests,
+  QuestionModel({
+    this.questionId,
     this.serializedJson,
     this.blockExtensionJson,
-  );
+  });
 
+  // 서버로 보낼 형태
   Map<String, dynamic> toMap() {
-    return {"type": type, "payload": payload, "tests": tests, "serializedJson": serializedJson, "blockExtensionJson": blockExtensionJson};
+    return {
+      "questionId": questionId,
+      "serializedJson": serializedJson,
+      "blockExtensionJson": blockExtensionJson,
+    };
   }
 
   QuestionModel copyWith({
-    String? type,
-    String? payload,
-    String? tests,
+    int? questionId,
     String? serializedJson,
     String? blockExtensionJson,
   }) {
     return QuestionModel(
-      type ?? this.type,
-      payload ?? this.payload,
-      tests ?? this.tests,
-      serializedJson ?? this.serializedJson,
-      blockExtensionJson ?? this.blockExtensionJson,
+      questionId: questionId ?? this.questionId,
+      serializedJson: serializedJson ?? this.serializedJson,
+      blockExtensionJson: blockExtensionJson ?? this.blockExtensionJson,
     );
   }
 
   @override
   String toString() {
-    return 'QuestionModel{type: $type, payload: $payload, tests: $tests, serializedJson: $serializedJson, blockExtensionJson: $blockExtensionJson}';
+    return 'QuestionModel{questionId: $questionId, serializedJson: $serializedJson, blockExtensionJson: $blockExtensionJson}';
   }
 }
